@@ -1,0 +1,30 @@
+@import 'fonts.less';
+
+@width: 960px;
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Whitney SSm A", "Whitney SSm B";
+    margin: 50px;
+}
+
+.container {
+    width: @width;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.axis {
+    .domain {
+        fill: none;
+    }
+    path, line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+    text {
+        font-size: 10px;
+    }
+}

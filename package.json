@@ -1,0 +1,15 @@
+{
+  "name": "04.30_scaling",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Luis Carli <info@luiscarli.com> (http://luiscarli.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^1.4.2"
+  }
+}

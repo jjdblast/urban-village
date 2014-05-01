@@ -1,0 +1,12 @@
+[
+    {   
+        "name": "d3",
+        "dev": "./bower_components/d3/d3.js",
+        "prod": "./bower_components/d3/d3.min.js"
+    },
+    {
+        "name": "lodash",
+        "dev": "./bower_components/lodash/dist/lodash.js",
+        "prod": "./bower_components/lodash/dist/lodash.min.js"
+    }
+]

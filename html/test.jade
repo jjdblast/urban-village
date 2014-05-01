@@ -1,0 +1,22 @@
+html
+    head
+        meta(charset='utf-8')
+        link(rel='icon', type='image/png', href='img/favicon.png')
+        title Test
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(type="text/css", rel="stylesheet", href="style.css")
+        link(type="text/css", rel="stylesheet", href="mocha.css")
+
+        script(type="text/javascript", src="lib.js")
+    body
+        div(style='display: none')
+            include index-body
+
+        div#mocha
+        script(type="text/javascript", src="mocha.js")
+        script mocha.setup('bdd')
+
+        each src in files
+            script(type="text/javascript", src=src)
+
+        script mocha.run()
