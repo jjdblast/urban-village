@@ -14,6 +14,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Whitney SSm A", "Whitney SSm B";
+  margin: 50px;
 }
 .container {
   width: 960px;
@@ -31,4 +32,10 @@ body {
 }
 .axis text {
   font-size: 10px;
+}
+#vis0 {
+  background: red;
+}
+svg {
+  background: blue;
 }

@@ -2,17 +2,20 @@
 
 @width: 960px;
 
-body {
+html, body {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     font-family: "Whitney SSm A", "Whitney SSm B";
-    margin: 50px;
+    // margin: 50px;
 }
 
 .container {
-    width: @width;
+    // width: @width;
     margin: auto;
-    margin-top: 50px;
+    padding: 10px;
+    // margin-top: 50px;
 }
 
 .axis {
@@ -26,5 +29,26 @@ body {
     }
     text {
         font-size: 10px;
+    }
+}
+
+#vis0 {
+    background: red;
+    position: relative;
+    width: 100%;
+    padding-bottom: 50%; //to fix w <-> h proportion
+    // height: 100%; //to fix height to the container (the window for example)
+}
+svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+svg {
+    background: blue;
+    rect {
+        shape-rendering: crispEdges;
     }
 }

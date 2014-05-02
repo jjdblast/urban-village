@@ -4,9 +4,11 @@ var d3 = require('d3')
 var fs = require('fs')
 
 MongoClient.connect("mongodb://localhost/scaling", function(err, db) {
-
+    console.log('connected do db')
     // db.close()
-    citiesPopulation(db)
+    // citiesPopulation(db)
+    // setLinearCityPosition(db)
+    aggregate(db)
 
 })
 
@@ -20,21 +22,81 @@ function citiesPopulation(db) {
 }
 
 function setLinearCityPosition(db){
-    
-    var data
-    var x = d3.scale.linear()
-        .range([0,100])
+
+    var popUrbData
+    var x = d3.scale.log()
+        .range([0,99.99999])
 
     db.collection('nodes').distinct('pop_urbArea', function(err,_data){
-        data = _.sortBy(_data)
-        x.domain(d3.extent(data))
+        console.log('got pop_urbArea array')
+        popUrbData = _.filter(_data, function(d,i){return d>0})
+        x.domain(d3.extent(popUrbData))
+        update()
     })
+
+    function update(){
+        console.log('updating')
+        var collection = 'nodes'
+        console.time('update nodes')
+        var count = 0
+        var cursor = db.collection(collection).find()
+        cursor.each(function(err,obj){
+            count++
+            if (count%100000 == 0) console.log(count)
+            if (obj == null) {
+                console.timeEnd('update nodes')
+                db.close()
+                return
+            }
+            if (obj.pop_urbArea>0) {
+                obj.pos_urbArea = x(obj.pop_urbArea) 
+                db.collection(collection).save(obj, function(err){
+                })
+            }
+        })
+    }
 }
 
 function aggregate(db) {
     db.collection('nodes')
     .aggregate([
-        // group
+        {
+            $match: {pop_urbArea: {$gt:0}}
+        },
+        {$group: {
+            _id: {
+                popPos: {$subtract:['$pos_urbArea', {$mod:['$pos_urbArea',100/5]}] },
+                degree: '$degree'
+            },
+            minPop: {$min: '$pop_urbArea'},
+            maxPop: {$max: '$pop_urbArea'},
+            avgClustCoeff: {$avg: '$clustCoeff'},
+            amount: {$sum : 1},
+        }},
+        {$sort:{
+            '_id.degree': 1,
+        }},
+        {$group: {
+            _id: {
+                popPos: '$_id.popPos'
+            },
+            minPop: {$min: '$minPop'},
+            maxPop: {$max: '$maxPop'},
+            amount: {$sum: '$amount'},
+            contacts: {$push: {
+                degree: '$_id.degree',
+                avgClustCoeff: '$avgClustCoeff',
+                amount: '$amount',
+            }},
+        }},
+        {$project:{
+            _id: 0,
+            popPos: '$_id.popPos',
+            minPop: 1, maxPop: 1, amount: 1, contacts: 1,
+        }},
+        {$sort:{
+            popPos: 1,
+        }},
     ], function(err,data){
         if (err) {
             console.log(err)
@@ -42,16 +104,9 @@ function aggregate(db) {
             return
         }
         db.close()
-        _.each(data, function(d,i){
-            var date = new Date(d.epoch_time * 1000)
-            d.pos = [d.long, d.lat]
-            d.date = new Date(2012, 4, 18, date.getHours(), date.getMinutes(), date.getSeconds())
-            delete d._id
-            delete d.long
-            delete d.lat
-        })
+        data = _.sortBy(data, '_id')
         console.log(data.length)
-        console.log(data[0])
-        fs.writeFileSync('data/telecom.json', JSON.stringify(data))
+        // console.log(data)
+        fs.writeFileSync('data/aggregate.json', JSON.stringify(data))
     })
 }
