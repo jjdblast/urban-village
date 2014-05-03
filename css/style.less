@@ -1,21 +1,51 @@
 @import 'fonts.less';
 
 @width: 960px;
+@half-gutter: 20px;
 
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: "Whitney SSm A", "Whitney SSm B";
-    // margin: 50px;
+    font-family: "Whitney A", "Whitney B";
+    // margin: 50px 0;
+}
+
+div {
+    box-sizing: border-box;
 }
 
 .container {
-    // width: @width;
+    width: @width;
     margin: auto;
-    padding: 10px;
-    // margin-top: 50px;
+    padding: 0 @half-gutter;
+}
+
+// rows and columns
+.row {
+    margin: 0 -@half-gutter;
+    position: relative;
+    overflow: hidden;
+}
+.col {
+    padding: 0 @half-gutter;
+    min-height: 1px;
+    float: left;
+}
+
+.visCtn {
+    background: red;
+    position: relative;
+    width: 100%;
+    padding-bottom: 50%; //to fix w <-> h proportion
+    // height: 100%; //to fix height to the container (the window for example)
+    svg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+    }
 }
 
 .axis {
@@ -28,27 +58,6 @@ html, body {
         shape-rendering: crispEdges;
     }
     text {
-        font-size: 10px;
-    }
-}
-
-#vis0 {
-    background: red;
-    position: relative;
-    width: 100%;
-    padding-bottom: 50%; //to fix w <-> h proportion
-    // height: 100%; //to fix height to the container (the window for example)
-}
-svg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-}
-
-svg {
-    background: blue;
-    rect {
-        shape-rendering: crispEdges;
+        font-size: 11px;
     }
 }

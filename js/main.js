@@ -10,12 +10,14 @@ d3.json('data/aggregate.json', function(err,data){
     console.log(d)
 })
 
-function render_vis0(){
+var base = require('./render_base')()
 
+module.exports = function render_vis(){
     var main = {}
     main.render = function(sel, data) {
-        
+
         return main
     }
+    _.extend(main, render_base)
     return main
 }
