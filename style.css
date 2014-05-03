@@ -10,16 +10,17 @@
   font-weight: 400;
   font-style: normal;
 }
+html,
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   font-family: "Whitney SSm A", "Whitney SSm B";
-  margin: 50px;
 }
 .container {
-  width: 960px;
   margin: auto;
-  margin-top: 50px;
+  padding: 10px;
 }
 .axis .domain {
   fill: none;
@@ -33,9 +34,21 @@ body {
 .axis text {
   font-size: 10px;
 }
-#vis0 {
+.visCtn {
   background: red;
+  position: relative;
+  width: 100%;
+  padding-bottom: 50%;
+}
+.visCtn svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
 }
 svg {
   background: blue;
+}
+svg rect {
+  shape-rendering: crispEdges;
 }
