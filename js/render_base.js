@@ -8,22 +8,20 @@ module.exports = function render_base(){
         return main
     }
 
-    // receives d3 selection of a .visCtn (that must be always 100% width)
-    // the container needs to be inside of a collumn
-    // this method set the container padding-bottom, 
+    // receives d3 selection of a .wrp-vis (that must be always 100% width)
+    // this method set the wrapper padding-bottom, 
     // the svg viewBox and the g.main translate
     // if it don't find a svg or g.main it creates one
     // OPTS
     // 'fullscreen' height for the container
     main.setSvg = function (sel, opts) {
-        // .visCtn
         var fullWidth = this.width + this.left + this.right,
             fullHeight = this.height + this.top + this.bottom
-        sel.classed('visCtn', true)
+        opts = opts ? opts : {}
         if (opts.fullscreen) {
             sel.style({height: '100%'})
         } else {
-            sel.style({height: fullHeight/fullWidth + '%'})
+            sel.style({'padding-bottom': fullHeight/fullWidth*100 + '%'})
         }
         // svg
         var svg = sel.select('svg')
@@ -31,20 +29,21 @@ module.exports = function render_base(){
             svg = sel.append('svg')
         }
         svg.attr({
-            viewBox: '0 0 '+fullHeight+' '+fullWidth,
+            // width: fullWidth, height: fullHeight
+            viewBox: '0 0 '+fullWidth+' '+fullHeight,
             preserveAspectRatio: 'xMidYMid meet'
         })
         // g.main
         var g = svg.select('g.main')
         if (g.empty()) {
-            g = sel.append('g').classed('main', true)
+            g = svg.append('g').classed('main', true)
         }
         g.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
     }
 
-    setG = function (sel) {
+    main.setG = function (sel) {
         sel.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
@@ -52,20 +51,20 @@ module.exports = function render_base(){
 
     // functions for setting the box of the vis
     // receive an object with width, height, left, right, top, bottom
-    main.setSvgBox = function (arg) {
-        if (arguments.length==0) return getBox()
-        setBox(arg)
+    main.svgBox = function (arg) {
+        if (arguments.length==0) return this._getBox()
+        this._setBox(arg)
         if (arg.width) this.width = arg.width - this.left - this.right
         if (arg.height) this.height = arg.height - this.top - this.bottom
         return main
     }
-    main.setGBox = function (arg) {
-        if (arguments.length==0) return getBox()
-        setBox(arg)
+    main.gBox = function (arg) {
+        if (arguments.length==0) return this._getBox()
+        this._setBox(arg)
         return main
     }
     // helpers
-    function setBox (arg){
+    main._setBox = function (arg){
         if (arg.left) this.left = arg.left
         if (arg.right) this.right = arg.right
         if (arg.top) this.top = arg.top
@@ -73,8 +72,8 @@ module.exports = function render_base(){
         if (arg.width) this.width = arg.width
         if (arg.height) this.height = arg.height
     }
-    function getBox (arg){
-        return {width: this.width, height: this.height, lef: this.left, right: this.right, top: this.top, bottom: this.bottom}
+    main._getBox = function (){
+        return {width: this.width, height: this.height, left: this.left, right: this.right, top: this.top, bottom: this.bottom}
     }
 
     _.extend(main, {})
@@ -89,11 +88,11 @@ var base = require('./render_base')()
 
 module.exports = function render_vis(){
     var main = {}
+    _.extend(main, render_base)
     main.render = function(sel, data) {
 
         return main
     }
-    _.extend(main, render_base)
     return main
 }
 

@@ -1,0 +1,58 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+div {
+    box-sizing: border-box;
+}
+
+.ctn {
+    width: @width;
+    min-height: 1px;
+    margin: auto;
+    padding: 0 @half-gutter;
+}
+
+// rows and columns
+.row {
+    min-height: 1px;
+    margin: 0 -@half-gutter;
+    position: relative;
+    overflow: hidden;
+}
+.col {
+    padding: 0 @half-gutter;
+    min-height: 1px;
+    width: 100%;
+    float: left;
+}
+
+// visContainer
+.wrp-vis {
+    position: relative;
+    width: 100%;
+    // padding-bottom: 50%; //to fix w <-> h proportion
+    // height: 100%; //to fix height to the container (the window for example)
+    svg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+    }
+}
+
+.axis {
+    .domain {
+        fill: none;
+    }
+    path, line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+    text {
+        font-size: 11px;
+    }
+}

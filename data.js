@@ -65,7 +65,7 @@ function aggregate(db) {
         },
         {$group: {
             _id: {
-                popPos: {$subtract:['$pos_urbArea', {$mod:['$pos_urbArea',100/5]}] },
+                popPos: {$subtract:['$pos_urbArea', {$mod:['$pos_urbArea',100/4]}] },
                 degree: '$degree'
             },
             minPop: {$min: '$pop_urbArea'},

@@ -1,0 +1,64 @@
+// @baseFontSize: 22px;
+// @lineMult: 1.5;
+// @baseLineHeight: round(@baseFontSize * @lineMult);
+// @sizeMult: 1.5;
+
+.font-element(@fontMult:1; @topMult:1; @bottomMult:1) {
+    @font-size: round(@baseFontSize * pow(@sizeMult, @fontMult));
+    font-size: @font-size;
+    line-height: @baseLineHeight * ceil(@font-size/@baseLineHeight);
+    margin-top: @baseLineHeight * @topMult;
+    margin-bottom: @baseLineHeight * @bottomMult;
+}
+h1 {
+    .font-element(@fontMult:3; @topMult:2; @bottomMult:2);
+    font-weight: 500;
+}
+h2 {
+    .font-element(@fontMult:2; @topMult:2; @bottomMult:1);
+    font-weight: 500;
+}
+h3 {
+    .font-element(@fontMult:1; @topMult:2; @bottomMult:1);
+    font-weight: 500;
+}
+h4 {
+    .font-element(@fontMult:1; @topMult:1; @bottomMult:1);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+h5 {
+    .font-element(@fontMult:0; @topMult:0; @bottomMult:0);
+    font-weight: 500;
+    // text-transform: uppercase;
+}
+p, ul, ol, pre, blockquote {
+    font-size: @baseFontSize;
+    line-height: @baseLineHeight;
+    font-weight: 400;
+    margin-top: 0px;
+    margin-bottom: @baseLineHeight;
+    padding: 0;
+}
+.no {
+    margin-bottom: 0;
+}
+b, strong {
+    font-weight: 600;
+}
+ul {
+    list-style-type: circle;
+}
+
+/* Sanitation */
+hr {
+    border: 1px solid;
+    margin: -1px 0;
+}
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+b, strong, em, small, code {
+    line-height: 1;
+}
