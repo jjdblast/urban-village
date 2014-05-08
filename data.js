@@ -65,11 +65,9 @@ function aggregate(db) {
         },
         {$group: {
             _id: {
-                popPos: {$subtract:['$pos_urbArea', {$mod:['$pos_urbArea',100/4]}] },
+                pop: '$pop_urbArea',
                 degree: '$degree'
             },
-            minPop: {$min: '$pop_urbArea'},
-            maxPop: {$max: '$pop_urbArea'},
             avgClustCoeff: {$avg: '$clustCoeff'},
             amount: {$sum : 1},
         }},
@@ -78,12 +76,10 @@ function aggregate(db) {
         }},
         {$group: {
             _id: {
-                popPos: '$_id.popPos'
+                pop: '$_id.pop'
             },
-            minPop: {$min: '$minPop'},
-            maxPop: {$max: '$maxPop'},
             amount: {$sum: '$amount'},
-            contacts: {$push: {
+            degrees: {$push: {
                 degree: '$_id.degree',
                 avgClustCoeff: '$avgClustCoeff',
                 amount: '$amount',
@@ -91,11 +87,11 @@ function aggregate(db) {
         }},
         {$project:{
             _id: 0,
-            popPos: '$_id.popPos',
-            minPop: 1, maxPop: 1, amount: 1, contacts: 1,
+            pop: '$_id.pop',
+            amount: 1, degrees: 1,
         }},
         {$sort:{
-            popPos: 1,
+            pop: 1,
         }},
     ], function(err,data){
         if (err) {
@@ -104,7 +100,6 @@ function aggregate(db) {
             return
         }
         db.close()
-        data = _.sortBy(data, '_id')
         console.log(data.length)
         // console.log(data)
         fs.writeFileSync('data/aggregate.json', JSON.stringify(data))

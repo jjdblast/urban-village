@@ -5,7 +5,7 @@ module.exports = function render_base(){
 
     main.render = function(sel, data) {
 
-        return main
+        return this
     }
 
     // receives d3 selection of a .wrp-vis (that must be always 100% width)
@@ -56,21 +56,21 @@ module.exports = function render_base(){
         this._setBox(arg)
         if (arg.width) this.width = arg.width - this.left - this.right
         if (arg.height) this.height = arg.height - this.top - this.bottom
-        return main
+        return this
     }
     main.gBox = function (arg) {
         if (arguments.length==0) return this._getBox()
         this._setBox(arg)
-        return main
+        return this
     }
     // helpers
     main._setBox = function (arg){
-        if (arg.left) this.left = arg.left
-        if (arg.right) this.right = arg.right
-        if (arg.top) this.top = arg.top
-        if (arg.bottom) this.bottom = arg.bottom
-        if (arg.width) this.width = arg.width
-        if (arg.height) this.height = arg.height
+        if (_.has(arg, 'left')) this.left = arg.left
+        if (_.has(arg, 'right')) this.right = arg.right
+        if (_.has(arg, 'top')) this.top = arg.top
+        if (_.has(arg, 'bottom')) this.bottom = arg.bottom
+        if (_.has(arg, 'width')) this.width = arg.width
+        if (_.has(arg, 'height')) this.height = arg.height
     }
     main._getBox = function (){
         return {width: this.width, height: this.height, left: this.left, right: this.right, top: this.top, bottom: this.bottom}
@@ -91,7 +91,7 @@ module.exports = function render_vis(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        return main
+        return this
     }
     return main
 }
