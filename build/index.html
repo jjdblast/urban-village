@@ -11,15 +11,26 @@
   <body>
     <div class="wrp-vis vis0">
       <svg>
+        <defs>
+          <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+            <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
+          </pattern>
+        </defs>
         <g class="main">
-          <g class="citiesView">
+          <g class="view-sumContacts">
+            <rect class="background2"></rect>
+            <rect class="background"></rect>
             <path class="line1"></path>
             <path class="line2"></path>
             <g class="cities"></g>
             <g class="amount"></g>
             <g class="x axis"></g>
             <g class="y axis"></g>
+          </g>
+          <g class="view-cities">
             <rect class="background"></rect>
+            <circle></circle>
+            <g class="axis"></g>
           </g>
         </g>
       </svg>
