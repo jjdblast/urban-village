@@ -6,7 +6,7 @@ module.exports = function transform(data){
 
         // d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
-        d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount})// / (d.amount/d.pop)
+        d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
 
         var totalContacts = d3.sum(d.degrees, function(d,i){return d.amount})
         var medianIndex = (totalContacts)/2
@@ -34,5 +34,8 @@ module.exports = function transform(data){
 
     })
 
-    return data
+    return _.filter(data, function (d,i) {
+        return d.amount / d.pop > .01
+    })
+
 }
