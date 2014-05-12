@@ -1,5 +1,6 @@
 var render_base = require('./render_base')()
 var render_sumContacts = require('./render_sumContacts')()
+var render_city = require('./render_city')()
 
 module.exports = function render_vis0(){
 
@@ -16,7 +17,15 @@ module.exports = function render_vis0(){
                 top: 50,
                 left: 20
             })
-            .render(sel.select('g.citiesView'), data)
+            .render(sel.select('g.view-sumContacts'), data)
+
+        render_city.gBox({
+                width: this.width/4,
+                height: this.height,
+                top: 50,
+                left: 600
+            })
+            .render(sel.select('g.view-cities'), data)
 
         return main
     }
