@@ -21,8 +21,8 @@ module.exports = function render_vis0(){
 
         render_city.gBox({
                 width: this.width/4,
-                height: this.height,
-                top: 50,
+                height: this.height/1.2,
+                top: 0,
                 left: 600
             })
             .render(sel.select('g.view-cities'), data)
