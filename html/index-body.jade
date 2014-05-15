@@ -15,12 +15,24 @@
                 g.x.axis
                 g.y.axis
             g.view-cities
-                rect.background
-                g.wrap
-                    g.connections
-                        g.chords
-                        g.arcs
-                    path.area
-                    circle
-                    g.axis
+                g.axis.popAxis
+                g.axis.degreeAxis
+                g.cityTicks
+                path.meanDegree
+                //- g.city
+                    g.wrap
+                        g.contacts
+                            g.connections
+                            g.arcs
+                        path.area
+                        g.axis
 
+#tpl-city(style='display: none')
+    svg
+        g.city
+            g.wrap
+                g.contacts
+                    g.connections
+                    g.arcs
+                path.area
+                g.axis

@@ -8,7 +8,7 @@ module.exports = function render_vis0(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        this.svgBox({width: 1200, height: 600, top: 20, bottom: 20, left: 20, right:20})
+        this.svgBox({width: 1200, height: 600, top: 40, bottom: 20, left: 20, right:20})
         this.setSvg(sel)
 
         render_sumContacts.gBox({
@@ -17,13 +17,13 @@ module.exports = function render_vis0(){
                 top: 50,
                 left: 20
             })
-            .render(sel.select('g.view-sumContacts'), data)
+            // .render(sel.select('g.view-sumContacts'), data)
 
         render_city.gBox({
-                width: this.width/4,
-                height: this.height/1.2,
+                width: this.width,
+                height: this.height,
                 top: 0,
-                left: 600
+                left: 0
             })
             .render(sel.select('g.view-cities'), data)
 
