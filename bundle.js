@@ -128,7 +128,7 @@ module.exports = function render_vis(){
             size: function(d,i){return d.pop}
         }
 
-        var cityWidth = this.width / 5
+        var cityWidth = this.width / 8
 
         var xPop = d3.scale.log()
             .domain(d3.extent(data, acc.size))
@@ -136,7 +136,7 @@ module.exports = function render_vis(){
         var xPopAxis = d3.svg.axis()
             .scale(xPop)
             .ticks(6, ',.1s')
-            .orient('bottom')
+            .orient('top')
 
         var maxDegree = d3.max(data, function(d,i){
             return d3.max(d.degrees, function(d,i){ return d.degree })
@@ -155,14 +155,14 @@ module.exports = function render_vis(){
             .domain([1, maxDegree])
             .range([this.height - bottom, this.height - bottom - r(maxDegree)])
 
-        var x = d3.scale.log()
+        var x = d3.scale.linear()
             .domain([1, maxAmount/2])
-            .range([0, cityWidth/3])
+            .range([0, cityWidth/4])
 
         var yAxis = d3.svg.axis()
             .scale(y)
             .ticks(6, '.,0s')
-            .tickSize(-this.width+40, 0)
+            .tickSize(-this.width+cityWidth, 0)
             .orient('left')
 
         var meanDegreeLine = d3.svg.line()
@@ -198,6 +198,8 @@ module.exports = function render_vis(){
 
         function renderCity (sel, data) {
             // for city small multiple
+            x.domain([1, data.maxAmount/2])
+
             arc.innerRadius(r(data.meanDegree)+2.5)
                 .outerRadius(r(data.meanDegree)-2.5)
 
@@ -206,7 +208,7 @@ module.exports = function render_vis(){
             sel.attr('transform', 'translate('+ (xPop(acc.size(data))-cityWidth/2) +',0)')
 
             sel.select('.wrap')
-                // .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
+                .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
 
             sel.select('path.area')
                 .attr({
@@ -219,7 +221,7 @@ module.exports = function render_vis(){
 
             sel.select('.contacts')
                 .attr({
-                    transform: 'translate('+cityWidth/2+','+y(1)+')'
+                    transform: 'translate('+cityWidth/2+','+ 550 +')' //+y(1)+')'
                 })
             var connections = sel.select('.connections')
                 .selectAll('path').data(contactsData.links)
@@ -249,36 +251,39 @@ module.exports = function render_vis(){
             sel.select('.city .axis')
                 .attr('transform', 'translate('+ cityWidth/2 +',0)')
                 // .call(yAxis)
+
+
         }
         
  
 
         // city ticks
-        // sel.select('.cityTicks')
-        //     .selectAll('path').data(data)
-        //     .enter().append('path')
-        //     .attr({
-        //         d: function(d,i){
-        //             return 'M '+xPop(acc.size(d))+',0 l 0,-6'
-        //         }
-        //     })
-        //     .style({
-        //         stroke: 'gray',
-        //         'stroke-width': 2
-        //     })
-        //     .attr('transform', 'translate(0,'+this.height+')')
+        sel.select('.cityTicks')
+            .selectAll('circle').data(data)
+            .enter().append('circle')
+            .attr({
+                cx: function(d,i){return xPop(d.pop)},
+                cy: function(d,i){return y(d.meanDegree)},
+                r: 2
+            })
+            .style({
+                stroke: 'none',
+                fill: 'gray',
+                'stroke-width': 2
+            })
+            .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
 
 
         // popAxis
         sel.select('.popAxis')
-            .attr('transform', 'translate(0,'+this.height+')')
+            .attr('transform', 'translate(0,'+0+')')
             .call(xPopAxis)
-            .selectAll('path, line')
+            .selectAll('line')
             .style({
                 stroke: 'gold'
             })
         sel.select('.degreeAxis')
-            .attr('transform', 'translate(30,0)')
+            .attr('transform', 'translate('+cityWidth/2+','+-(main.height - bottom - r(maxDegree))+')')
             .call(yAxis)
             .selectAll('path, line')
             .style({
@@ -287,7 +292,7 @@ module.exports = function render_vis(){
 
         sel.select('path.meanDegree')
             .attr('d', meanDegreeLine(data))
-            // .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
+            .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
             .style({
                 fill: 'none', stroke: 'gray',
                 'stroke-width': 2
@@ -364,7 +369,7 @@ module.exports = function render_vis0(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        this.svgBox({width: 1200, height: 600, top: 40, bottom: 20, left: 20, right:20})
+        this.svgBox({width: 1200, height: 600, top: 20, bottom: 20, left: 20, right:20})
         this.setSvg(sel)
 
         render_sumContacts.gBox({
@@ -525,6 +530,7 @@ module.exports = function transform(data){
         d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
+        d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})
 
         var totalContacts = d3.sum(d.degrees, function(d,i){return d.amount})
         var medianIndex = (totalContacts)/2
