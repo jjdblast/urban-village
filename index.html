@@ -28,16 +28,24 @@
             <g class="y axis"></g>
           </g>
           <g class="view-cities">
-            <rect class="background"></rect>
-            <g class="wrap">
-              <g class="connections">
-                <g class="chords"></g>
-                <g class="arcs"></g>
-              </g>
-              <path class="area"></path>
-              <circle></circle>
-              <g class="axis"></g>
+            <g class="axis popAxis"></g>
+            <g class="axis degreeAxis"></g>
+            <g class="cityTicks"></g>
+            <path class="meanDegree"></path>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div id="tpl-city" style="display: none">
+      <svg>
+        <g class="city">
+          <g class="wrap">
+            <g class="contacts">
+              <g class="connections"></g>
+              <g class="arcs"></g>
             </g>
+            <path class="area"></path>
+            <g class="axis"></g>
           </g>
         </g>
       </svg>
