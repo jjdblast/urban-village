@@ -157,10 +157,10 @@ module.exports = function render_vis(){
 
         var x = d3.scale.linear()
             .domain([0, 15])
-            .range([0, cityWidth/3])
+            .range([3, cityWidth/3])
         var xClust = d3.scale.linear()
             .domain([0,.5])
-            .range([0, -cityWidth/3])
+            .range([-3, -cityWidth/3])
 
         var xAxis = d3.svg.axis()
             .scale(x)
@@ -315,20 +315,20 @@ module.exports = function render_vis(){
  
 
         // city ticks
-        // sel.select('.cityTicks')
-        //     .selectAll('circle').data(data)
-        //     .enter().append('circle')
-        //     .attr({
-        //         cx: function(d,i){return xPop(d.pop)},
-        //         cy: function(d,i){return y(d.meanDegree)},
-        //         r: 1
-        //     })
-        //     .style({
-        //         stroke: 'gray',
-        //         fill: 'white',
-        //         'stroke-width': 1
-        //     })
-        //     .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
+        sel.select('.cityTicks')
+            .selectAll('circle').data(data)
+            .enter().append('circle')
+            .attr({
+                cx: function(d,i){return xPop(d.pop)},
+                cy: function(d,i){return y(d.meanDegree)},
+                r: 1
+            })
+            .style({
+                stroke: 'gray',
+                fill: 'white',
+                'stroke-width': 1
+            })
+            .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
 
 
         // popAxis
