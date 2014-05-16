@@ -156,23 +156,48 @@ module.exports = function render_vis(){
             .range([this.height - bottom, this.height - bottom - r(maxDegree)])
 
         var x = d3.scale.linear()
-            .domain([1, maxAmount/2])
-            .range([0, cityWidth/4])
+            .domain([0, 15])
+            .range([0, cityWidth/3])
+        var xClust = d3.scale.linear()
+            .domain([0,.5])
+            .range([0, -cityWidth/3])
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .tickValues([15])
+            .orient('bottom')
+        var xClustAxis = d3.svg.axis()
+            .scale(xClust)
+            .tickValues([.5])
+            .orient('bottom')
 
         var yAxis = d3.svg.axis()
             .scale(y)
             .ticks(6, '.,0s')
-            .tickSize(-this.width+cityWidth, 0)
+            // .tickSize(-this.width+cityWidth, 0)
             .orient('left')
 
         var meanDegreeLine = d3.svg.line()
             .x(function(d,i){return xPop(acc.size(d))})
             .y(function(d,i){return y(d.meanDegree)})
+        var maxDegreeLine = d3.svg.line()
+            .x(function(d,i){return xPop(acc.size(d))})
+            .y(function(d,i){return y(d.maxDegree)})
+
+        var maxDegreeArea = d3.svg.area()
+            .x(function(d,i){return xPop(acc.size(d))})
+            .y1(function(d,i){return y(d.maxDegree)})
+            .y0(function(d,i){return y(1)})
+            // .interpolate('basis')
 
         var area = d3.svg.area()
             .y(function(d,i){return y(d.degree)})
-            .x1(function(d,i){return -x(d.amount/2)})
-            .x0(function(d,i){return x(d.amount/2)})
+            .x1(function(d,i){return 0})
+            .x0(function(d,i){return x(d.amount)})
+        var areaClust = d3.svg.area()
+            .y(function(d,i){return y(d.degree)})
+            .x1(function(d,i){return xClust(d.avgClustCoeff)})
+            .x0(function(d,i){return 0})
 
         var arc = d3.svg.arc()
 
@@ -187,7 +212,7 @@ module.exports = function render_vis(){
         })
         console.log(cityPopsData)
 
-        var cities = sel.selectAll('.city').data([data[1], data[21], data[83], data[104], data[108]])
+        var cities = sel.selectAll('.city').data([data[0], data[21], data[83], data[120], _.last(data)])
         cities.enter().append(function () {
                 return document.querySelector('#tpl-city g.city').cloneNode(true)
             })
@@ -198,7 +223,9 @@ module.exports = function render_vis(){
 
         function renderCity (sel, data) {
             // for city small multiple
-            x.domain([1, data.maxAmount/2])
+            // x.domain([1, data.maxAmount])
+
+            area.x0(function(d,i){return x((d.amount/data.amount)*100)})
 
             arc.innerRadius(r(data.meanDegree)+2.5)
                 .outerRadius(r(data.meanDegree)-2.5)
@@ -217,11 +244,24 @@ module.exports = function render_vis(){
                 })
                 .style({
                     fill: 'url(#diagonalHatch)',
+                    stroke: 'steelblue'
+                })
+            sel.select('path.areaClust')
+                .attr({
+                    transform: 'translate('+cityWidth/2+',0)',
+                    d: areaClust(data.degrees)
+                })
+                .style({
+                    fill: 'url(#diagonalHatch2)',
+                    stroke: 'orange'
+                })
+                .on('click', function(d,i){
+                    console.log(d)
                 })
 
             sel.select('.contacts')
                 .attr({
-                    transform: 'translate('+cityWidth/2+','+ 550 +')' //+y(1)+')'
+                    transform: 'translate('+cityWidth/2+','+ 580 +')' //+y(1)+')'
                 })
             var connections = sel.select('.connections')
                 .selectAll('path').data(contactsData.links)
@@ -248,9 +288,26 @@ module.exports = function render_vis(){
             arcs.exit().remove()
 
             // axis and background
-            sel.select('.city .axis')
-                .attr('transform', 'translate('+ cityWidth/2 +',0)')
-                // .call(yAxis)
+            sel.select('.axis')
+                .attr('transform', 'translate('+ (cityWidth/2+3) +',0)')
+                .call(yAxis)
+            sel.select('.xAxis')
+                .attr('transform', 'translate('+ cityWidth/2 +','+(y(1)+10)+')')
+                .call(xAxis)
+                .selectAll('path, line')
+                .style({
+                    stroke: 'steelblue',
+                    'stroke-width': 1
+                })
+            sel.select('.xClustAxis')
+                .attr('transform', 'translate('+ cityWidth/2 +','+(y(1)+10)+')')
+                .call(xClustAxis)
+                .selectAll('path, line')
+                .style({
+                    stroke: 'orange',
+                    'stroke-width': 1
+                })
+
 
 
         }
@@ -258,44 +315,55 @@ module.exports = function render_vis(){
  
 
         // city ticks
-        sel.select('.cityTicks')
-            .selectAll('circle').data(data)
-            .enter().append('circle')
-            .attr({
-                cx: function(d,i){return xPop(d.pop)},
-                cy: function(d,i){return y(d.meanDegree)},
-                r: 2
-            })
-            .style({
-                stroke: 'none',
-                fill: 'gray',
-                'stroke-width': 2
-            })
-            .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
+        // sel.select('.cityTicks')
+        //     .selectAll('circle').data(data)
+        //     .enter().append('circle')
+        //     .attr({
+        //         cx: function(d,i){return xPop(d.pop)},
+        //         cy: function(d,i){return y(d.meanDegree)},
+        //         r: 1
+        //     })
+        //     .style({
+        //         stroke: 'gray',
+        //         fill: 'white',
+        //         'stroke-width': 1
+        //     })
+        //     .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
 
 
         // popAxis
         sel.select('.popAxis')
-            .attr('transform', 'translate(0,'+0+')')
+            .attr('transform', 'translate(0,'+-5+')')
             .call(xPopAxis)
-            .selectAll('line')
-            .style({
-                stroke: 'gold'
-            })
-        sel.select('.degreeAxis')
-            .attr('transform', 'translate('+cityWidth/2+','+-(main.height - bottom - r(maxDegree))+')')
-            .call(yAxis)
             .selectAll('path, line')
             .style({
-                stroke: 'gold'
+                stroke: 'black',
+                'stroke-width': 1
             })
+        // sel.select('.degreeAxis')
+        //     .attr('transform', 'translate('+cityWidth/2+','+-(main.height - bottom - r(maxDegree))+')')
+        //     .call(yAxis)
+        //     .selectAll('path, line')
+        //     .style({
+        //         stroke: 'lightgray',
+        //         'stroke-width': .5
+        //     })
 
         sel.select('path.meanDegree')
             .attr('d', meanDegreeLine(data))
             .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
             .style({
                 fill: 'none', stroke: 'gray',
-                'stroke-width': 2
+                'stroke-width': 1,
+                'stroke-dashArray': '2,2'
+            })
+        sel.select('path.maxDegree')
+            .attr('d', maxDegreeArea(data))
+            .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
+            .style({
+                fill: 'hsl(0,0%,92%)', stroke: 'none',
+                'stroke-width': 1,
+                'stroke-dashArray': '2,2'
             })
 
         return this
@@ -369,7 +437,7 @@ module.exports = function render_vis0(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        this.svgBox({width: 1200, height: 600, top: 20, bottom: 20, left: 20, right:20})
+        this.svgBox({width: 1200, height: 600, top: 40, bottom: 20, left: 20, right:20})
         this.setSvg(sel)
 
         render_sumContacts.gBox({
@@ -526,8 +594,7 @@ module.exports = function render_vis0_cities(){
 module.exports = function transform(data){
 
     _.each(data, function(d,i){
-
-        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
+        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>0})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
         d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})
@@ -547,7 +614,7 @@ module.exports = function transform(data){
     })
 
     return _(data).filter(function (d,i) {
-            return d.amount / d.pop > .1
+            return d.amount / d.pop > .0
         })
         // .reject(function(d,i){return d.meanDegree>14})
         .sortBy('pop')
