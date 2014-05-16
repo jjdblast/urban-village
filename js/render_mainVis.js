@@ -8,7 +8,7 @@ module.exports = function render_vis0(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        this.svgBox({width: 1200, height: 600, top: 20, bottom: 20, left: 20, right:20})
+        this.svgBox({width: 1200, height: 600, top: 40, bottom: 20, left: 20, right:20})
         this.setSvg(sel)
 
         render_sumContacts.gBox({

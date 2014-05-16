@@ -3,8 +3,7 @@
 module.exports = function transform(data){
 
     _.each(data, function(d,i){
-
-        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
+        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>0})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
         d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})
@@ -24,7 +23,7 @@ module.exports = function transform(data){
     })
 
     return _(data).filter(function (d,i) {
-            return d.amount / d.pop > .1
+            return d.amount / d.pop > .0
         })
         // .reject(function(d,i){return d.meanDegree>14})
         .sortBy('pop')

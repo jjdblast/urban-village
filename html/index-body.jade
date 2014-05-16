@@ -4,6 +4,8 @@
         defs
             pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
                 path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
+            pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
+                path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
         g.main
             g.view-sumContacts
                 rect.background2
@@ -15,6 +17,7 @@
                 g.x.axis
                 g.y.axis
             g.view-cities
+                path.maxDegree
                 g.axis.popAxis
                 g.axis.degreeAxis
                 g.cityTicks
@@ -28,5 +31,8 @@
                     g.connections
                     g.arcs
                 path.area
+                path.areaClust
                 g.axis
+                g.axis.xAxis
+                g.axis.xClustAxis
                 path.baseLine
