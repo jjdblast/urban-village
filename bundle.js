@@ -12,7 +12,7 @@ d3.json('data/aggregate.json', function(err,data){
 
         
 })
-},{"./render_mainVis":4,"./transform":6}],2:[function(require,module,exports){
+},{"./render_mainVis":6,"./transform":8}],2:[function(require,module,exports){
 
 module.exports = function render_base(){
 
@@ -56,12 +56,14 @@ module.exports = function render_base(){
         g.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
+        return this
     }
 
     main.setG = function (sel) {
         sel.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
+        return this
     }
 
     // functions for setting the box of the vis
@@ -114,6 +116,175 @@ module.exports = function render_vis(){
 */
 },{}],3:[function(require,module,exports){
 var render_base = require('./render_base')()
+var renderCity = require('./render_city2')
+
+var main = {}
+_.extend(main, render_base)
+
+main.render = function(sel, data) {
+
+    var acc = {
+        size: function(d,i){return d.pop},
+        sMeanDegree: function(d,i){return y(d.meanDegree)}
+    }
+    data = _.sortBy(data, acc.size)
+
+    var numberOfCities = 8
+    var cityWidth = this.width / numberOfCities
+    var coverageRadius = (50 - 10) / 2
+
+    // scales
+
+    var x = d3.scale.log()
+        .domain(d3.extent(data, acc.size))
+        .range([cityWidth/2, this.width-cityWidth/2])
+    var y = d3.scale.log()
+        .domain([1, d3.max(data, function(d,i){return d.maxDegree})])
+        .range([this.height, 0])
+    var pop = d3.scale.sqrt()
+        .domain([0, d3.max(data, function(d,i){return d.pop})])
+        .range([0, coverageRadius])
+    var amount = d3.scale.sqrt()
+        .domain([0, d3.max(data, function(d,i){return d.amount})])
+        .range([0, coverageRadius])
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .ticks(6, ',.1s')
+        .orient('top')
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .ticks(6, '.,0s')
+        .orient('left')
+
+    // helpers
+
+    var bisect = d3.bisector(function(d){return acc.size(d)}).right
+
+    // draw objects
+
+    var line = d3.svg.line()
+        .x(function(d,i){return x(acc.size(d))})
+        .y(acc.sMeanDegree)
+
+    var area = d3.svg.area()
+        .x(function(d,i){return x(acc.size(d))})
+        .y1(function(d,i){return y(d.maxDegree)})
+        .y0(function(d,i){return y(1)})
+
+    renderCity
+        .gBox({width: cityWidth, height: this.height})
+        .y(y)
+
+    // extra data transformation
+
+    var xRange = x.range()
+    var range = d3.range(xRange[0], xRange[1], (xRange[1]-xRange[0])/numberOfCities)
+    var initCityData = _.map(range, function(d,i){
+        var index = bisect(data, x.invert(d))
+        return data[index]
+    })
+    var cityData = initCityData
+    var hoverCity = data[0]
+
+    // render
+
+    sel.on('mousemove', function(d,i){
+        var index = bisect(data, x.invert(d3.mouse(this)[0]))
+        var xPos = x(acc.size(data[index]))
+        var overlay = _.filter(initCityData, function(d,i){
+            var thisXPos = x(acc.size(d))
+            return xPos > thisXPos && xPos <= thisXPos+cityWidth*.8 || xPos+cityWidth*.8 > thisXPos && xPos+cityWidth*.8 <= thisXPos+cityWidth*.8
+        })
+        _.each(initCityData, function(d,i){ d.hide = false})
+        _.each(overlay, function(d,i){ d.hide = true})
+        hoverCity = data[index]
+        renderCities()
+    })
+
+    sel.select('.xAxis')
+        .attr('transform', 'translate(0,-5)')
+        .call(xAxis)
+        .selectAll('path, line')
+        .style({
+            stroke: 'black',
+            'stroke-width': 1
+        })
+
+    sel.select('path.meanDegree')
+        .attr('d', line(data))
+        .style({
+            fill: 'none', stroke: 'white',
+            'stroke-width': 2,
+            'stroke-dashArray': '2,2'
+        })
+
+    sel.select('path.area')
+        .attr('d', area(data))
+        .style({
+            fill: 'hsl(0,0%,92%)', stroke: 'none',
+            'stroke-width': 1,
+            'stroke-dashArray': '2,2'
+        })
+
+    sel.select('.cityTicks')
+        .selectAll('circle').data(data)
+        .enter().append('circle')
+        .attr({
+            cx: function(d,i){return x(acc.size(d))},
+            cy: function(d,i){return y(d.meanDegree)},
+            r: 1
+        })
+        .style({
+            stroke: 'gray',
+            fill: 'white',
+            'stroke-width': 1
+        })
+
+    renderCities()
+    function renderCities () {
+
+        var cities = sel.selectAll('.city').data(cityData, function(d,i){return d.pop})
+        cities.enter().append(function () {
+                return document.querySelector('#tpl-city g.city').cloneNode(true)
+            })
+            .attr('transform', function(d,i){
+                return 'translate('+(x(acc.size(d))-cityWidth/2)+',0)'
+            })
+
+        cities
+            .each(function(d,i){
+                renderCity.render(d3.select(this), d)
+            })
+            .classed('hide', function(d,i){return d.hide})
+
+        cities.exit().remove()
+
+        if (d3.select('.hoverCity .wrap').empty()) {
+            d3.select('.hoverCity').append(function(){
+                return document.querySelector('#tpl-city g.wrap').cloneNode(true)
+            })
+        }
+
+        d3.select('.hoverCity')
+            .transition()
+            .duration(40)
+            .ease('linear')
+            .attr('transform', 'translate('+(x(acc.size(hoverCity))-cityWidth/2)+',0)')
+        renderCity.renderHover(d3.select('.hoverCity'), hoverCity)
+
+        var t = d3.select('.hoverCity').node()
+        debugger
+
+    }
+
+
+    return this
+}
+
+module.exports = main
+},{"./render_base":2,"./render_city2":5}],4:[function(require,module,exports){
+var render_base = require('./render_base')()
 
 module.exports = function render_vis(){
 
@@ -125,8 +296,10 @@ module.exports = function render_vis(){
         this.setG(sel)
 
         var acc = {
-            size: function(d,i){return d.pop}
+            size: function(d,i){return d.amount}
         }
+
+        data = _.sortBy(data, acc.size)
 
         var cityWidth = this.width / 8
 
@@ -192,12 +365,12 @@ module.exports = function render_vis(){
 
         var area = d3.svg.area()
             .y(function(d,i){return y(d.degree)})
-            .x1(function(d,i){return 0})
+            .x1(function(d,i){return 3})
             .x0(function(d,i){return x(d.amount)})
         var areaClust = d3.svg.area()
             .y(function(d,i){return y(d.degree)})
             .x1(function(d,i){return xClust(d.avgClustCoeff)})
-            .x0(function(d,i){return 0})
+            .x0(function(d,i){return -3})
 
         var arc = d3.svg.arc()
 
@@ -319,7 +492,7 @@ module.exports = function render_vis(){
             .selectAll('circle').data(data)
             .enter().append('circle')
             .attr({
-                cx: function(d,i){return xPop(d.pop)},
+                cx: function(d,i){return xPop(acc.size(d))},
                 cy: function(d,i){return y(d.meanDegree)},
                 r: 1
             })
@@ -426,10 +599,146 @@ module.exports = function render_vis(){
 
     return main
 }
-},{"./render_base":2}],4:[function(require,module,exports){
+},{"./render_base":2}],5:[function(require,module,exports){
+var render_base = require('./render_base')()
+
+var coverageRadius = 15
+
+// scales
+var xAmount = d3.scale.linear()
+    .domain([0, 15])
+var xClust = d3.scale.linear()
+    .domain([0,.5])
+var pop = d3.scale.sqrt()
+var y
+var y2 = d3.scale.log()
+
+//axis
+var xAmountAxis = d3.svg.axis()
+    .scale(xAmount)
+    .tickValues([15])
+    .orient('bottom')
+var xClustAxis = d3.svg.axis()
+    .scale(xClust)
+    .tickValues([.5])
+    .orient('bottom')
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .ticks(6, '.,1s')
+    .orient('left')
+
+// draw functions
+var areaAmount = d3.svg.area()
+var areaClust = d3.svg.area()
+
+// MAIN
+var main = {}
+_.extend(main, render_base)
+
+main.render = function (sel, data) {
+
+    // scales
+    xAmount
+        .range([0, this.width*.40])
+    xClust
+        .range([0, -this.width*.40])
+    pop
+        .domain([0, data.pop])
+        .range([0, coverageRadius])
+
+    y2
+        .domain([1, data.maxDegree])
+        .range([this.height, y(data.maxDegree)])
+
+    yAxis.scale(y2)
+
+    // draw functions
+    areaAmount
+        .y(function(d,i){return y(d.degree)})
+        .x1(function(d,i){return 0})
+        .x0(function(d,i){return xAmount((d.amount/data.amount)*100)})
+    areaClust
+        .y(function(d,i){return y(d.degree)})
+        .x1(function(d,i){return xClust(d.avgClustCoeff)})
+        .x0(function(d,i){return 0})
+
+    // render
+    sel.select('.wrap')
+        .attr({
+            transform: 'translate('+this.width/2+',0)'
+        })
+    sel.select('path.area')
+        .attr({
+            // transform: 'translate('+this.width/2+',0)',
+            d: areaAmount(data.degrees)
+        })
+        .style({
+            fill: 'url(#diagonalHatch)',
+            stroke: 'steelblue'
+        })
+    sel.select('path.areaClust')
+        .attr({
+            // transform: 'translate('+this.width/2+',0)',
+            d: areaClust(data.degrees)
+        })
+        .style({
+            fill: 'url(#diagonalHatch2)',
+            stroke: 'orange'
+        })
+        .on('click', function(d,i){
+            console.log(d)
+        })
+
+    sel.select('g.coverage')
+        .attr('transform', 'translate(0,'+(this.height+10+coverageRadius)+')')
+    sel.select('circle.pop')
+        .attr({
+            cx:0, cy: 0,
+            r: pop(data.pop)
+        })
+        .style({
+            fill: 'none', stroke: 'gray'
+        })
+    sel.select('circle.amount')
+        .attr({
+            cx:0, cy: 0,
+            r: pop(data.amount)
+        })
+        .style({
+            fill: 'url(#diagonalHatch)',
+            stroke: 'steelblue'
+        })
+
+    // Axis
+
+
+    return this
+}
+
+main.renderHover = function (sel, data) {
+
+    this.render(sel, data)
+
+    sel.select('.yAxis')
+        .attr('transform', 'translate(3,0)')
+        .call(yAxis)
+
+    return this
+}
+
+main.y = function (arg) {
+    if (arguments.length == 0) return y
+    y = arg
+    return this
+}
+
+module.exports = main
+},{"./render_base":2}],6:[function(require,module,exports){
 var render_base = require('./render_base')()
 var render_sumContacts = require('./render_sumContacts')()
 var render_city = require('./render_city')()
+var render_citiesView = require('./render_citiesView')
+
 
 module.exports = function render_vis0(){
 
@@ -437,7 +746,7 @@ module.exports = function render_vis0(){
     _.extend(main, render_base)
     main.render = function(sel, data) {
 
-        this.svgBox({width: 1200, height: 600, top: 40, bottom: 20, left: 20, right:20})
+        this.svgBox({width: 1100, height: 400, top: 40, bottom: 60, left: 20, right:20})
         this.setSvg(sel)
 
         render_sumContacts.gBox({
@@ -454,13 +763,22 @@ module.exports = function render_vis0(){
                 top: 0,
                 left: 0
             })
+            // .render(sel.select('g.view-cities'), data)
+
+        render_citiesView.gBox({
+                width: this.width,
+                height: this.height,
+                top: 0,
+                left: 0
+            })
+            .setG(sel.select('g.view-cities'))
             .render(sel.select('g.view-cities'), data)
 
         return main
     }
     return main
 }
-},{"./render_base":2,"./render_city":3,"./render_sumContacts":5}],5:[function(require,module,exports){
+},{"./render_base":2,"./render_citiesView":3,"./render_city":4,"./render_sumContacts":7}],7:[function(require,module,exports){
 var render_base = require('./render_base')()
 
 module.exports = function render_vis0_cities(){
@@ -588,7 +906,7 @@ module.exports = function render_vis0_cities(){
     }
     return main
 }
-},{"./render_base":2}],6:[function(require,module,exports){
+},{"./render_base":2}],8:[function(require,module,exports){
 // transform
 
 module.exports = function transform(data){
@@ -614,7 +932,7 @@ module.exports = function transform(data){
     })
 
     return _(data).filter(function (d,i) {
-            return d.amount / d.pop > .0
+            return d.amount / d.pop > .1
         })
         // .reject(function(d,i){return d.meanDegree>14})
         .sortBy('pop')
