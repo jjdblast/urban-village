@@ -10,7 +10,7 @@
                         pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
                             path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
                     g.main
-                        g.view-sumContacts
+                        //- g.view-sumContacts
                             rect.background2
                             rect.background
                             path.line1
@@ -24,8 +24,12 @@
                             path.meanDegree
                             g.cityTicks
                             g.axis.xAxis
+                            g.popTick
+                                text
+                                path
                             g.cities
-                        g.hoverCity
+                            g.hoverCity
+                            rect.hoverTarget
         .col-right
             .wrp-vis
                 svg
@@ -36,9 +40,13 @@
                 g.contacts
                     g.connections
                     g.arcs
-                path.area
+                path.areaAmount
                 path.areaClust
                 g.axis.yAxis
+                g.degreeTick
+                    //- path.amount
+                    //- path.clust
+                    text
                 g.axis.xAxis
                 g.axis.xClustAxis
                 path.baseLine

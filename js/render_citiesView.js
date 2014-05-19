@@ -1,10 +1,14 @@
 var render_base = require('./render_base')()
 var renderCity = require('./render_city2')
 
+var popNumberFormat = d3.format(',')
+
 var main = {}
 _.extend(main, render_base)
 
 main.render = function(sel, data) {
+
+    console.log('yo')
 
     var acc = {
         size: function(d,i){return d.pop},
@@ -37,11 +41,6 @@ main.render = function(sel, data) {
         .scale(x)
         .ticks(6, ',.1s')
         .orient('top')
-    // var yAxis = d3.svg.axis()
-    //     .scale(y)
-    //     .ticks(6, '.,0s')
-    //     .orient('left')
-
 
     // helpers
 
@@ -66,36 +65,32 @@ main.render = function(sel, data) {
 
     var xRange = x.range()
     var range = d3.range(xRange[0], xRange[1], (xRange[1]-xRange[0])/numberOfCities)
-    var initCityData = _.map(range, function(d,i){
+    var cityData = _.map(range, function(d,i){
         var index = bisect(data, x.invert(d))
         return data[index]
     })
-    var cityData = initCityData
     var hoverCity = data[0]
 
     // render
 
-    sel.on('mousemove', function(d,i){
-        var index = bisect(data, x.invert(d3.mouse(this)[0]))
-        var xPos = x(acc.size(data[index]))
-        var overlay = _.filter(initCityData, function(d,i){
-            var thisXPos = x(acc.size(d))
-            return xPos > thisXPos && xPos <= thisXPos+cityWidth*.8 || xPos+cityWidth*.8 > thisXPos && xPos+cityWidth*.8 <= thisXPos+cityWidth*.8
+    sel.select('rect.hoverTarget')
+        .attr({
+            x:0, y:0, width: this.width, height: this.height
         })
-        _.each(initCityData, function(d,i){ d.hide = false})
-        _.each(overlay, function(d,i){ d.hide = true})
-        hoverCity = data[index]
-        renderCities()
-    })
+        .style({
+            opacity: 0,
+        })
+        .on('mousemove', function(d,i){
+            renderCity.o({ hoverDegree: Math.round(y.invert(d3.mouse(this)[1])) })
+            hoverCity = data[ bisect(data, x.invert(d3.mouse(this)[0])) ]
+            renderCities()
+        })
 
-    sel.select('.xAxis')
+    var selXAxis = sel.select('.xAxis')
         .attr('transform', 'translate(0,-5)')
         .call(xAxis)
-        .selectAll('path, line')
-        .style({
-            stroke: 'black',
-            'stroke-width': 1
-        })
+    selXAxis.selectAll('path, line')
+        .style({ stroke: 'black', 'stroke-width': 1 })
 
     sel.select('path.meanDegree')
         .attr('d', line(data))
@@ -131,7 +126,37 @@ main.render = function(sel, data) {
     renderCities()
     function renderCities () {
 
-        var cities = sel.selectAll('.city').data(cityData, function(d,i){return d.pop})
+        if (hoverCity) {
+            var popTick = sel.select('g.popTick')
+                .attr('transform', 'translate('+ x(acc.size(hoverCity)) +',-5)')
+            popTick.select('text')
+                .attr({
+                    y: -9, 'text-anchor': 'middle'
+                })
+                .style({
+                    'font-size': '11px', 'font-weight': '600'
+                })
+                .text( popNumberFormat(acc.size(hoverCity)) )
+            popTick.select('path')
+                .attr('d', 'M0,0 v-6')
+                .style({
+                    stroke: 'black'
+                })
+            var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
+            sel.select('.xAxis').selectAll('text')
+                .transition()
+                .ease('linear')
+                .duration(100)
+                .style({
+                    'fill-opacity': function(d,i){
+                        return Math.abs(x(d) - x(acc.size(hoverCity))) < popTickLenght ? 0 : 1
+
+                    }
+                })
+        }
+
+        var cities = sel.select('g.cities')
+            .selectAll('.city').data(cityData, function(d,i){return d.pop})
         cities.enter().append(function () {
                 return document.querySelector('#tpl-city g.city').cloneNode(true)
             })
@@ -143,7 +168,9 @@ main.render = function(sel, data) {
             .each(function(d,i){
                 renderCity.render(d3.select(this), d)
             })
-            .classed('hide', function(d,i){return d.hide})
+            .classed('hide', function(d,i){
+                return Math.abs( x(acc.size(d)) - x(acc.size(hoverCity)) ) < cityWidth*.8
+            })
 
         cities.exit().remove()
 

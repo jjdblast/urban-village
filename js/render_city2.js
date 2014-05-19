@@ -23,7 +23,7 @@ var xClustAxis = d3.svg.axis()
     .orient('bottom')
 var yAxis = d3.svg.axis()
     .ticks(6, '.,1s')
-    .orient('left')
+    .orient('right')
 
 // draw functions
 var areaAmount = d3.svg.area()
@@ -65,9 +65,8 @@ main.render = function (sel, data, _o) {
         .attr({
             transform: 'translate('+this.width/2+',0)'
         })
-    sel.select('path.area')
+    sel.select('path.areaAmount')
         .attr({
-            // transform: 'translate('+this.width/2+',0)',
             d: areaAmount(data.degrees)
         })
         .style({
@@ -76,7 +75,6 @@ main.render = function (sel, data, _o) {
         })
     sel.select('path.areaClust')
         .attr({
-            // transform: 'translate('+this.width/2+',0)',
             d: areaClust(data.degrees)
         })
         .style({
@@ -115,11 +113,52 @@ main.render = function (sel, data, _o) {
 
 main.renderHover = function (sel, data) {
 
+    if(o.hoverDegree > data.maxDegree) o.hoverDegree = data.maxDegree
+    if(o.hoverDegree < 1) o.hoverDegree = 1
+
     this.render(sel, data)
 
     sel.select('.yAxis')
-        .attr('transform', 'translate(3,0)')
+        .attr('transform', 'translate(-3,0)')
         .call(yAxis)
+
+    var degreeTick = sel.select('g.degreeTick')
+        .attr('transform', 'translate(0,'+ o.y(o.hoverDegree) +')')
+    degreeTick.select('text')
+        .attr({
+            x: 6, dy: '.32em', 'text-anchor': 'start'
+        })
+        .style({
+            'font-size': '11px', 'font-weight': '600'
+        })
+        .text(o.hoverDegree + ' contacts')
+    degreeTick.select('.amount')
+        .attr('d', function(){
+            var d = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+            return 'M0,0 h' + xAmount((d.amount/data.amount)*100)
+        })
+        .style({
+            stroke: 'steelblue'
+        })
+    degreeTick.select('.clust')
+        .attr('d', function(){
+            var d = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+            return 'M0,0 h' + xClust(d.avgClustCoeff)
+        })
+        .style({
+            stroke: 'orange'
+        })
+
+    sel.select('.yAxis').selectAll('text')
+        .transition()
+        .ease('linear')
+        .duration(100)
+        .style({
+            'fill-opacity': function(d,i){
+                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < 25 ? 0 : 1
+
+            }
+        })
 
     return this
 }

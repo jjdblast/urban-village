@@ -23,24 +23,19 @@
                 </pattern>
               </defs>
               <g class="main">
-                <g class="view-sumContacts">
-                  <rect class="background2"></rect>
-                  <rect class="background"></rect>
-                  <path class="line1"></path>
-                  <path class="line2"></path>
-                  <g class="cities"></g>
-                  <g class="amount"></g>
-                  <g class="x axis"></g>
-                  <g class="y axis"></g>
-                </g>
                 <g class="view-cities">
                   <path class="area"></path>
                   <path class="meanDegree"></path>
                   <g class="cityTicks"></g>
                   <g class="axis xAxis"></g>
+                  <g class="popTick">
+                    <text></text>
+                    <path></path>
+                  </g>
                   <g class="cities"></g>
+                  <g class="hoverCity"></g>
+                  <rect class="hoverTarget"></rect>
                 </g>
-                <g class="hoverCity"></g>
               </g>
             </svg>
           </div>
@@ -60,9 +55,12 @@
               <g class="connections"></g>
               <g class="arcs"></g>
             </g>
-            <path class="area"></path>
+            <path class="areaAmount"></path>
             <path class="areaClust"></path>
             <g class="axis yAxis"></g>
+            <g class="degreeTick">
+              <text></text>
+            </g>
             <g class="axis xAxis"></g>
             <g class="axis xClustAxis"></g>
             <path class="baseLine"></path>
