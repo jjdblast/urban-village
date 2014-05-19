@@ -63,3 +63,32 @@ div {
 body {
   font-family: "Whitney A", "Whitney B";
 }
+.ctn-full {
+  width: 960px;
+  min-height: 1px;
+  margin: auto;
+  padding: 0 20px;
+  width: 100%;
+}
+.col-citiesView {
+  padding: 0 20px;
+  min-height: 1px;
+  width: 100%;
+  float: left;
+  padding: 0;
+  width: 75%;
+}
+.col-right {
+  padding: 0 20px;
+  min-height: 1px;
+  width: 100%;
+  float: left;
+  width: 25%;
+}
+g.city {
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+}
+.hide {
+  opacity: 0;
+}

@@ -41,12 +41,14 @@ module.exports = function render_base(){
         g.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
+        return this
     }
 
     main.setG = function (sel) {
         sel.attr({
             transform: 'translate('+this.left+','+this.top+')'
         })
+        return this
     }
 
     // functions for setting the box of the vis

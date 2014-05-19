@@ -1,28 +1,34 @@
 //- .container
-.wrp-vis.vis0
-    svg
-        defs
-            pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
-                path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
-            pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
-                path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
-        g.main
-            g.view-sumContacts
-                rect.background2
-                rect.background
-                path.line1
-                path.line2
-                g.cities
-                g.amount
-                g.x.axis
-                g.y.axis
-            g.view-cities
-                path.maxDegree
-                g.axis.popAxis
-                g.axis.degreeAxis
-                g.cityTicks
-                path.meanDegree
-
+.ctn-full
+    .row
+        .col-citiesView
+            .wrp-vis.vis0
+                svg
+                    defs
+                        pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
+                            path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
+                        pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
+                            path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
+                    g.main
+                        g.view-sumContacts
+                            rect.background2
+                            rect.background
+                            path.line1
+                            path.line2
+                            g.cities
+                            g.amount
+                            g.x.axis
+                            g.y.axis
+                        g.view-cities
+                            path.area
+                            path.meanDegree
+                            g.cityTicks
+                            g.axis.xAxis
+                            g.cities
+                        g.hoverCity
+        .col-right
+            .wrp-vis
+                svg
 #tpl-city(style='display: none')
     svg
         g.city
@@ -32,7 +38,10 @@
                     g.arcs
                 path.area
                 path.areaClust
-                g.axis
+                g.axis.yAxis
                 g.axis.xAxis
                 g.axis.xClustAxis
                 path.baseLine
+                g.coverage
+                    circle.pop
+                    circle.amount

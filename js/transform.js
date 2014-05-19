@@ -23,7 +23,7 @@ module.exports = function transform(data){
     })
 
     return _(data).filter(function (d,i) {
-            return d.amount / d.pop > .0
+            return d.amount / d.pop > .1
         })
         // .reject(function(d,i){return d.meanDegree>14})
         .sortBy('pop')

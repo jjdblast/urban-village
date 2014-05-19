@@ -10,8 +10,10 @@ module.exports = function render_vis(){
         this.setG(sel)
 
         var acc = {
-            size: function(d,i){return d.pop}
+            size: function(d,i){return d.amount}
         }
+
+        data = _.sortBy(data, acc.size)
 
         var cityWidth = this.width / 8
 
@@ -204,7 +206,7 @@ module.exports = function render_vis(){
             .selectAll('circle').data(data)
             .enter().append('circle')
             .attr({
-                cx: function(d,i){return xPop(d.pop)},
+                cx: function(d,i){return xPop(acc.size(d))},
                 cy: function(d,i){return y(d.meanDegree)},
                 r: 1
             })
