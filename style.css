@@ -35,7 +35,7 @@ div {
   box-sizing: border-box;
 }
 .ctn {
-  width: 960px;
+  width: 700px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
@@ -72,15 +72,101 @@ div {
 .axis text {
   font-size: 11px;
 }
+h1 {
+  font-size: 61px;
+  line-height: 61px;
+  margin-top: 54px;
+  margin-bottom: 54px;
+  font-weight: 500;
+}
+h2 {
+  font-size: 41px;
+  line-height: 41px;
+  margin-top: 54px;
+  margin-bottom: 27px;
+  font-weight: 500;
+}
+h3 {
+  font-size: 27px;
+  line-height: 27px;
+  margin-top: 54px;
+  margin-bottom: 27px;
+  font-weight: 500;
+}
+h4 {
+  font-size: 27px;
+  line-height: 27px;
+  margin-top: 27px;
+  margin-bottom: 27px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+h5 {
+  font-size: 18px;
+  line-height: 18px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-weight: 500;
+}
+p,
+ul,
+ol,
+pre,
+blockquote {
+  font-size: 18px;
+  line-height: 27px;
+  font-weight: 400;
+  margin-top: 0px;
+  margin-bottom: 27px;
+  padding: 0;
+}
+.no {
+  margin-bottom: 0;
+}
+b,
+strong {
+  font-weight: 600;
+}
+ul {
+  list-style-type: circle;
+}
+/* Sanitation */
+hr {
+  border: 1px solid;
+  margin: -1px 0;
+}
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+b,
+strong,
+em,
+small,
+code {
+  line-height: 1;
+}
 body {
   font-family: "Whitney A", "Whitney B";
 }
 .ctn-full {
-  width: 960px;
+  width: 700px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
   width: 100%;
+  margin-top: 40px;
+}
+.ctn-vis {
+  width: 350px;
+  float: left;
+  margin-left: 0px;
+  padding: 10px;
+  padding-left: 0px;
+  padding-top: 0px;
 }
 .col-citiesView {
   padding: 0 20px;
@@ -101,5 +187,32 @@ g.city {
   transition: opacity .3s;
 }
 .hide {
-  opacity: 0;
+  opacity: 0 !important;
+}
+.view-description {
+  margin-top: 80px;
+}
+.view-description p {
+  margin: 0;
+  text-align: center;
+}
+.graphDescription {
+  margin: 50px auto;
+}
+.graphDescription p {
+  margin: 0;
+  text-align: center;
+}
+.stroke {
+  text-decoration: underline;
+  font-weight: 600;
+}
+.green {
+  color: #33a02c;
+}
+.steelblue {
+  color: steelblue;
+}
+.orange {
+  color: orange;
 }
