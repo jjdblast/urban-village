@@ -1,7 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 var render_sumContacts = require('./render_sumContacts')()
-var render_citiesView = require('./render_citiesView')
+var citiesView = require('./render_citiesView')
+var conPreview = require('./render_conPreview')
 
 var main = {}
 
@@ -11,9 +12,14 @@ main.init = function(data) {
     // this.setSvg(sel)
 
     var selCitiesView = d3.select('.vis0')
-    render_citiesView.svgBox({width: 1100, height: 400, top: 40, bottom: 60, left: 20, right:20})
+    citiesView.svgBox({width: 800, height: 350, top: 60, bottom: 50, left: 20, right:20})
         .setSvg(selCitiesView)
         .render(selCitiesView, data)
+
+    var selConPreview = d3.select('.view-conPreview')
+    conPreview.svgBox({width: 400, height: 400, top: 40, bottom: 60, left: 20, right:20})
+        .setSvg(selConPreview)
+        // .render(selConPreview, data[20])
 
     return main
 }
@@ -35,7 +41,7 @@ module.exports = main
 //         left: 0
 //     })
     // .render(sel.select('g.view-cities'), data)
-},{"./render_citiesView":4,"./render_sumContacts":6}],2:[function(require,module,exports){
+},{"./render_citiesView":4,"./render_conPreview":6,"./render_sumContacts":7}],2:[function(require,module,exports){
 var transform = require('./transform')
 var ctrlMain = require('./ctrl_mainVis')
 
@@ -47,7 +53,7 @@ d3.json('data/aggregate.json', function(err,data){
 
         
 })
-},{"./ctrl_mainVis":1,"./transform":7}],3:[function(require,module,exports){
+},{"./ctrl_mainVis":1,"./transform":8}],3:[function(require,module,exports){
 
 module.exports = function render_base(){
 
@@ -138,15 +144,15 @@ module.exports = function render_base(){
 
 var base = require('./render_base')()
 
-module.exports = function render_vis(){
-    var main = {}
-    _.extend(main, render_base)
-    main.render = function(sel, data) {
+var main = {}
+_.extend(main, render_base)
 
-        return this
-    }
-    return main
+main.render = function(sel, data) {
+
+    return this
 }
+
+module.exports = main
 
 */
 },{}],4:[function(require,module,exports){
@@ -160,8 +166,6 @@ _.extend(main, render_base)
 
 main.render = function(sel, data) {
 
-    console.log('yo')
-
     var acc = {
         size: function(d,i){return d.pop},
         sMeanDegree: function(d,i){return y(d.meanDegree)}
@@ -170,7 +174,6 @@ main.render = function(sel, data) {
 
     var numberOfCities = 8
     var cityWidth = this.width / numberOfCities
-    var coverageRadius = (50 - 10) / 2
 
     // scales
 
@@ -182,12 +185,12 @@ main.render = function(sel, data) {
     var y = d3.scale.log()
         .domain([1, maxDegree])
         .range([this.height, 0])
-    var pop = d3.scale.sqrt()
-        .domain([0, d3.max(data, function(d,i){return d.pop})])
-        .range([0, coverageRadius])
-    var amount = d3.scale.sqrt()
-        .domain([0, d3.max(data, function(d,i){return d.amount})])
-        .range([0, coverageRadius])
+    // var pop = d3.scale.sqrt()
+    //     .domain([0, d3.max(data, function(d,i){return d.pop})])
+    //     .range([0, coverageRadius])
+    // var amount = d3.scale.sqrt()
+    //     .domain([0, d3.max(data, function(d,i){return d.amount})])
+    //     .range([0, coverageRadius])
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -242,7 +245,9 @@ main.render = function(sel, data) {
         .attr('transform', 'translate(0,-5)')
         .call(xAxis)
     selXAxis.selectAll('path, line')
-        .style({ stroke: 'black', 'stroke-width': 1 })
+        .style({ stroke: 'green', 'stroke-width': 1 })
+    selXAxis.selectAll('text')
+        .style({ fill: '#33a02c' })
 
     sel.select('path.meanDegree')
         .attr('d', line(data))
@@ -260,16 +265,17 @@ main.render = function(sel, data) {
             'stroke-dashArray': '2,2'
         })
 
+    // city ticks
     var cityTicks = sel.select('.cityTicks')
         .selectAll('circle').data(data)
     cityTicks.enter().append('circle')
         .attr({
             cx: function(d,i){return x(acc.size(d))},
             cy: function(d,i){return y(d.meanDegree)},
-            r: 1
+            r: 1.5
         })
         .style({
-            stroke: 'gray',
+            stroke: 'white',
             fill: 'white',
             'stroke-width': 1
         })
@@ -286,13 +292,14 @@ main.render = function(sel, data) {
                     y: -9, 'text-anchor': 'middle'
                 })
                 .style({
-                    'font-size': '11px', 'font-weight': '600'
+                    'font-size': '11px', 'font-weight': '600',
+                    fill: '#33a02c'
                 })
-                .text( popNumberFormat(acc.size(hoverCity)) )
+                .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
             popTick.select('path')
                 .attr('d', 'M0,0 v-6')
                 .style({
-                    stroke: 'black'
+                    stroke: '#33a02c'
                 })
             var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
             sel.select('.xAxis').selectAll('text')
@@ -348,11 +355,11 @@ var render_base = require('./render_base')()
 
 var o = {}
 
-var coverageRadius = 15
+var coverageRadius = 10
 
 // scales
 var xAmount = d3.scale.linear()
-    .domain([0, 15])
+    .domain([0, 20])
 var xClust = d3.scale.linear()
     .domain([0,.5])
 var pop = d3.scale.sqrt()
@@ -361,7 +368,7 @@ var y2 = d3.scale.log()
 //axis
 var xAmountAxis = d3.svg.axis()
     .scale(xAmount)
-    .tickValues([15])
+    .tickValues([20])
     .orient('bottom')
 var xClustAxis = d3.svg.axis()
     .scale(xClust)
@@ -384,9 +391,9 @@ main.render = function (sel, data, _o) {
 
     // scales
     xAmount
-        .range([0, this.width*.40])
+        .range([0, this.width*.35])
     xClust
-        .range([0, -this.width*.40])
+        .range([0, -this.width*.35])
     pop
         .domain([0, data.pop])
         .range([0, coverageRadius])
@@ -407,10 +414,13 @@ main.render = function (sel, data, _o) {
         .x0(function(d,i){return 0})
 
     // render
+    // wrap translate makes the middle of the group x=0
     sel.select('.wrap')
         .attr({
             transform: 'translate('+this.width/2+',0)'
         })
+
+    // the area for the amount of people
     sel.select('path.areaAmount')
         .attr({
             d: areaAmount(data.degrees)
@@ -419,6 +429,7 @@ main.render = function (sel, data, _o) {
             fill: 'url(#diagonalHatch)',
             stroke: 'steelblue'
         })
+    // the area for the clustering
     sel.select('path.areaClust')
         .attr({
             d: areaClust(data.degrees)
@@ -431,17 +442,151 @@ main.render = function (sel, data, _o) {
             console.log(d)
         })
 
-    sel.select('g.coverage')
-        .attr('transform', 'translate(0,'+(this.height+10+coverageRadius)+')')
-    sel.select('circle.pop')
+    // Axis
+    var selAmountAxis = sel.select('.xAmountAxis')
+        .attr('transform', 'translate(0,'+(this.height+7)+')')
+        .call(xAmountAxis)
+    selAmountAxis.selectAll('path, line')
+        .style({
+            stroke: 'steelblue',
+            'stroke-width': 1
+        })
+    selAmountAxis.selectAll('text')
+        .style('opacity', 0)
+    var selClustAxis = sel.select('.xClustAxis')
+        .attr('transform', 'translate(0,'+(this.height+7)+')')
+    selClustAxis.call(xClustAxis)
+        .selectAll('path, line')
+        .style({
+            stroke: 'orange',
+            'stroke-width': 1
+        })
+    selClustAxis.selectAll('text')
+        .style('opacity', 0)
+
+    var hoverDegreeData = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+    if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
+
+    // # xAmountAxis
+    var amountTick = sel.select('g.amountTick')
+        .attr('transform', 'translate('+ xAmount((hoverDegreeData.amount/data.amount)*100) +','+ (this.height+7) +')')
+
+    amountTick.select('text.percent')
+        .text( d3.format('.0f')((hoverDegreeData.amount/data.amount)*100) +'%')
+        .attr({
+            y: 10, dy: '.71em',
+            'text-anchor': function(d,i){
+                return xAmount((hoverDegreeData.amount/data.amount)*100) > 8 ? 'middle' : 'start'
+            }
+        })
+        .style({
+            'font-size': '11px',
+            'fill': 'steelblue'
+        })
+    amountTick.select('text.number')
+        .text( d3.format(',.0f')(hoverDegreeData.amount) + '')
+        .attr({
+            y: '2em', dy: '.71em',
+            'text-anchor': function(d,i){
+                return xAmount((hoverDegreeData.amount/data.amount)*100) > 8 ? 'middle' : 'start'
+            }
+        })
+        .style({
+            'font-size': '11px',
+            'fill': 'steelblue'
+        })
+    amountTick.select('path')
+        .attr('d', 'M0,0 v6')
+        .style({
+            stroke: 'steelblue'
+        })
+
+    // # xClustAxis
+
+    var clustTick = sel.select('g.clustTick')
+        .attr('transform', 'translate('+ xClust(hoverDegreeData.avgClustCoeff) +','+ (this.height+7) +')')
+
+    clustTick.select('text.number')
+        .text( d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%' )
+        .attr({
+            y: 10, dy: '.71em',
+            'text-anchor': function(d,i){
+                return xClust(hoverDegreeData.avgClustCoeff) < -8 ? 'middle' : 'end'
+            }
+        })
+        .style({
+            'font-size': '11px',
+            'fill': 'orange'
+        })
+    clustTick.select('path')
+        .attr('d', 'M0,0 v6')
+        .style({
+            stroke: 'orange'
+        })
+
+    // yAxis degree tick
+    var degreeTick = sel.select('g.degreeTick')
+        .attr('transform', 'translate(0,'+ o.y(hoverDegreeData.degree) +')')
+    degreeTick.select('path')
+        .attr('d', 'M-3,0 h 6')
+        .style({
+            stroke: 'black'
+        })
+    degreeTick.select('circle.clust')
+        .attr({
+            cy: 0,
+            cx: xClust(hoverDegreeData.avgClustCoeff),
+            r: 2
+        })
+        .style({
+            fill: 'orange'
+        })
+    degreeTick.select('circle.amount')
+        .attr({
+            cy: 0,
+            cx: xAmount((hoverDegreeData.amount/data.amount)*100),
+            r: 2
+        })
+        .style({
+            fill: 'steelblue'
+        })
+    degreeTick.select('path.clust')
+        .attr('d', 'M'+ xClust(hoverDegreeData.avgClustCoeff) + ',0 H0')
+        .style({
+            stroke: 'orange'
+        })
+    degreeTick.select('path.amount')
+        .attr('d', 'M'+ xAmount((hoverDegreeData.amount/data.amount)*100) + ',0 H0')
+        .style({
+            stroke: 'steelblue'
+        })
+
+
+    return this
+}
+
+main.renderHover = function (sel, data) {
+
+
+    this.render(sel, data)
+
+    // if(o.hoverDegree > data.maxDegree) o.hoverDegree = data.maxDegree
+    if(o.hoverDegree < 1) o.hoverDegree = 1
+    var hoverDegreeData = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+    if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
+
+    // the two coverage circles
+    var selCoverage = sel.select('g.coverage')
+        .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
+    selCoverage.select('circle.pop')
         .attr({
             cx:0, cy: 0,
             r: pop(data.pop)
         })
         .style({
-            fill: 'none', stroke: 'gray'
+            fill: 'white', stroke: '#33a02c'
         })
-    sel.select('circle.amount')
+    selCoverage.select('circle.amount')
         .attr({
             cx:0, cy: 0,
             r: pop(data.amount)
@@ -451,60 +596,80 @@ main.render = function (sel, data, _o) {
             stroke: 'steelblue'
         })
 
-    // Axis
+    // # yAxis
 
-
-    return this
-}
-
-main.renderHover = function (sel, data) {
-
-    if(o.hoverDegree > data.maxDegree) o.hoverDegree = data.maxDegree
-    if(o.hoverDegree < 1) o.hoverDegree = 1
-
-    this.render(sel, data)
-
-    sel.select('.yAxis')
-        .attr('transform', 'translate(-3,0)')
-        .call(yAxis)
-
+    // yAxis degree tick
     var degreeTick = sel.select('g.degreeTick')
         .attr('transform', 'translate(0,'+ o.y(o.hoverDegree) +')')
     degreeTick.select('text')
         .attr({
-            x: 6, dy: '.32em', 'text-anchor': 'start'
+            x: 0, y: function () {
+                return o.y(o.hoverDegree) < 20 ? 12 : -12
+            },
+            dy: '.32em', 'text-anchor': 'middle'
         })
         .style({
             'font-size': '11px', 'font-weight': '600'
         })
         .text(o.hoverDegree + ' contacts')
-    degreeTick.select('.amount')
-        .attr('d', function(){
-            var d = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
-            return 'M0,0 h' + xAmount((d.amount/data.amount)*100)
+    degreeTick.select('path')
+        .attr('d', 'M-3,0 h 6')
+        .style({
+            stroke: 'black'
+        })
+    degreeTick.select('circle.clust')
+        .attr({
+            cy: 0,
+            cx: xClust(hoverDegreeData.avgClustCoeff),
+            r: 2
         })
         .style({
-            stroke: 'steelblue'
+            fill: 'orange'
         })
-    degreeTick.select('.clust')
-        .attr('d', function(){
-            var d = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
-            return 'M0,0 h' + xClust(d.avgClustCoeff)
+    degreeTick.select('circle.amount')
+        .attr({
+            cy: 0,
+            cx: xAmount((hoverDegreeData.amount/data.amount)*100),
+            r: 2
         })
+        .style({
+            fill: 'steelblue'
+        })
+    degreeTick.select('path.clust')
+        .attr('d', 'M'+ xClust(hoverDegreeData.avgClustCoeff) + ',0 H0')
         .style({
             stroke: 'orange'
         })
+    degreeTick.select('path.amount')
+        .attr('d', 'M'+ xAmount((hoverDegreeData.amount/data.amount)*100) + ',0 H0')
+        .style({
+            stroke: 'steelblue'
+        })
 
-    sel.select('.yAxis').selectAll('text')
+
+    // yAxis
+    sel.select('.yAxis')
+        .attr('transform', 'translate(-3,0)')
+        .call(yAxis)
+
+    // yAxis overlapping
+    var degreeTickHeight = degreeTick.node().getBoundingClientRect().height
+    sel.select('.yAxis').selectAll('.tick')
         .transition()
         .ease('linear')
         .duration(100)
         .style({
             'fill-opacity': function(d,i){
-                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < 25 ? 0 : 1
+                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < degreeTickHeight ? 0 : 1
+
+            },
+            'stroke-opacity': function(d,i){
+                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < degreeTickHeight ? 0 : 1
 
             }
         })
+
+   
 
     return this
 }
@@ -517,6 +682,123 @@ main.o = function (arg) {
 
 module.exports = main
 },{"./render_base":3}],6:[function(require,module,exports){
+var render_base = require('./render_base')()
+
+var main = {}
+_.extend(main, render_base)
+
+main.render = function(sel, data) {
+
+    var cityWidth = this.width
+
+    var maxAvgDegree = d3.max(data, function(d,i){ return d.meanDegree })
+    var r = d3.scale.log()
+        .domain([1, 800])
+        .range([0, this.width/2])
+
+    var degree = 50
+
+    var arc = d3.svg.arc()
+        .innerRadius(r(100)+2.5)
+        .outerRadius(r(100)-2.5)
+
+    var contactsData = main.getContactsData(degree, r(degree))
+    console.log(contactsData)
+    // render
+
+    sel.select('.contacts')
+        .attr({
+            transform: 'translate('+ this.width/2 +','+ this.width/2 +')' //+y(1)+')'
+        })
+    var connections = sel.select('.connections')
+        .selectAll('path').data(contactsData.links)
+    connections.enter().append('path') 
+    connections.attr({
+            d: function(d,i){return d.path},
+        })
+        .style({
+            stroke: 'orange',
+            fill: 'none',
+            'stroke-width': 1
+        })
+    connections.exit().remove()
+
+    var arcs = sel.select('g.arcs')
+        .selectAll('path').data(contactsData.contacts)
+    arcs.enter().append('path')
+    arcs.attr({
+            d: arc
+        })
+        .style({
+            fill: 'gray'
+        })
+    arcs.exit().remove()
+
+    console.log('yo')
+
+    return this
+}
+
+main.getContactsData = function(degree, radius) {
+
+    var range = d3.range(degree)
+
+    var scale = d3.scale.ordinal()
+        .domain(range)
+        .rangeBands([0, 2*Math.PI], .2, .1)
+
+    var contData = _.map(range, function(d,i){
+        var startAngle = scale(d)
+        return {
+            startAngle: startAngle,
+            endAngle: startAngle + scale.rangeBand(),
+            id: i
+        }
+    })
+    _.each(contData, function(cont,i){
+        var ptsId = _.reject(range, function(d2){ return d2 == cont.id })
+        ptsId = _.union(ptsId.slice(i), ptsId).reverse()
+        var scale = d3.scale.ordinal()
+            .domain(ptsId)//.reverse())
+            .rangePoints([cont.startAngle, cont.endAngle], 1)
+        cont.points = _.map(ptsId, function(d,i){
+            return {
+                angle: scale(d),
+                id: d
+            }
+        })
+    })
+    var links = []
+    _.each(contData, function(cont,i){
+        _.each(cont.points, function(pt,i){
+            if (!_.find(links, function(d,i){
+                return (d.fromId == cont.id && d.toId == pt.id) || (d.fromId == pt.id && d.toId == cont.id)
+            })) {
+                links.push({
+                    fromId: cont.id,
+                    toId: pt.id,
+                    from: pt.angle,
+                    to: _.find(_.find(contData, function(d,i){return d.id == pt.id}).points, function(d,i){return d.id == cont.id}).angle,
+                    random: Math.random(),
+                    index: i
+                })
+            }
+        })
+    })
+    // var radius = r(degree)
+    _.each(links, function(d,i){
+        var halfPI = Math.PI/2
+        d.path = 'M '+ radius*Math.cos(d.from - halfPI) +','+ radius*Math.sin(d.from - halfPI) + ' Q 0,0 '+ radius*Math.cos(d.to - halfPI) +','+ radius*Math.sin(d.to - halfPI)
+    })
+
+    return {
+        links: links.slice(0,links.length*.25),
+        contacts: contData
+    }
+}
+
+module.exports = main
+},{"./render_base":3}],7:[function(require,module,exports){
 var render_base = require('./render_base')()
 
 module.exports = function render_vis0_cities(){
@@ -644,13 +926,13 @@ module.exports = function render_vis0_cities(){
     }
     return main
 }
-},{"./render_base":3}],7:[function(require,module,exports){
+},{"./render_base":3}],8:[function(require,module,exports){
 // transform
 
 module.exports = function transform(data){
 
     _.each(data, function(d,i){
-        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>0})
+        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>5})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
         d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})

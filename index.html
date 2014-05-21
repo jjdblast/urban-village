@@ -41,8 +41,15 @@
           </div>
         </div>
         <div class="col-right">
-          <div class="wrp-vis">
-            <svg></svg>
+          <div class="wrp-vis view-conPreview">
+            <svg>
+              <g class="main">
+                <g class="contacts">
+                  <g class="connections"></g>
+                  <g class="arcs"></g>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
@@ -51,18 +58,28 @@
       <svg>
         <g class="city">
           <g class="wrap">
-            <g class="contacts">
-              <g class="connections"></g>
-              <g class="arcs"></g>
-            </g>
             <path class="areaAmount"></path>
             <path class="areaClust"></path>
             <g class="axis yAxis"></g>
             <g class="degreeTick">
+              <circle class="clust"></circle>
+              <path class="clust"></path>
+              <circle class="amount"></circle>
+              <path class="amount"></path>
               <text></text>
+              <path></path>
             </g>
-            <g class="axis xAxis"></g>
             <g class="axis xClustAxis"></g>
+            <g class="clustTick">
+              <text class="number"></text>
+              <path></path>
+            </g>
+            <g class="axis xAmountAxis"></g>
+            <g class="amountTick">
+              <text class="percent"></text>
+              <text class="number"></text>
+              <path></path>
+            </g>
             <path class="baseLine"></path>
             <g class="coverage">
               <circle class="pop"></circle>
