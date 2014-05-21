@@ -229,25 +229,25 @@ main.renderHover = function (sel, data) {
     if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
 
     // the two coverage circles
-    var selCoverage = sel.select('g.coverage')
-        .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
-    selCoverage.select('circle.pop')
-        .attr({
-            cx:0, cy: 0,
-            r: pop(data.pop)
-        })
-        .style({
-            fill: 'white', stroke: '#33a02c'
-        })
-    selCoverage.select('circle.amount')
-        .attr({
-            cx:0, cy: 0,
-            r: pop(data.amount)
-        })
-        .style({
-            fill: 'url(#diagonalHatch)',
-            stroke: 'steelblue'
-        })
+    // var selCoverage = sel.select('g.coverage')
+    //     .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
+    // selCoverage.select('circle.pop')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.pop)
+    //     })
+    //     .style({
+    //         fill: 'white', stroke: '#33a02c'
+    //     })
+    // selCoverage.select('circle.amount')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.amount)
+    //     })
+    //     .style({
+    //         fill: 'url(#diagonalHatch)',
+    //         stroke: 'steelblue'
+    //     })
 
     // # yAxis
 

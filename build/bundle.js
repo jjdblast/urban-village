@@ -1,25 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-var render_sumContacts = require('./render_sumContacts')()
+var render_sumContacts = require('./render_sumContacts')
 var citiesView = require('./render_citiesView')
-var conPreview = require('./render_conPreview')
 
 var main = {}
 
 main.init = function(data) {
 
-    // this.svgBox({width: 1100, height: 400, top: 40, bottom: 60, left: 20, right:20})
-    // this.setSvg(sel)
-
     var selCitiesView = d3.select('.vis0')
-    citiesView.svgBox({width: 800, height: 350, top: 60, bottom: 50, left: 20, right:20})
+    citiesView.svgBox({width: 1100, height: 350, top: 30, bottom: 40, left: 20, right:20})
         .setSvg(selCitiesView)
         .render(selCitiesView, data)
 
-    var selConPreview = d3.select('.view-conPreview')
-    conPreview.svgBox({width: 400, height: 400, top: 40, bottom: 60, left: 20, right:20})
-        .setSvg(selConPreview)
-        // .render(selConPreview, data[20])
+    render_sumContacts.svgBox({
+            width: 300,
+            height: 300,
+            top: 40, bottom: 40, left: 5, right:60
+        })
+        .setSvg(d3.select('.vis1'))
+        .render(d3.select('.vis1'), data)
 
     return main
 }
@@ -41,7 +40,7 @@ module.exports = main
 //         left: 0
 //     })
     // .render(sel.select('g.view-cities'), data)
-},{"./render_citiesView":4,"./render_conPreview":6,"./render_sumContacts":7}],2:[function(require,module,exports){
+},{"./render_citiesView":4,"./render_sumContacts":6}],2:[function(require,module,exports){
 var transform = require('./transform')
 var ctrlMain = require('./ctrl_mainVis')
 
@@ -53,7 +52,7 @@ d3.json('data/aggregate.json', function(err,data){
 
         
 })
-},{"./ctrl_mainVis":1,"./transform":8}],3:[function(require,module,exports){
+},{"./ctrl_mainVis":1,"./transform":7}],3:[function(require,module,exports){
 
 module.exports = function render_base(){
 
@@ -160,7 +159,7 @@ var render_base = require('./render_base')()
 var renderCity = require('./render_city2')
 
 var popNumberFormat = d3.format(',')
-var hoverCity, hoverDegree = 10
+var hoverCity, hoverDegree = 10, hoverDegreeData
 
 var main = {}
 _.extend(main, render_base)
@@ -247,7 +246,7 @@ main.render = function(sel, data) {
 
     sel.select('rect.hoverTarget')
         .attr({
-            x:0, y:0, width: this.width, height: this.height
+            x:cityWidth/2, y:0, width: this.width-cityWidth, height: this.height
         })
         .style({
             opacity: 0,
@@ -256,12 +255,33 @@ main.render = function(sel, data) {
             hoverDegree = Math.round(y.invert(d3.mouse(this)[1]))
             renderCity.o({ hoverDegree: Math.round(y.invert(d3.mouse(this)[1])) })
             hoverCity = data[ bisect(data, x.invert(d3.mouse(this)[0])) ]
+            hoverDegreeData = _.find(hoverCity.degrees, function(d,i){return d.degree == hoverDegree})
             renderCities()
+
+            d3.select('.label-pop')
+                .text(d3.format(',')(hoverCity.pop))
+            d3.select('.label-amount')
+                .text(d3.format('.0f')((hoverDegreeData.amount/hoverCity.amount)*100) +'%')
+            d3.select('.label-contacts')
+                .text(hoverDegree)
+            d3.select('.label-clust')
+                .text(d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%')
         })
         .on('mouseout', function () {
             hoverCity = _.last(data)
-            renderCity.o({ hoverDegree: Math.round(hoverCity.meanDegree) })
+            hoverDegree = Math.round(hoverCity.meanDegree)
+            renderCity.o({ hoverDegree: hoverDegree })
+            hoverDegreeData = _.find(hoverCity.degrees, function(d,i){return d.degree == hoverDegree})
             renderCities()
+
+            d3.select('.label-pop')
+                .text(d3.format(',')(hoverCity.pop))
+            d3.select('.label-amount')
+                .text(d3.format('.0f')((hoverDegreeData.amount/hoverCity.amount)*100) +'%')
+            d3.select('.label-contacts')
+                .text(hoverDegree)
+            d3.select('.label-clust')
+                .text(d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%')
         })
 
     sel.select('text.label-average')
@@ -319,35 +339,34 @@ main.render = function(sel, data) {
     renderCities()
     function renderCities () {
 
-        if (hoverCity) {
-            var popTick = sel.select('g.popTick')
-                .attr('transform', 'translate('+ x(acc.size(hoverCity)) +',-5)')
-            popTick.select('text')
-                .attr({
-                    y: -9, 'text-anchor': 'middle'
-                })
-                .style({
-                    'font-size': '11px', 'font-weight': '600',
-                    fill: '#33a02c'
-                })
-                .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
-            popTick.select('path')
-                .attr('d', 'M0,0 v-6')
-                .style({
-                    stroke: '#33a02c'
-                })
-            var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
-            sel.select('.xAxis').selectAll('text')
-                .transition()
-                .ease('linear')
-                .duration(100)
-                .style({
-                    'fill-opacity': function(d,i){
-                        return Math.abs(x(d) - x(acc.size(hoverCity))) < popTickLenght ? 0 : 1
+        var popTick = sel.select('g.popTick')
+            .attr('transform', 'translate('+ x(acc.size(hoverCity)) +',-5)')
+        popTick.select('text')
+            .attr({
+                y: -9, 'text-anchor': 'middle'
+            })
+            .style({
+                'font-size': '11px', 'font-weight': '600',
+                fill: '#33a02c'
+            })
+            .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
+        popTick.select('path')
+            .attr('d', 'M0,0 v-6')
+            .style({
+                stroke: '#33a02c', 'stroke-width': 2
+            })
+        var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
+        sel.select('.xAxis').selectAll('text')
+            .transition()
+            .ease('linear')
+            .duration(100)
+            .style({
+                'fill-opacity': function(d,i){
+                    return Math.abs(x(d) - x(acc.size(hoverCity))) < popTickLenght ? 0 : 1
 
-                    }
-                })
-        }
+                }
+            })
+        
 
         var cities = sel.select('g.cities')
             .selectAll('.city').data(cityData, function(d,i){return d.pop})
@@ -636,25 +655,25 @@ main.renderHover = function (sel, data) {
     if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
 
     // the two coverage circles
-    var selCoverage = sel.select('g.coverage')
-        .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
-    selCoverage.select('circle.pop')
-        .attr({
-            cx:0, cy: 0,
-            r: pop(data.pop)
-        })
-        .style({
-            fill: 'white', stroke: '#33a02c'
-        })
-    selCoverage.select('circle.amount')
-        .attr({
-            cx:0, cy: 0,
-            r: pop(data.amount)
-        })
-        .style({
-            fill: 'url(#diagonalHatch)',
-            stroke: 'steelblue'
-        })
+    // var selCoverage = sel.select('g.coverage')
+    //     .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
+    // selCoverage.select('circle.pop')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.pop)
+    //     })
+    //     .style({
+    //         fill: 'white', stroke: '#33a02c'
+    //     })
+    // selCoverage.select('circle.amount')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.amount)
+    //     })
+    //     .style({
+    //         fill: 'url(#diagonalHatch)',
+    //         stroke: 'steelblue'
+    //     })
 
     // # yAxis
 
@@ -744,255 +763,135 @@ module.exports = main
 },{"./render_base":3}],6:[function(require,module,exports){
 var render_base = require('./render_base')()
 
+    
 var main = {}
 _.extend(main, render_base)
-
 main.render = function(sel, data) {
 
-    var cityWidth = this.width
+    var acc = {
+        x: function(d,i){return d.pop},
+        y: function(d,i){return d.sumDegree},
+    }
 
-    var maxAvgDegree = d3.max(data, function(d,i){ return d.meanDegree })
-    var r = d3.scale.log()
-        .domain([1, 800])
-        .range([0, this.width/2])
+    // minPop = d3.min(data, acc.x)
+    var xExt = d3.extent(data, acc.x)
+    xExt[0] = xExt[0] - 50
+    // xExt[1] = xExt[1] + 50000
+    var yMin = d3.min(data, acc.y) - 1000
+    var yExt = [yMin, yMin*(Math.pow(xExt[1]/xExt[0],1.12))]
+    var yExt2 = [yMin + 0, yMin*(Math.pow(xExt[1]/xExt[0],1)) + 0]
 
-    var degree = 50
+    var x = d3.scale.log()
+        .domain(xExt)
+        .range([0, this.width])
 
-    var arc = d3.svg.arc()
-        .innerRadius(r(100)+2.5)
-        .outerRadius(r(100)-2.5)
+    var y = d3.scale.log()
+        .domain(yExt2)
+        .range([this.height, 0])
 
-    var contactsData = main.getContactsData(degree, r(degree))
-    console.log(contactsData)
-    // render
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .ticks(6, ',.1s')
+        .tickSize(6, 0)
+        .orient('bottom')
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .ticks(4, ',.1s')
+        // .tickValues([100,10000,1000000])
+        .tickSize(6, 0)
+        .orient('right')
 
-    sel.select('.contacts')
+    var line = d3.svg.line()
+        .x(function(d,i){return x(d[0])})
+        .y(function(d,i){return y(d[1])})
+
+    // draw
+    var cities = sel.select('g.cities')
+        .selectAll('circle').data(data)
+    cities.enter().append('circle')
+        .style({
+            fill: 'steelblue',
+            '-webkit-filter': 'drop-shadow( -5px -5px 5px #000 )'
+        })
+    cities
+        .on('click', function(d){
+            console.log(d)
+        })
+        .transition()
         .attr({
-            transform: 'translate('+ this.width/2 +','+ this.width/2 +')' //+y(1)+')'
+            cx: function(d,i){return x(acc.x(d))},
+            cy: function(d,i){return y(acc.y(d))},
+            r: 3
         })
-    var connections = sel.select('.connections')
-        .selectAll('path').data(contactsData.links)
-    connections.enter().append('path') 
-    connections.attr({
-            d: function(d,i){return d.path},
-        })
+    cities.exit().remove()
+
+    sel.select('path.line1')
+        .transition()
+        .attr('d', line([[xExt[0], yExt[0]], [xExt[1], yExt[1]] ]))
         .style({
-            stroke: 'orange',
             fill: 'none',
-            'stroke-width': 1
+            stroke: 'steelblue',
+            'stroke-width': 2,
         })
-    connections.exit().remove()
+    sel.select('path.line2')
+        .transition()
+        .attr('d', line([[xExt[0], yExt2[0]], [xExt[1], yExt2[1]] ]))
+        .style({
+            fill: 'none',
+            stroke: 'black',
+            'stroke-width': 2,
+            // 'stroke-dashArray': '5,5'
+        })
 
-    var arcs = sel.select('g.arcs')
-        .selectAll('path').data(contactsData.contacts)
-    arcs.enter().append('path')
-    arcs.attr({
-            d: arc
+    // draw axis
+    sel.select('g.x.axis')
+        .attr('transform', 'translate(0,'+ this.height +')')
+        .transition()
+        .call(xAxis)
+    sel.select('g.y.axis')
+        .attr('transform', 'translate('+ this.width +',0)')
+        .transition()
+        .call(yAxis)
+
+    // background
+    sel.select('rect.background')
+        .attr({
+            x:0, y:0,
+            width: this.width,
+            height: this.height
         })
         .style({
-            fill: 'gray'
+            fill: 'white',
+            stroke: 'black',
+            'stroke-width': 2,
+            // 'stroke-dashArray': '5,5'
         })
-    arcs.exit().remove()
+    sel.select('rect.background2')
+        .attr({
+            x:0, y:y(yExt[1]),
+            width: this.width,
+            height: - y(yExt[1]) - 0,
+            fill: 'url(#diagonalHatch)',
+            // transform: 'scale(-1,0)'
+        })
+        .style({
+            stroke: 'steelblue',
+            'stroke-width': 2,
+            // 'stroke-dashArray': '5,5'
+        })
 
-    console.log('yo')
 
     return this
 }
 
-main.getContactsData = function(degree, radius) {
-
-    var range = d3.range(degree)
-
-    var scale = d3.scale.ordinal()
-        .domain(range)
-        .rangeBands([0, 2*Math.PI], .2, .1)
-
-    var contData = _.map(range, function(d,i){
-        var startAngle = scale(d)
-        return {
-            startAngle: startAngle,
-            endAngle: startAngle + scale.rangeBand(),
-            id: i
-        }
-    })
-    _.each(contData, function(cont,i){
-        var ptsId = _.reject(range, function(d2){ return d2 == cont.id })
-        ptsId = _.union(ptsId.slice(i), ptsId).reverse()
-        var scale = d3.scale.ordinal()
-            .domain(ptsId)//.reverse())
-            .rangePoints([cont.startAngle, cont.endAngle], 1)
-        cont.points = _.map(ptsId, function(d,i){
-            return {
-                angle: scale(d),
-                id: d
-            }
-        })
-    })
-    var links = []
-    _.each(contData, function(cont,i){
-        _.each(cont.points, function(pt,i){
-            if (!_.find(links, function(d,i){
-                return (d.fromId == cont.id && d.toId == pt.id) || (d.fromId == pt.id && d.toId == cont.id)
-            })) {
-                links.push({
-                    fromId: cont.id,
-                    toId: pt.id,
-                    from: pt.angle,
-                    to: _.find(_.find(contData, function(d,i){return d.id == pt.id}).points, function(d,i){return d.id == cont.id}).angle,
-                    random: Math.random(),
-                    index: i
-                })
-            }
-        })
-    })
-    // var radius = r(degree)
-    _.each(links, function(d,i){
-        var halfPI = Math.PI/2
-        d.path = 'M '+ radius*Math.cos(d.from - halfPI) +','+ radius*Math.sin(d.from - halfPI) + ' Q 0,0 '+ radius*Math.cos(d.to - halfPI) +','+ radius*Math.sin(d.to - halfPI)
-    })
-
-    return {
-        links: links.slice(0,links.length*.25),
-        contacts: contData
-    }
-}
-
 module.exports = main
 },{"./render_base":3}],7:[function(require,module,exports){
-var render_base = require('./render_base')()
-
-module.exports = function render_vis0_cities(){
-    
-    var main = {}
-    _.extend(main, render_base)
-    main.render = function(sel, data) {
-
-        this.setG(sel)
-
-        var acc = {
-            x: function(d,i){return d.pop},
-            y: function(d,i){return d.sumDegree},
-        }
-
-        // minPop = d3.min(data, acc.x)
-        var xExt = d3.extent(data, acc.x)
-        xExt[0] = xExt[0] - 50
-        // xExt[1] = xExt[1] + 50000
-        var yMin = d3.min(data, acc.y) - 1000
-        var yExt = [yMin, yMin*(Math.pow(xExt[1]/xExt[0],1.12))]
-        var yExt2 = [yMin + 0, yMin*(Math.pow(xExt[1]/xExt[0],1)) + 0]
-
-        var x = d3.scale.log()
-            .domain(xExt)
-            .range([0, this.width])
-
-        var y = d3.scale.log()
-            .domain(yExt2)
-            .range([this.height, 0])
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .ticks(6, ',.1s')
-            .tickSize(6, 0)
-            .orient('bottom')
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .ticks(4, ',.1s')
-            // .tickValues([100,10000,1000000])
-            .tickSize(6, 0)
-            .orient('right')
-
-        var line = d3.svg.line()
-            .x(function(d,i){return x(d[0])})
-            .y(function(d,i){return y(d[1])})
-
-        // draw
-        var cities = sel.select('g.cities')
-            .selectAll('circle').data(data)
-        cities.enter().append('circle')
-            .style({
-                fill: 'steelblue',
-                '-webkit-filter': 'drop-shadow( -5px -5px 5px #000 )'
-            })
-        cities
-            .on('click', function(d){
-                console.log(d)
-            })
-            .transition()
-            .attr({
-                cx: function(d,i){return x(acc.x(d))},
-                cy: function(d,i){return y(acc.y(d))},
-                r: 3
-            })
-        cities.exit().remove()
-
-        sel.select('path.line1')
-            .transition()
-            .attr('d', line([[xExt[0], yExt[0]], [xExt[1], yExt[1]] ]))
-            .style({
-                fill: 'none',
-                stroke: 'steelblue',
-                'stroke-width': 2,
-            })
-        sel.select('path.line2')
-            .transition()
-            .attr('d', line([[xExt[0], yExt2[0]], [xExt[1], yExt2[1]] ]))
-            .style({
-                fill: 'none',
-                stroke: 'black',
-                'stroke-width': 2,
-                // 'stroke-dashArray': '5,5'
-            })
-
-        // draw axis
-        sel.select('g.x.axis')
-            .attr('transform', 'translate(0,'+ this.height +')')
-            .transition()
-            .call(xAxis)
-        sel.select('g.y.axis')
-            .attr('transform', 'translate('+ this.width +',0)')
-            .transition()
-            .call(yAxis)
-
-        // background
-        sel.select('rect.background')
-            .attr({
-                x:0, y:0,
-                width: this.width,
-                height: this.height
-            })
-            .style({
-                fill: 'white',
-                stroke: 'black',
-                'stroke-width': 2,
-                // 'stroke-dashArray': '5,5'
-            })
-        sel.select('rect.background2')
-            .attr({
-                x:0, y:y(yExt[1]),
-                width: this.width,
-                height: - y(yExt[1]) - 0,
-                fill: 'url(#diagonalHatch)',
-                // transform: 'scale(-1,0)'
-            })
-            .style({
-                stroke: 'steelblue',
-                'stroke-width': 2,
-                // 'stroke-dashArray': '5,5'
-            })
-
-
-        return this
-    }
-    return main
-}
-},{"./render_base":3}],8:[function(require,module,exports){
 // transform
 
 module.exports = function transform(data){
 
     _.each(data, function(d,i){
-        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>5})
+        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
         d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})

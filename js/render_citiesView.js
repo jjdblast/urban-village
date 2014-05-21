@@ -2,7 +2,7 @@ var render_base = require('./render_base')()
 var renderCity = require('./render_city2')
 
 var popNumberFormat = d3.format(',')
-var hoverCity, hoverDegree = 10
+var hoverCity, hoverDegree = 10, hoverDegreeData
 
 var main = {}
 _.extend(main, render_base)
@@ -89,7 +89,7 @@ main.render = function(sel, data) {
 
     sel.select('rect.hoverTarget')
         .attr({
-            x:0, y:0, width: this.width, height: this.height
+            x:cityWidth/2, y:0, width: this.width-cityWidth, height: this.height
         })
         .style({
             opacity: 0,
@@ -98,12 +98,33 @@ main.render = function(sel, data) {
             hoverDegree = Math.round(y.invert(d3.mouse(this)[1]))
             renderCity.o({ hoverDegree: Math.round(y.invert(d3.mouse(this)[1])) })
             hoverCity = data[ bisect(data, x.invert(d3.mouse(this)[0])) ]
+            hoverDegreeData = _.find(hoverCity.degrees, function(d,i){return d.degree == hoverDegree})
             renderCities()
+
+            d3.select('.label-pop')
+                .text(d3.format(',')(hoverCity.pop))
+            d3.select('.label-amount')
+                .text(d3.format('.0f')((hoverDegreeData.amount/hoverCity.amount)*100) +'%')
+            d3.select('.label-contacts')
+                .text(hoverDegree)
+            d3.select('.label-clust')
+                .text(d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%')
         })
         .on('mouseout', function () {
             hoverCity = _.last(data)
-            renderCity.o({ hoverDegree: Math.round(hoverCity.meanDegree) })
+            hoverDegree = Math.round(hoverCity.meanDegree)
+            renderCity.o({ hoverDegree: hoverDegree })
+            hoverDegreeData = _.find(hoverCity.degrees, function(d,i){return d.degree == hoverDegree})
             renderCities()
+
+            d3.select('.label-pop')
+                .text(d3.format(',')(hoverCity.pop))
+            d3.select('.label-amount')
+                .text(d3.format('.0f')((hoverDegreeData.amount/hoverCity.amount)*100) +'%')
+            d3.select('.label-contacts')
+                .text(hoverDegree)
+            d3.select('.label-clust')
+                .text(d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%')
         })
 
     sel.select('text.label-average')
@@ -161,35 +182,34 @@ main.render = function(sel, data) {
     renderCities()
     function renderCities () {
 
-        if (hoverCity) {
-            var popTick = sel.select('g.popTick')
-                .attr('transform', 'translate('+ x(acc.size(hoverCity)) +',-5)')
-            popTick.select('text')
-                .attr({
-                    y: -9, 'text-anchor': 'middle'
-                })
-                .style({
-                    'font-size': '11px', 'font-weight': '600',
-                    fill: '#33a02c'
-                })
-                .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
-            popTick.select('path')
-                .attr('d', 'M0,0 v-6')
-                .style({
-                    stroke: '#33a02c'
-                })
-            var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
-            sel.select('.xAxis').selectAll('text')
-                .transition()
-                .ease('linear')
-                .duration(100)
-                .style({
-                    'fill-opacity': function(d,i){
-                        return Math.abs(x(d) - x(acc.size(hoverCity))) < popTickLenght ? 0 : 1
+        var popTick = sel.select('g.popTick')
+            .attr('transform', 'translate('+ x(acc.size(hoverCity)) +',-5)')
+        popTick.select('text')
+            .attr({
+                y: -9, 'text-anchor': 'middle'
+            })
+            .style({
+                'font-size': '11px', 'font-weight': '600',
+                fill: '#33a02c'
+            })
+            .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
+        popTick.select('path')
+            .attr('d', 'M0,0 v-6')
+            .style({
+                stroke: '#33a02c', 'stroke-width': 2
+            })
+        var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
+        sel.select('.xAxis').selectAll('text')
+            .transition()
+            .ease('linear')
+            .duration(100)
+            .style({
+                'fill-opacity': function(d,i){
+                    return Math.abs(x(d) - x(acc.size(hoverCity))) < popTickLenght ? 0 : 1
 
-                    }
-                })
-        }
+                }
+            })
+        
 
         var cities = sel.select('g.cities')
             .selectAll('.city').data(cityData, function(d,i){return d.pop})

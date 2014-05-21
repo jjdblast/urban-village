@@ -6,7 +6,7 @@
 .font-element(@fontMult:1; @topMult:1; @bottomMult:1) {
     @font-size: round(@baseFontSize * pow(@sizeMult, @fontMult));
     font-size: @font-size;
-    line-height: @baseLineHeight * ceil(@font-size/@baseLineHeight);
+    line-height: @baseLineHeight * (@font-size/@baseLineHeight);
     margin-top: @baseLineHeight * @topMult;
     margin-bottom: @baseLineHeight * @bottomMult;
 }

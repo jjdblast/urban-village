@@ -1,4 +1,25 @@
 //- .container
+.ctn
+    h1 Number of phone contacts across city population in Portugal
+    .ctn-vis: .wrp-vis.vis1
+        svg
+            //- defs
+                pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
+                    path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
+                pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
+                    path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
+            g.main
+                g.view-sumContacts
+                    rect.background2
+                    rect.background
+                    path.line1
+                    path.line2
+                    g.cities
+                    g.amount
+                    g.x.axis
+                    g.y.axis
+    p On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio-economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways. On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.
+
 .ctn-full
     .row
         .col-citiesView
@@ -33,15 +54,26 @@
                             g.cityTicks
                             g.hoverCity
                             rect.hoverTarget
-        //- .col-right
-            .wrp-vis.view-conPreview
-                svg
-                    g.main
-                        g.contacts
-                            g.connections
-                            g.arcs
-
-
+.ctn.graphDescription
+    p.green
+        | The city of 
+        span.label-cityName Lisboa
+        |  have a population of 
+        span.stroke.label-pop 562,000
+        |  people, 
+    p.green in the data from this city:
+    p
+        span.steelblue 
+            span.stroke.label-amount 10%
+            |  of the people have 
+        span.black 
+            span.stroke.label-contacts 10
+            |  phone contacts
+    p.orange 
+        | there's a 
+        span.stroke.label-clust 24%
+        |  chance that two of these contacts know each other
+        
 #tpl-city(style='display: none')
     svg
         g.city
