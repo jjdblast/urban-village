@@ -3,13 +3,111 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="img/favicon.png">
-    <title>App</title>
+    <title>Scaling</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="style.css">
     <script type="text/javascript" src="lib.js"></script>
   </head>
   <body>
-    <div class="wrp-vis vis0"></div>
+    <div class="ctn">
+      <h1>Number of phone contacts across city population in Portugal</h1>
+      <div class="ctn-vis">
+        <div class="wrp-vis vis1">
+          <svg>
+            <g class="main">
+              <g class="view-sumContacts">
+                <rect class="background2"></rect>
+                <rect class="background"></rect>
+                <path class="line1"></path>
+                <path class="line2"></path>
+                <g class="cities"></g>
+                <g class="amount"></g>
+                <g class="x axis"></g>
+                <g class="y axis"></g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p>On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio-economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways. On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.</p>
+    </div>
+    <div class="ctn-full">
+      <div class="row">
+        <div class="col-citiesView">
+          <div class="wrp-vis vis0">
+            <svg>
+              <defs>
+                <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+                  <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
+                </pattern>
+                <pattern id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4">
+                  <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="orange"></path>
+                </pattern>
+              </defs>
+              <g class="main">
+                <g class="view-cities">
+                  <path class="area"></path>
+                  <text class="label-average">average</text>
+                  <g class="axis xAxis"></g>
+                  <path class="line-clust"></path>
+                  <path class="line-amount"></path>
+                  <g class="popTick">
+                    <text></text>
+                    <path></path>
+                  </g>
+                  <g class="cities"></g>
+                  <path class="meanDegree"></path>
+                  <g class="cityTicks"></g>
+                  <g class="hoverCity"></g>
+                  <rect class="hoverTarget"></rect>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ctn graphDescription">
+      <p class="green">The city of <span class="label-cityName">Lisboa</span> have a population of <span class="stroke label-pop">562,000</span> people, </p>
+      <p class="green">in the data from this city:</p>
+      <p><span class="steelblue"><span class="stroke label-amount">10%</span> of the people have </span><span class="black"><span class="stroke label-contacts">10</span> phone contacts</span></p>
+      <p class="orange">there's a <span class="stroke label-clust">24%</span> chance that two of these contacts know each other</p>
+    </div>
+    <div id="tpl-city" style="display: none">
+      <svg>
+        <g class="city">
+          <g class="wrap">
+            <path class="areaAmount"></path>
+            <path class="areaClust"></path>
+            <g class="axis yAxis"></g>
+            <g class="degreeTick">
+              <circle class="clust"></circle>
+              <path class="clust"></path>
+              <circle class="amount"></circle>
+              <path class="amount"></path>
+              <text></text>
+              <path></path>
+            </g>
+            <g class="axis xClustAxis"></g>
+            <g class="clustTick">
+              <text class="number"></text>
+              <path></path>
+            </g>
+            <g class="axis xAmountAxis"></g>
+            <g class="amountTick">
+              <text class="percent"></text>
+              <text class="number"></text>
+              <path></path>
+            </g>
+            <path class="baseLine"></path>
+            <g class="coverage">
+              <circle class="pop"></circle>
+              <circle class="amount"></circle>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
 </html>
