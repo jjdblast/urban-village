@@ -1,16 +1,79 @@
 @import 'fonts.less';
 @import 'base.less';
+@import 'typography.less';
 
-@width: 960px;
+@width: 700px;
 @half-gutter: 20px;
 
-@baseFontSize: 22px;
+@baseFontSize: 18px;
 @lineMult: 1.5;
 @baseLineHeight: round(@baseFontSize * @lineMult);
 @sizeMult: 1.5;
 
 body {
     font-family: "Whitney A", "Whitney B";
-    // margin: 50px 0;
+    // margin-bottom: 500px;
     // background: lightgray;
+}
+
+.ctn-full {
+    .ctn();
+    width: 100%;
+    margin-top: 40px;
+    // margin-bottom: 80px;
+    // max-width: 1200px;
+}
+.ctn-vis {
+    width: 350px;
+    float: left;
+    margin-left: 0px;
+    padding: 10px;
+    padding-left: 0px;
+    padding-top: 0px;
+}
+.col-citiesView {
+    .col();
+    padding: 0;
+    width: 100%;
+}
+.col-right {
+    .col();
+    width: 25%;
+}
+
+g.city {
+    // opacity: .9;
+    transition: opacity .3s;
+}
+.hide {
+    opacity: 0 !important;
+}
+
+.view-description {
+    margin-top: 80px;
+    p {
+        margin: 0;
+        text-align: center;
+    }
+}
+
+.graphDescription {
+    margin: 50px auto;
+    p {
+        margin: 0;
+        text-align: center;
+    }
+}
+.stroke {
+    text-decoration: underline;
+    font-weight: 600;
+}
+.green {
+    color: #33a02c;
+}
+.steelblue {
+    color: steelblue;
+}
+.orange {
+    color: orange;
 }
