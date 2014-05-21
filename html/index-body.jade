@@ -21,34 +21,50 @@
                             g.y.axis
                         g.view-cities
                             path.area
-                            path.meanDegree
-                            g.cityTicks
+                            text.label-average average
                             g.axis.xAxis
+                            path.line-clust
+                            path.line-amount
                             g.popTick
                                 text
                                 path
                             g.cities
+                            path.meanDegree
+                            g.cityTicks
                             g.hoverCity
                             rect.hoverTarget
-        .col-right
-            .wrp-vis
+        //- .col-right
+            .wrp-vis.view-conPreview
                 svg
+                    g.main
+                        g.contacts
+                            g.connections
+                            g.arcs
+
+
 #tpl-city(style='display: none')
     svg
         g.city
             g.wrap
-                g.contacts
-                    g.connections
-                    g.arcs
                 path.areaAmount
                 path.areaClust
                 g.axis.yAxis
                 g.degreeTick
-                    //- path.amount
-                    //- path.clust
+                    circle.clust
+                    path.clust
+                    circle.amount
+                    path.amount
                     text
-                g.axis.xAxis
+                    path
                 g.axis.xClustAxis
+                g.clustTick
+                    text.number
+                    path
+                g.axis.xAmountAxis
+                g.amountTick
+                    text.percent
+                    text.number
+                    path
                 path.baseLine
                 g.coverage
                     circle.pop

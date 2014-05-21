@@ -3,7 +3,7 @@
 module.exports = function transform(data){
 
     _.each(data, function(d,i){
-        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>0})
+        d.degrees = _.filter(d.degrees, function(d,i){return d.amount>5})
         d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
         d.sumDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount}) / (d.amount/d.pop)
         d.maxAmount = d3.max(d.degrees, function(d,i){return d.amount})

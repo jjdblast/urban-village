@@ -88,14 +88,14 @@ module.exports = function render_base(){
 
 var base = require('./render_base')()
 
-module.exports = function render_vis(){
-    var main = {}
-    _.extend(main, render_base)
-    main.render = function(sel, data) {
+var main = {}
+_.extend(main, render_base)
 
-        return this
-    }
-    return main
+main.render = function(sel, data) {
+
+    return this
 }
+
+module.exports = main
 
 */

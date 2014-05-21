@@ -2,13 +2,14 @@ var render_base = require('./render_base')()
 var renderCity = require('./render_city2')
 
 var popNumberFormat = d3.format(',')
+var hoverCity, hoverDegree = 10
 
 var main = {}
 _.extend(main, render_base)
 
 main.render = function(sel, data) {
 
-    console.log('yo')
+    console.log(data[0])
 
     var acc = {
         size: function(d,i){return d.pop},
@@ -18,7 +19,6 @@ main.render = function(sel, data) {
 
     var numberOfCities = 8
     var cityWidth = this.width / numberOfCities
-    var coverageRadius = (50 - 10) / 2
 
     // scales
 
@@ -30,12 +30,13 @@ main.render = function(sel, data) {
     var y = d3.scale.log()
         .domain([1, maxDegree])
         .range([this.height, 0])
-    var pop = d3.scale.sqrt()
-        .domain([0, d3.max(data, function(d,i){return d.pop})])
-        .range([0, coverageRadius])
-    var amount = d3.scale.sqrt()
-        .domain([0, d3.max(data, function(d,i){return d.amount})])
-        .range([0, coverageRadius])
+    
+    var xAmount = d3.scale.linear()
+        .domain([0, 20])
+        .range([cityWidth*.35, 0])
+    var xClust = d3.scale.linear()
+        .domain([0,.5])
+        .range([cityWidth*.35, 0])
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -51,6 +52,18 @@ main.render = function(sel, data) {
     var line = d3.svg.line()
         .x(function(d,i){return x(acc.size(d))})
         .y(acc.sMeanDegree)
+    var lineClust = d3.svg.line()
+        .x(function(d,i){return x(acc.size(d))})
+        .y(function(d,i){
+            var obj = _.find(d.degrees, function(d,i){ return d.degree == Math.round(hoverDegree) })
+            return obj ? xClust(obj.avgClustCoeff)+main.height+7 : xClust(0)+main.height+7
+        })
+    var lineAmount = d3.svg.line()
+        .x(function(d,i){return x(acc.size(d))})
+        .y(function(d,i){
+            var obj = _.find(d.degrees, function(d,i){ return d.degree == Math.round(hoverDegree) })
+            return obj ? xAmount((obj.amount/d.amount)*100)+main.height+7 : xClust(0)+main.height+7
+        })
 
     var area = d3.svg.area()
         .x(function(d,i){return x(acc.size(d))})
@@ -69,7 +82,8 @@ main.render = function(sel, data) {
         var index = bisect(data, x.invert(d))
         return data[index]
     })
-    var hoverCity = data[0]
+    hoverCity = _.last(data)
+    renderCity.o({ hoverDegree: Math.round(hoverCity.meanDegree) })
 
     // render
 
@@ -80,24 +94,43 @@ main.render = function(sel, data) {
         .style({
             opacity: 0,
         })
-        .on('mousemove', function(d,i){
+        .on('mousemove', function(){
+            hoverDegree = Math.round(y.invert(d3.mouse(this)[1]))
             renderCity.o({ hoverDegree: Math.round(y.invert(d3.mouse(this)[1])) })
             hoverCity = data[ bisect(data, x.invert(d3.mouse(this)[0])) ]
             renderCities()
+        })
+        .on('mouseout', function () {
+            hoverCity = _.last(data)
+            renderCity.o({ hoverDegree: Math.round(hoverCity.meanDegree) })
+            renderCities()
+        })
+
+    sel.select('text.label-average')
+        .attr({
+            x: this.width-90,
+            y: acc.sMeanDegree(hoverCity)+15,
+            'text-anchor': 'end'
+        })
+        .style({
+            'font-size': '12px', fill: 'white'
         })
 
     var selXAxis = sel.select('.xAxis')
         .attr('transform', 'translate(0,-5)')
         .call(xAxis)
     selXAxis.selectAll('path, line')
-        .style({ stroke: 'black', 'stroke-width': 1 })
+        .style({ stroke: 'green', 'stroke-width': 1 })
+    selXAxis.selectAll('text')
+        .style({ fill: '#33a02c' })
 
     sel.select('path.meanDegree')
         .attr('d', line(data))
         .style({
             fill: 'none', stroke: 'white',
             'stroke-width': 2,
-            'stroke-dashArray': '2,2'
+            'stroke-dashArray': '2,2',
+            'opacity': .8
         })
 
     sel.select('path.area')
@@ -108,18 +141,20 @@ main.render = function(sel, data) {
             'stroke-dashArray': '2,2'
         })
 
+    // city ticks
     var cityTicks = sel.select('.cityTicks')
         .selectAll('circle').data(data)
     cityTicks.enter().append('circle')
         .attr({
             cx: function(d,i){return x(acc.size(d))},
             cy: function(d,i){return y(d.meanDegree)},
-            r: 1
+            r: 1.5
         })
         .style({
-            stroke: 'gray',
+            stroke: 'white',
             fill: 'white',
-            'stroke-width': 1
+            'stroke-width': 1,
+            'opacity': .5
         })
     cityTicks.exit().remove()
 
@@ -134,13 +169,14 @@ main.render = function(sel, data) {
                     y: -9, 'text-anchor': 'middle'
                 })
                 .style({
-                    'font-size': '11px', 'font-weight': '600'
+                    'font-size': '11px', 'font-weight': '600',
+                    fill: '#33a02c'
                 })
-                .text( popNumberFormat(acc.size(hoverCity)) )
+                .text( 'city pop ' + popNumberFormat(acc.size(hoverCity)) )
             popTick.select('path')
                 .attr('d', 'M0,0 v-6')
                 .style({
-                    stroke: 'black'
+                    stroke: '#33a02c'
                 })
             var popTickLenght = popTick.select('text').node().getComputedTextLength()+6
             sel.select('.xAxis').selectAll('text')
@@ -183,6 +219,25 @@ main.render = function(sel, data) {
         d3.select('.hoverCity')
             .attr('transform', 'translate('+(x(acc.size(hoverCity))-cityWidth/2)+',0)')
         renderCity.renderHover(d3.select('.hoverCity'), hoverCity)
+
+        // extra lines
+        // sel.select('path.line-clust')
+        //     .attr({
+        //         d: lineClust(data)
+        //     })
+        //     .style({
+        //         fill: 'none', opacity: .2,
+        //         stroke: 'orange'
+        //     })
+        // sel.select('path.line-amount')
+        //     .attr({
+        //         d: lineAmount(data)
+        //     })
+        //     .style({
+        //         fill: 'none', opacity: .2,
+        //         stroke: 'steelblue'
+        //     })
+
 
     }
 
