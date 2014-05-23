@@ -6,13 +6,17 @@
 .font-element(@fontMult:1; @topMult:1; @bottomMult:1) {
     @font-size: round(@baseFontSize * pow(@sizeMult, @fontMult));
     font-size: @font-size;
-    line-height: @baseLineHeight * (@font-size/@baseLineHeight);
+    line-height: @font-size * pow(@lineMult, 1/@fontMult);
     margin-top: @baseLineHeight * @topMult;
     margin-bottom: @baseLineHeight * @bottomMult;
 }
 h1 {
-    .font-element(@fontMult:3; @topMult:2; @bottomMult:2);
-    font-weight: 500;
+    // .font-element(@fontMult:3; @topMult:2; @bottomMult:2);
+    font-size: 38px;
+    line-height: 1.18;
+    font-weight: 600;
+    margin-top: @half-gutter*3;
+    margin-bottom: @half-gutter*2;
 }
 h2 {
     .font-element(@fontMult:2; @topMult:2; @bottomMult:1);
