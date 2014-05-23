@@ -35,7 +35,7 @@ div {
   box-sizing: border-box;
 }
 .ctn {
-  width: 700px;
+  width: 600px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
@@ -73,37 +73,37 @@ div {
   font-size: 11px;
 }
 h1 {
-  font-size: 61px;
-  line-height: 61px;
-  margin-top: 54px;
-  margin-bottom: 54px;
-  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.18;
+  font-weight: 600;
+  margin-top: 60px;
+  margin-bottom: 40px;
 }
 h2 {
-  font-size: 41px;
-  line-height: 41px;
-  margin-top: 54px;
-  margin-bottom: 27px;
+  font-size: 36px;
+  line-height: 44.09081537px;
+  margin-top: 48px;
+  margin-bottom: 24px;
   font-weight: 500;
 }
 h3 {
-  font-size: 27px;
-  line-height: 27px;
-  margin-top: 54px;
-  margin-bottom: 27px;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 48px;
+  margin-bottom: 24px;
   font-weight: 500;
 }
 h4 {
-  font-size: 27px;
-  line-height: 27px;
-  margin-top: 27px;
-  margin-bottom: 27px;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   font-weight: 400;
   text-transform: uppercase;
 }
 h5 {
-  font-size: 18px;
-  line-height: 18px;
+  font-size: 16px;
+  line-height: Infinitypx;
   margin-top: 0px;
   margin-bottom: 0px;
   font-weight: 500;
@@ -113,11 +113,11 @@ ul,
 ol,
 pre,
 blockquote {
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 400;
   margin-top: 0px;
-  margin-bottom: 27px;
+  margin-bottom: 24px;
   padding: 0;
 }
 .no {
@@ -153,7 +153,7 @@ body {
   font-family: "Whitney A", "Whitney B";
 }
 .ctn-full {
-  width: 700px;
+  width: 600px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
@@ -161,10 +161,9 @@ body {
   margin-top: 40px;
 }
 .ctn-vis {
-  width: 350px;
+  width: 280px;
   float: left;
   margin-left: 0px;
-  padding: 10px;
   padding-left: 0px;
   padding-top: 0px;
 }

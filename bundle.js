@@ -8,7 +8,7 @@ var main = {}
 main.init = function(data) {
 
     var selCitiesView = d3.select('.vis0')
-    citiesView.svgBox({width: 1100, height: 350, top: 30, bottom: 40, left: 20, right:20})
+    citiesView.svgBox({width: 1000, height: 350, top: 30, bottom: 40, left: 20, right:20})
         .setSvg(selCitiesView)
         .render(selCitiesView, data)
 
