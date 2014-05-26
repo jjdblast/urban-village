@@ -1,5 +1,5 @@
 var render_base = require('./render_base')()
-var renderCity = require('./render_city2')
+var renderCity = require('./render_city')
 
 var popNumberFormat = d3.format(',')
 var hoverCity, hoverDegree = 10, hoverDegreeData

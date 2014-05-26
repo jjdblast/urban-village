@@ -77,3 +77,43 @@ g.city {
 .orange {
     color: orange;
 }
+
+
+/////////
+
+*[ng-controller^='mainCtrl'] {
+    .wrp-vis {
+        box-shadow: inset 0px 1px 5px gray, inset 0px -1px 5px gray;
+    }
+    rect.hoverTarget {
+        opacity: 0;
+    }
+    .hoverTick {
+        path {
+            stroke-width: 2;
+        }
+        font-weight: 600;
+    }
+    path.leftArea {
+        fill: url(#diagonalHatch2);
+        stroke: orange;
+    }
+    path.rightArea {
+        fill: url(#diagonalHatch);
+        stroke: steelblue;
+    }
+}
+
+.ng-hide-add, .ng-hide-remove {
+    transition:0.2s linear all;
+    display:block!important;
+}
+.ng-hide-remove {
+    opacity: 0;
+}
+.ng-hide-add.ng-hide-add-active { 
+    opacity: 0;
+}
+.ng-hide-remove.ng-hide-remove-active { 
+    opacity: 1;
+}

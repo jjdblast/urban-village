@@ -1,315 +1,336 @@
 var render_base = require('./render_base')()
 
-module.exports = function render_vis(){
+var o = {}
 
-    var main = {}
-    _.extend(main, render_base)
+var coverageRadius = 10
 
-    main.render = function(sel, data) {
+// scales
+var xAmount = d3.scale.linear()
+    .domain([0, 20])
+var xClust = d3.scale.linear()
+    .domain([0,.5])
+var pop = d3.scale.sqrt()
+var y2 = d3.scale.log()
 
-        this.setG(sel)
+//axis
+var xAmountAxis = d3.svg.axis()
+    .scale(xAmount)
+    .tickValues([20])
+    .orient('bottom')
+var xClustAxis = d3.svg.axis()
+    .scale(xClust)
+    .tickValues([.5])
+    .orient('bottom')
+var yAxis = d3.svg.axis()
+    .ticks(6, '.,1s')
+    .orient('right')
 
-        var acc = {
-            size: function(d,i){return d.amount}
-        }
+// draw functions
+var areaAmount = d3.svg.area()
+var areaClust = d3.svg.area()
 
-        data = _.sortBy(data, acc.size)
+// MAIN
+var main = {}
+_.extend(main, render_base)
 
-        var cityWidth = this.width / 8
+main.render = function (sel, data, _o) {
+    if (_o) _.extend(o, _o)
 
-        var xPop = d3.scale.log()
-            .domain(d3.extent(data, acc.size))
-            .range([cityWidth/2, this.width-cityWidth/2])
-        var xPopAxis = d3.svg.axis()
-            .scale(xPop)
-            .ticks(6, ',.1s')
-            .orient('top')
+    // scales
+    xAmount
+        .range([0, this.width*.35])
+    xClust
+        .range([0, -this.width*.35])
+    pop
+        .domain([0, data.pop])
+        .range([0, coverageRadius])
+    y2
+        .domain([1, data.maxDegree])
+        .range([this.height, o.y(data.maxDegree)])
 
-        var maxDegree = d3.max(data, function(d,i){
-            return d3.max(d.degrees, function(d,i){ return d.degree })
+    yAxis.scale(y2)
+
+    // draw functions
+    areaAmount
+        .y(function(d,i){return o.y(d.degree)})
+        .x1(function(d,i){return 0})
+        .x0(function(d,i){return xAmount((d.amount/data.amount)*100)})
+    areaClust
+        .y(function(d,i){return o.y(d.degree)})
+        .x1(function(d,i){return xClust(d.avgClustCoeff)})
+        .x0(function(d,i){return 0})
+
+    // render
+    // wrap translate makes the middle of the group x=0
+    sel.select('.wrap')
+        .attr({
+            transform: 'translate('+this.width/2+',0)'
         })
-        var maxAvgDegree = d3.max(data, function(d,i){ return d.meanDegree })
-        var maxAmount = d3.max(data, function(d,i){
-            return d3.max(d.degrees, function(d,i){ return d.amount })
+
+    // the area for the amount of people
+    sel.select('path.areaAmount')
+        .attr({
+            d: areaAmount(data.degrees)
+        })
+        .style({
+            fill: 'url(#diagonalHatch)',
+            stroke: 'steelblue'
+        })
+    // the area for the clustering
+    sel.select('path.areaClust')
+        .attr({
+            d: areaClust(data.degrees)
+        })
+        .style({
+            fill: 'url(#diagonalHatch2)',
+            stroke: 'orange'
+        })
+        .on('click', function(d,i){
+            console.log(d)
         })
 
-        var r = d3.scale.log()
-            .domain([1, maxAvgDegree])
-            .range([0, cityWidth/2])
-
-        var bottom = r(maxAvgDegree)
-        var y = d3.scale.log()
-            .domain([1, maxDegree])
-            .range([this.height - bottom, this.height - bottom - r(maxDegree)])
-
-        var x = d3.scale.linear()
-            .domain([0, 15])
-            .range([3, cityWidth/3])
-        var xClust = d3.scale.linear()
-            .domain([0,.5])
-            .range([-3, -cityWidth/3])
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .tickValues([15])
-            .orient('bottom')
-        var xClustAxis = d3.svg.axis()
-            .scale(xClust)
-            .tickValues([.5])
-            .orient('bottom')
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .ticks(6, '.,0s')
-            // .tickSize(-this.width+cityWidth, 0)
-            .orient('left')
-
-        var meanDegreeLine = d3.svg.line()
-            .x(function(d,i){return xPop(acc.size(d))})
-            .y(function(d,i){return y(d.meanDegree)})
-        var maxDegreeLine = d3.svg.line()
-            .x(function(d,i){return xPop(acc.size(d))})
-            .y(function(d,i){return y(d.maxDegree)})
-
-        var maxDegreeArea = d3.svg.area()
-            .x(function(d,i){return xPop(acc.size(d))})
-            .y1(function(d,i){return y(d.maxDegree)})
-            .y0(function(d,i){return y(1)})
-            // .interpolate('basis')
-
-        var area = d3.svg.area()
-            .y(function(d,i){return y(d.degree)})
-            .x1(function(d,i){return 3})
-            .x0(function(d,i){return x(d.amount)})
-        var areaClust = d3.svg.area()
-            .y(function(d,i){return y(d.degree)})
-            .x1(function(d,i){return xClust(d.avgClustCoeff)})
-            .x0(function(d,i){return -3})
-
-        var arc = d3.svg.arc()
-
-        bisect = d3.bisector(function(d,i){return d.pop}).right
-        _data = data
-        var xPopE = xPop.domain()
-        var cityPops = d3.range(xPopE[0], xPopE[1], (xPopE[1]-xPopE[0])/5)
-        cityPops.push(xPopE[1])
-        console.log(cityPops)
-        var cityPopsData = _.map(cityPops, function(d,i){
-            return bisect(data, d)
+    // Axis
+    var selAmountAxis = sel.select('.xAmountAxis')
+        .attr('transform', 'translate(0,'+(this.height+7)+')')
+        .call(xAmountAxis)
+    selAmountAxis.selectAll('path, line')
+        .style({
+            stroke: 'steelblue',
+            'stroke-width': 1
         })
-        console.log(cityPopsData)
+    selAmountAxis.selectAll('text')
+        .style('opacity', 0)
+    var selClustAxis = sel.select('.xClustAxis')
+        .attr('transform', 'translate(0,'+(this.height+7)+')')
+    selClustAxis.call(xClustAxis)
+        .selectAll('path, line')
+        .style({
+            stroke: 'orange',
+            'stroke-width': 1
+        })
+    selClustAxis.selectAll('text')
+        .style('opacity', 0)
 
-        var cities = sel.selectAll('.city').data([data[0], data[21], data[83], data[120], _.last(data)])
-        cities.enter().append(function () {
-                return document.querySelector('#tpl-city g.city').cloneNode(true)
-            })
-        cities.each(function(d,i){
-                renderCity(d3.select(this), d)
-            })
-        cities.exit().remove()
+    // hover behaviour
 
-        function renderCity (sel, data) {
-            // for city small multiple
-            // x.domain([1, data.maxAmount])
+    // if (!o.hoverDegree) return 
+    if(o.hoverDegree < 1) o.hoverDegree = 1
+    var hoverDegreeData = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+    if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
 
-            area.x0(function(d,i){return x((d.amount/data.amount)*100)})
+    // # xAmountAxis
+    var amountTick = sel.select('g.amountTick')
+        .attr('transform', 'translate('+ xAmount((hoverDegreeData.amount/data.amount)*100) +','+ (this.height+7) +')')
 
-            arc.innerRadius(r(data.meanDegree)+2.5)
-                .outerRadius(r(data.meanDegree)-2.5)
-
-            var contactsData = main.getContactsData(data.meanDegree, r(data.meanDegree))
-
-            sel.attr('transform', 'translate('+ (xPop(acc.size(data))-cityWidth/2) +',0)')
-
-            sel.select('.wrap')
-                .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
-
-            sel.select('path.area')
-                .attr({
-                    transform: 'translate('+cityWidth/2+',0)',
-                    d: area(data.degrees)
-                })
-                .style({
-                    fill: 'url(#diagonalHatch)',
-                    stroke: 'steelblue'
-                })
-            sel.select('path.areaClust')
-                .attr({
-                    transform: 'translate('+cityWidth/2+',0)',
-                    d: areaClust(data.degrees)
-                })
-                .style({
-                    fill: 'url(#diagonalHatch2)',
-                    stroke: 'orange'
-                })
-                .on('click', function(d,i){
-                    console.log(d)
-                })
-
-            sel.select('.contacts')
-                .attr({
-                    transform: 'translate('+cityWidth/2+','+ 580 +')' //+y(1)+')'
-                })
-            var connections = sel.select('.connections')
-                .selectAll('path').data(contactsData.links)
-            connections.enter().append('path') 
-            connections.attr({
-                    d: function(d,i){return d.path},
-                })
-                .style({
-                    stroke: 'orange',
-                    fill: 'none',
-                    'stroke-width': 2.5
-                })
-            connections.exit().remove()
-
-            var arcs = sel.select('g.arcs')
-                .selectAll('path').data(contactsData.contacts)
-            arcs.enter().append('path')
-            arcs.attr({
-                    d: arc
-                })
-                .style({
-                    fill: 'gray'
-                })
-            arcs.exit().remove()
-
-            // axis and background
-            sel.select('.axis')
-                .attr('transform', 'translate('+ (cityWidth/2+3) +',0)')
-                .call(yAxis)
-            sel.select('.xAxis')
-                .attr('transform', 'translate('+ cityWidth/2 +','+(y(1)+10)+')')
-                .call(xAxis)
-                .selectAll('path, line')
-                .style({
-                    stroke: 'steelblue',
-                    'stroke-width': 1
-                })
-            sel.select('.xClustAxis')
-                .attr('transform', 'translate('+ cityWidth/2 +','+(y(1)+10)+')')
-                .call(xClustAxis)
-                .selectAll('path, line')
-                .style({
-                    stroke: 'orange',
-                    'stroke-width': 1
-                })
-
-
-
-        }
-        
- 
-
-        // city ticks
-        sel.select('.cityTicks')
-            .selectAll('circle').data(data)
-            .enter().append('circle')
-            .attr({
-                cx: function(d,i){return xPop(acc.size(d))},
-                cy: function(d,i){return y(d.meanDegree)},
-                r: 1
-            })
-            .style({
-                stroke: 'gray',
-                fill: 'white',
-                'stroke-width': 1
-            })
-            .attr('transform', 'translate(0,'+-(main.height - bottom - r(maxDegree))+')')
-
-
-        // popAxis
-        sel.select('.popAxis')
-            .attr('transform', 'translate(0,'+-5+')')
-            .call(xPopAxis)
-            .selectAll('path, line')
-            .style({
-                stroke: 'black',
-                'stroke-width': 1
-            })
-        // sel.select('.degreeAxis')
-        //     .attr('transform', 'translate('+cityWidth/2+','+-(main.height - bottom - r(maxDegree))+')')
-        //     .call(yAxis)
-        //     .selectAll('path, line')
-        //     .style({
-        //         stroke: 'lightgray',
-        //         'stroke-width': .5
-        //     })
-
-        sel.select('path.meanDegree')
-            .attr('d', meanDegreeLine(data))
-            .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
-            .style({
-                fill: 'none', stroke: 'gray',
-                'stroke-width': 1,
-                'stroke-dashArray': '2,2'
-            })
-        sel.select('path.maxDegree')
-            .attr('d', maxDegreeArea(data))
-            .attr('transform', 'translate(0,'+ -(main.height - bottom - r(maxDegree)) +')')
-            .style({
-                fill: 'hsl(0,0%,92%)', stroke: 'none',
-                'stroke-width': 1,
-                'stroke-dashArray': '2,2'
-            })
-
-        return this
-    }
-
-    main.getContactsData = function(degree, radius) {
-        var range = d3.range(degree)
-        scale = d3.scale.ordinal()
-            .domain(range)
-            .rangeBands([0, 2*Math.PI], .2, .1)
-        var contData = _.map(range, function(d,i){
-            var startAngle = scale(d)
-            return {
-                startAngle: startAngle,
-                endAngle: startAngle + scale.rangeBand(),
-                id: i
+    amountTick.select('text.percent')
+        .text( d3.format('.0f')((hoverDegreeData.amount/data.amount)*100) +'%')
+        .attr({
+            y: 10, dy: '.71em',
+            'text-anchor': function(d,i){
+                return xAmount((hoverDegreeData.amount/data.amount)*100) > 8 ? 'middle' : 'start'
             }
         })
-        _.each(contData, function(cont,i){
-            var ptsId = _.reject(range, function(d2){ return d2 == cont.id })
-            ptsId = _.union(ptsId.slice(i), ptsId).reverse()
-            var scale = d3.scale.ordinal()
-                .domain(ptsId)//.reverse())
-                .rangePoints([cont.startAngle, cont.endAngle], 1)
-            cont.points = _.map(ptsId, function(d,i){
-                return {
-                    angle: scale(d),
-                    id: d
-                }
-            })
+        .style({
+            'font-size': '11px',
+            'fill': 'steelblue'
         })
-        var links = []
-        _.each(contData, function(cont,i){
-            _.each(cont.points, function(pt,i){
-                if (!_.find(links, function(d,i){
-                    return (d.fromId == cont.id && d.toId == pt.id) || (d.fromId == pt.id && d.toId == cont.id)
-                })) {
-                    links.push({
-                        fromId: cont.id,
-                        toId: pt.id,
-                        from: pt.angle,
-                        to: _.find(_.find(contData, function(d,i){return d.id == pt.id}).points, function(d,i){return d.id == cont.id}).angle,
-                        random: Math.random(),
-                        index: i
-                    })
-                }
-            })
+    amountTick.select('text.number')
+        .text( d3.format(',.0f')(hoverDegreeData.amount) + '')
+        .attr({
+            y: '2em', dy: '.71em',
+            'text-anchor': function(d,i){
+                return xAmount((hoverDegreeData.amount/data.amount)*100) > 8 ? 'middle' : 'start'
+            }
         })
-        // var radius = r(degree)
-        _.each(links, function(d,i){
-            var halfPI = Math.PI/2
-            d.path = 'M '+ radius*Math.cos(d.from - halfPI) +','+ radius*Math.sin(d.from - halfPI) + ' Q 0,0 '+ radius*Math.cos(d.to - halfPI) +','+ radius*Math.sin(d.to - halfPI)
+        .style({
+            'font-size': '11px',
+            'fill': 'steelblue'
+        })
+    amountTick.select('path')
+        .attr('d', 'M0,0 v6')
+        .style({
+            stroke: 'steelblue'
         })
 
-        return {
-            links: links.slice(0,links.length*.25),
-            contacts: contData
-        }
-    }
+    // # xClustAxis
 
-    return main
+    var clustTick = sel.select('g.clustTick')
+        .attr('transform', 'translate('+ xClust(hoverDegreeData.avgClustCoeff) +','+ (this.height+7) +')')
+
+    clustTick.select('text.number')
+        .text( d3.format('.0f')(hoverDegreeData.avgClustCoeff*100)+'%' )
+        .attr({
+            y: 10, dy: '.71em',
+            'text-anchor': function(d,i){
+                return xClust(hoverDegreeData.avgClustCoeff) < -8 ? 'middle' : 'end'
+            }
+        })
+        .style({
+            'font-size': '11px',
+            'fill': 'orange'
+        })
+    clustTick.select('path')
+        .attr('d', 'M0,0 v6')
+        .style({
+            stroke: 'orange'
+        })
+
+    // yAxis degree tick
+    var degreeTick = sel.select('g.degreeTick')
+        .attr('transform', 'translate(0,'+ o.y(hoverDegreeData.degree) +')')
+    degreeTick.select('path')
+        .attr('d', 'M-3,0 h 6')
+        .style({
+            stroke: 'black'
+        })
+    degreeTick.select('circle.clust')
+        .attr({
+            cy: 0,
+            cx: xClust(hoverDegreeData.avgClustCoeff),
+            r: 2
+        })
+        .style({
+            fill: 'orange'
+        })
+    degreeTick.select('circle.amount')
+        .attr({
+            cy: 0,
+            cx: xAmount((hoverDegreeData.amount/data.amount)*100),
+            r: 2
+        })
+        .style({
+            fill: 'steelblue'
+        })
+    degreeTick.select('path.clust')
+        .attr('d', 'M'+ xClust(hoverDegreeData.avgClustCoeff) + ',0 H0')
+        .style({
+            stroke: 'orange'
+        })
+    degreeTick.select('path.amount')
+        .attr('d', 'M'+ xAmount((hoverDegreeData.amount/data.amount)*100) + ',0 H0')
+        .style({
+            stroke: 'steelblue'
+        })
+
+
+    return this
 }
+
+main.renderHover = function (sel, data) {
+
+    // if (!data) return
+
+    this.render(sel, data)
+
+    // if(o.hoverDegree > data.maxDegree) o.hoverDegree = data.maxDegree
+    // if (!o.hoverDegree) return 
+    if(o.hoverDegree < 1) o.hoverDegree = 1
+    var hoverDegreeData = _.find(data.degrees, function(d,i){return d.degree == o.hoverDegree})
+    if (!hoverDegreeData) hoverDegreeData = {degree:o.hoverDegree, avgClustCoeff: 0, amount: 0}
+
+    // the two coverage circles
+    // var selCoverage = sel.select('g.coverage')
+    //     .attr('transform', 'translate(0,'+(-30-coverageRadius)+')')
+    // selCoverage.select('circle.pop')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.pop)
+    //     })
+    //     .style({
+    //         fill: 'white', stroke: '#33a02c'
+    //     })
+    // selCoverage.select('circle.amount')
+    //     .attr({
+    //         cx:0, cy: 0,
+    //         r: pop(data.amount)
+    //     })
+    //     .style({
+    //         fill: 'url(#diagonalHatch)',
+    //         stroke: 'steelblue'
+    //     })
+
+    // # yAxis
+
+    // yAxis degree tick
+    var degreeTick = sel.select('g.degreeTick')
+        .attr('transform', 'translate(0,'+ o.y(o.hoverDegree) +')')
+    degreeTick.select('text')
+        .attr({
+            x: 0, y: function () {
+                return o.y(o.hoverDegree) < 20 ? 12 : -12
+            },
+            dy: '.32em', 'text-anchor': 'middle'
+        })
+        .style({
+            'font-size': '11px', 'font-weight': '600'
+        })
+        .text(o.hoverDegree + ' contacts')
+    degreeTick.select('path')
+        .attr('d', 'M-3,0 h 6')
+        .style({
+            stroke: 'black'
+        })
+    degreeTick.select('circle.clust')
+        .attr({
+            cy: 0,
+            cx: xClust(hoverDegreeData.avgClustCoeff),
+            r: 2
+        })
+        .style({
+            fill: 'orange'
+        })
+    degreeTick.select('circle.amount')
+        .attr({
+            cy: 0,
+            cx: xAmount((hoverDegreeData.amount/data.amount)*100),
+            r: 2
+        })
+        .style({
+            fill: 'steelblue'
+        })
+    degreeTick.select('path.clust')
+        .attr('d', 'M'+ xClust(hoverDegreeData.avgClustCoeff) + ',0 H0')
+        .style({
+            stroke: 'orange'
+        })
+    degreeTick.select('path.amount')
+        .attr('d', 'M'+ xAmount((hoverDegreeData.amount/data.amount)*100) + ',0 H0')
+        .style({
+            stroke: 'steelblue'
+        })
+
+
+    // yAxis
+    sel.select('.yAxis')
+        .attr('transform', 'translate(-3,0)')
+        .call(yAxis)
+
+    // yAxis overlapping
+    var degreeTickHeight = degreeTick.node().getBoundingClientRect().height
+    sel.select('.yAxis').selectAll('.tick')
+        .transition()
+        .ease('linear')
+        .duration(100)
+        .style({
+            'fill-opacity': function(d,i){
+                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < degreeTickHeight ? 0 : 1
+
+            },
+            'stroke-opacity': function(d,i){
+                return Math.abs(o.y(d) - o.y(o.hoverDegree)) < degreeTickHeight ? 0 : 1
+
+            }
+        })
+
+   
+
+    return this
+}
+
+main.o = function (arg) {
+    if (arguments.length == 0) return o
+    _.extend(o, arg)
+    return this
+}
+
+module.exports = main

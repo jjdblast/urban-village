@@ -8,5 +8,15 @@
         "name": "lodash",
         "dev": "./bower_components/lodash/dist/lodash.js",
         "prod": "./bower_components/lodash/dist/lodash.min.js"
+    },
+    {   
+        "name": "angular",
+        "dev": "./bower_components/angular/angular.js",
+        "prod": "./bower_components/angular/angular.min.js"
+    },
+    {   
+        "name": "angular-animate",
+        "dev": "./bower_components/angular-animate/angular-animate.js",
+        "prod": "./bower_components/angular-animate/angular-animate.min.js"
     }
 ]
