@@ -53,7 +53,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     $scope.model = {}
     $scope.svgWidth = 1000
     $scope.svgHeight = 350
-    $scope.margin = {t: 40, b:20, l:20, r:20}
+    $scope.margin = {t: 50, b:40, l:20, r:20}
     $scope.width = $scope.svgWidth - $scope.margin.l - $scope.margin.r
     $scope.height = $scope.svgHeight - $scope.margin.t - $scope.margin.b
 
@@ -114,9 +114,10 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             $scope.hoverCity = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
         },
         mouseleave: function () {
-            $scope.mouse = undefined
+            $scope.hoverDegree = 10
+            $scope.hoverCity = _.last($scope.data)
         },
-        showTick: function (elemPos, hoverPos, size) {
+        overlaping: function (elemPos, hoverPos, size) {
             if (!hoverPos) return true
             return Math.abs(elemPos - hoverPos) > size
         }
