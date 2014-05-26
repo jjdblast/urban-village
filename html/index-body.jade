@@ -1,0 +1,18 @@
+.ctn-full
+    h2 Titulo
+.wrp-vis(
+    ng-style = 'wrpStyle()' 
+    style = 'background: hsl(0,0%,90%)'
+)
+    svg(
+            vbox = '0 0 {{svgWidth}} {{svgHeight}}'
+            preserveAspectRatio = 'xMidYMid meet' 
+            ng-if = 'data'
+        )
+        defs
+            pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
+                path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
+            pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
+                path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
+        g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
+            include vis-gMain

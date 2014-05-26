@@ -215,20 +215,12 @@ g.city {
 .orange {
   color: orange;
 }
+*[ng-controller^='mainCtrl'] .wrp-vis {
+  -webkit-box-shadow: inset 0px 1px 5px #808080, inset 0px -1px 5px #808080;
+  box-shadow: inset 0px 1px 5px #808080, inset 0px -1px 5px #808080;
+}
 *[ng-controller^='mainCtrl'] rect.hoverTarget {
   opacity: 0;
-}
-*[ng-controller^='mainCtrl'] path.area {
-  fill: lightgray;
-}
-*[ng-controller^='mainCtrl'] path.mean {
-  fill: none;
-  stroke: white;
-  stroke-width: 2;
-  stroke-dashArray: 2,2;
-}
-*[ng-controller^='mainCtrl'] .cityTicks circle {
-  fill: white;
 }
 *[ng-controller^='mainCtrl'] .hoverTick {
   font-weight: 600;
