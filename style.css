@@ -65,9 +65,9 @@ div {
 .axis .domain {
   fill: none;
 }
-.axis line {
+.axis line,
+.axis path {
   fill: none;
-  stroke: #000;
 }
 .axis text {
   font-size: 11px;
@@ -214,4 +214,48 @@ g.city {
 }
 .orange {
   color: orange;
+}
+*[ng-controller^='mainCtrl'] rect.hoverTarget {
+  opacity: 0;
+}
+*[ng-controller^='mainCtrl'] path.area {
+  fill: lightgray;
+}
+*[ng-controller^='mainCtrl'] path.mean {
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-dashArray: 2,2;
+}
+*[ng-controller^='mainCtrl'] .cityTicks circle {
+  fill: white;
+}
+*[ng-controller^='mainCtrl'] .hoverTick {
+  font-weight: 600;
+}
+*[ng-controller^='mainCtrl'] .hoverTick path {
+  stroke-width: 2;
+}
+*[ng-controller^='mainCtrl'] path.leftArea {
+  fill: url(#diagonalHatch2);
+  stroke: orange;
+}
+*[ng-controller^='mainCtrl'] path.rightArea {
+  fill: url(#diagonalHatch);
+  stroke: steelblue;
+}
+.ng-hide-add,
+.ng-hide-remove {
+  -webkit-transition: 0.2s linear all;
+  transition: 0.2s linear all;
+  display: block!important;
+}
+.ng-hide-remove {
+  opacity: 0;
+}
+.ng-hide-add.ng-hide-add-active {
+  opacity: 0;
+}
+.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
 }

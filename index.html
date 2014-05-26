@@ -8,103 +8,64 @@
     <link type="text/css" rel="stylesheet" href="style.css">
     <script type="text/javascript" src="lib.js"></script>
   </head>
-  <body>
-    <div class="ctn">
-      <h1>Number of phone contacts across city population in Portugal</h1>
-      <div class="ctn-vis">
-        <div class="wrp-vis vis1">
-          <svg>
-            <g class="main">
-              <g class="view-sumContacts">
-                <rect class="background2"></rect>
-                <rect class="background"></rect>
-                <path class="line1"></path>
-                <path class="line2"></path>
-                <g class="cities"></g>
-                <g class="amount"></g>
-                <g class="x axis"></g>
-                <g class="y axis"></g>
-              </g>
+  <body ng-app="app" ng-controller="mainCtrl as ctrl">
+    <div ng-style="wrpStyle()" class="wrp-vis">
+      <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
+        <defs>
+          <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+            <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
+          </pattern>
+          <pattern id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4">
+            <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="orange"></path>
+          </pattern>
+        </defs>
+        <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
+          <path ng-attr-d="{{area(data)}}" class="area"></path>
+          <path ng-attr-d="{{line(data)}}" class="mean"></path>
+          <text ng-attr-transform="translate({{width-160}}, {{height/2+10}})" font-size="13" fill="white">average</text>
+          <g class="cityTicks">
+            <circle ng-repeat="city in data" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.meanDegree)}}" r="2"></circle>
+          </g>
+          <g transform="translate(0,-18)" class="axis xAxis">
+            <path ng-attr-d="M {{cityWidth/2}},3 v6 h{{width-cityWidth}} v-6" stroke="green"></path>
+            <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
+              <path d="M0,3 v6" stroke="green"></path>
+              <text text-anchor="middle" fill="green" ng-show="ctrl.showTick(x(tick.value), x(hoverCity.pop), model.popTickSize[0])">{{tick.text}}</text>
             </g>
-          </svg>
-        </div>
-      </div>
-      <p lc-test="30" place>On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio-economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways. On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.</p>
-    </div>
-    <div class="ctn-full">
-      <div class="row">
-        <div class="col-citiesView">
-          <div class="wrp-vis vis0">
-            <svg>
-              <defs>
-                <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
-                  <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
-                </pattern>
-                <pattern id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4">
-                  <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="orange"></path>
-                </pattern>
-              </defs>
-              <g class="main">
-                <g class="view-cities">
-                  <path class="area"></path>
-                  <text class="label-average">average</text>
-                  <g class="axis xAxis"></g>
-                  <path class="line-clust"></path>
-                  <path class="line-amount"></path>
-                  <g class="popTick">
-                    <text></text>
-                    <path></path>
-                  </g>
-                  <g class="cities"></g>
-                  <path class="meanDegree"></path>
-                  <g class="cityTicks"></g>
-                  <g class="hoverCity"></g>
-                  <rect class="hoverTarget"></rect>
-                </g>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ctn graphDescription">
-      <p class="green">The city of <span class="label-cityName">Lisboa</span> have a population of <span class="stroke label-pop">562,000</span> people, </p>
-      <p class="green">in the data from this city:</p>
-      <p><span class="steelblue"><span class="stroke label-amount">10%</span> of the people have </span><span class="black"><span class="stroke label-contacts">10</span> phone contacts</span></p>
-      <p class="orange">there's a <span class="stroke label-clust">24%</span> chance that two of these contacts know each other</p>
-    </div>
-    <div id="tpl-city" style="display: none">
-      <svg>
-        <g class="city">
-          <g class="wrap">
-            <path class="areaAmount"></path>
-            <path class="areaClust"></path>
-            <g class="axis yAxis"></g>
-            <g class="degreeTick">
-              <circle class="clust"></circle>
-              <path class="clust"></path>
-              <circle class="amount"></circle>
-              <path class="amount"></path>
-              <text></text>
-              <path></path>
-            </g>
-            <g class="axis xClustAxis"></g>
-            <g class="clustTick">
-              <text class="number"></text>
-              <path></path>
-            </g>
-            <g class="axis xAmountAxis"></g>
-            <g class="amountTick">
-              <text class="percent"></text>
-              <text class="number"></text>
-              <path></path>
-            </g>
-            <path class="baseLine"></path>
-            <g class="coverage">
-              <circle class="pop"></circle>
-              <circle class="amount"></circle>
+            <g ng-if="mouse" ng-attr-transform="translate({{x(hoverCity.pop)}}, 0)" class="hoverTick">
+              <path d="M0,3 v6" stroke="green"></path>
+              <text getsize ng-model="model.popTickSize" text-anchor="middle" ng-bind-template="city pop: {{hoverCity.pop | number:0}}" fill="green" style="font-weight:600"></text>
             </g>
           </g>
+          <g class="cities">
+            <g ng-repeat="city in citiesData" ng-attr-transform="translate({{x(city.pop)}},0)" ng-show="ctrl.showTick(x(city.pop), x(hoverCity.pop), cityWidth*.8)" class="city">
+              <path ng-attr-d="{{areaClust(city.degrees)}}" class="leftArea"></path>
+              <path ng-attr-d="{{areaAmount(city.degrees)}}" class="rightArea"></path>
+              <g ng-attr-transform="translate(0,{{height+10}})" class="bottomAxis">
+                <path ng-attr-d="M0,6 v-6 h{{-cityWidth*.35}} v6" stroke="orange" fill="none"></path>
+                <path ng-attr-d="M0,6 v-6 h{{cityWidth*.35}} v6" stroke="steelblue" fill="none"></path>
+              </g>
+            </g>
+          </g>
+          <g ng-if="hoverCity" ng-attr-transform="translate({{x(hoverCity.pop)}},0)" class="city hoverCity">
+            <path ng-attr-d="{{areaClust(hoverCity.degrees)}}" class="leftArea"></path>
+            <path ng-attr-d="{{areaAmount(hoverCity.degrees)}}" class="rightArea"></path>
+            <g class="axis yAxis">
+              <g ng-repeat="tick in y.ticks(10)" ng-attr-transform="translate(0, {{y(tick)}})" class="tick">
+                <path d="M-3,0 h6" stroke="black"></path>
+                <text ng-show="ctrl.showTick(y(tick), mouse[1], model.degreeTickSize[1])" text-anchor="start" dy=".32em" x="9">{{x.tickFormat(6, ',.1s')(tick)}}</text>
+              </g>
+              <g ng-if="mouse" ng-attr-transform="translate(0, {{y(hoverDegree)}})" class="hoverTick">
+                <path d="M-3,0 h6" stroke="black"></path>
+                <text getsize ng-model="model.degreeTickSize" dy=".32em" x="9" text-anchor="start" ng-bind-template="{{hoverDegree | number:0}} contacts"></text>
+              </g>
+            </g>
+            <g ng-attr-transform="translate(0,{{height+10}})" class="bottomAxis">
+              <path ng-attr-d="M0,6 v-6 h{{-cityWidth*.35}} v6" stroke="orange" fill="none"></path>
+              <path ng-attr-d="M0,6 v-6 h{{cityWidth*.35}} v6" stroke="steelblue" fill="none"></path>
+            </g>
+          </g>
+          <rect ng-mousemove="ctrl.mousemove($event)" ng-mouseleave="ctrl.mouseleave()" ng-attr-x="{{cityWidth/2}}" ng-attr-width="{{width-cityWidth}}" ng-attr-height="{{height}}" class="hoverTarget"></rect>
         </g>
       </svg>
     </div>
