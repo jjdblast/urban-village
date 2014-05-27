@@ -222,12 +222,6 @@ g.city {
 *[ng-controller^='mainCtrl'] rect.hoverTarget {
   opacity: 0;
 }
-*[ng-controller^='mainCtrl'] .hoverTick {
-  font-weight: 600;
-}
-*[ng-controller^='mainCtrl'] .hoverTick path {
-  stroke-width: 2;
-}
 *[ng-controller^='mainCtrl'] path.leftArea {
   fill: url(#diagonalHatch2);
   stroke: orange;

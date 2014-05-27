@@ -109,13 +109,34 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     // events and helpers
     _.extend(this, {
         mousemove: function(e){
-            $scope.mouse = getMouse(e)
+            var mouse = $scope.mouse = getMouse(e)
             $scope.hoverDegree = Math.round( $scope.y.invert($scope.mouse[1]) )
-            $scope.hoverCity = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
+
+            var y0 = $scope.x.invert($scope.mouse[0]),
+                i = bisect($scope.data, y0, 1),
+                d0 = $scope.data[i - 1],
+                d1 = $scope.data[i],
+                d = y0 - acc.size(d0) > acc.size(d1) - y0 ? d1 : d0;
+
+            $scope.hoverCity = d
+            // $scope.hoverCity = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
+            
+            $scope.hoverCity.hoverDegree = _.find($scope.hoverCity.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+
+            _.each($scope.citiesData, function(d,i){
+                d.hoverDegree = _.find(d.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+            })
         },
         mouseleave: function () {
+            $scope.mouse = [0,$scope.y(10)]
+
             $scope.hoverDegree = 10
-            $scope.hoverCity = _.last($scope.data)
+            $scope.hoverCity = _.first($scope.data)
+            $scope.hoverCity.hoverDegree = _.find($scope.hoverCity.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+
+            _.each($scope.citiesData, function(d,i){
+                d.hoverDegree = _.find(d.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+            })
         },
         overlaping: function (elemPos, hoverPos, size) {
             if (!hoverPos) return true
@@ -130,6 +151,10 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         $scope.data = transform(data)
         console.log(data[0])
         console.log(data[0].degrees[0])
+
+        $scope.mouse = [0,0]
+        $scope.hoverDegree = 10
+        $scope.hoverCity = _.first($scope.data)
         
         // scales domain
         $scope.x.domain(d3.extent($scope.data, acc.size))
