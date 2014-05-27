@@ -9,51 +9,88 @@
     <script type="text/javascript" src="lib.js"></script>
   </head>
   <body ng-app="app" ng-controller="mainCtrl as ctrl">
-    <div class="ctn-full">
-      <h2>Titulo</h2>
+    <div style="" class="ctn-full">
+      <h2 style="margin-bottom: 0;" class="title">Number of phone contacts according to city population</h2>
+      <h3 style="margin-top: 0; margin-bottom: 120px;">15 months of telecommunication data from cities in Portugal</h3>
     </div>
-    <div ng-style="wrpStyle()" style="background: hsl(0,0%,90%)" class="wrp-vis">
-      <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
-        <defs>
-          <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
-            <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
-          </pattern>
-          <pattern id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4">
-            <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="orange"></path>
-          </pattern>
-        </defs>
-        <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
-          <!-- base and labels-->
-          <path ng-attr-d="{{area(data)}}" fill="white" class="area"></path>
-          <path ng-attr-d="{{line(data)}}" fill="none" stroke="lightgray" class="mean"></path>
-          <g class="cityTicks">
-            <circle ng-repeat="city in data" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.meanDegree)}}" r="2" fill="lightgray"></circle>
-          </g>
-          <text ng-attr-transform="translate({{width-165}}, {{height/2+10}})" font-size="12" fill="lightgray">contacts average</text>
-          <text ng-attr-transform="translate({{width-165}}, {{15}})" font-size="12" fill="lightgray">contacts max</text>
-          <!-- population axis-->
-          <g transform="translate(0,-18)" class="axis xAxis">
-            <path ng-attr-d="M {{cityWidth/2}},3 v6 h{{width-cityWidth}} v-6" stroke="green"></path>
-            <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
-              <path d="M0,3 v6" stroke="green"></path>
-              <text text-anchor="middle" fill="green" ng-show="ctrl.overlaping(x(tick.value), x(hoverCity.pop), model.popTickSize[0]*.8)">{{tick.text}}</text>
+    <div style="background: hsl(0,0%,90%)" class="ctn-full">
+      <div ng-style="wrpStyle()" class="wrp-vis">
+        <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
+          <defs>
+            <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+              <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="steelblue"></path>
+            </pattern>
+            <pattern id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4">
+              <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="orange"></path>
+            </pattern>
+          </defs>
+          <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
+            <!-- base and labels-->
+            <path ng-attr-d="{{area(data)}}" fill="white" class="area"></path>
+            <path ng-attr-d="{{line(data)}}" fill="none" stroke="lightgray" class="mean"></path>
+            <g class="cityTicks">
+              <circle ng-repeat="city in data" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.meanDegree)}}" r="2" fill="lightgray"></circle>
             </g>
-            <g ng-if="mouse" ng-attr-transform="translate({{x(hoverCity.pop)}}, 0)" class="hoverTick">
-              <path d="M0,3 v6" stroke="green" stroke-width="2"></path>
-              <text getsize ng-model="model.popTickSize" text-anchor="middle" ng-bind-template="city pop: {{hoverCity.pop | number:0}}" fill="green" font-weight="600"></text>
+            <text ng-attr-transform="translate({{width-165}}, {{height/2+10}})" font-size="12" fill="lightgray">contacts average</text>
+            <text ng-attr-transform="translate({{width-165}}, {{15}})" font-size="12" fill="lightgray">contacts max</text>
+            <!-- population axis-->
+            <g transform="translate(0,-18)" class="axis xAxis">
+              <path ng-attr-d="M0,3 v6 H{{width}} v-6" stroke="green"></path>
+              <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
+                <path d="M0,3 v6" stroke="green"></path>
+                <text text-anchor="middle" fill="green" ng-show="ctrl.overlaping(x(tick.value), x(hoverPop), model.popTickSize[0]*.8)">{{tick.text}}</text>
+              </g>
+              <g ng-attr-transform="translate({{x(hoverPop)}}, 0)" class="hoverTick">
+                <path d="M0,3 v6" stroke="green" stroke-width="2"></path>
+                <text getsize ng-model="model.popTickSize" y="-2" fill="green" font-weight="600" text-anchor="middle">city pop: {{hoverPop | number:0}}</text>
+              </g>
             </g>
-          </g>
-          <!-- cities-->
-          <g class="cities">
-            <g ng-repeat="city in citiesData" ng-attr-transform="translate({{x(city.pop)}},0)" ng-show="ctrl.overlaping(x(city.pop), x(hoverCity.pop), cityWidth*.8)" class="city">
+            <!-- cities-->
+            <g class="cities">
+              <g ng-repeat="city in citiesData" ng-attr-transform="translate({{x(city.pop)}},0)" ng-show="ctrl.overlaping(x(city.pop), x(hoverPop), cityWidth*.88)" class="city">
+                <!-- amount and cluster areas-->
+                <path ng-attr-d="{{areaClust(city.degrees)}}" class="leftArea"></path>
+                <path ng-attr-d="{{areaAmount(city.degrees)}}" class="rightArea"></path>
+                <!-- Degree lines-->
+                <g ng-if="mouse" ng-attr-transform="translate(0, {{y(hoverDegree)}})" class="hoverTick">
+                  <!-- clust hover line-->
+                  <path ng-if="city.hoverDegree" ng-attr-d="M0,0 h{{xClust(city.hoverDegree.clustPerc)}}" stroke="orange"></path>
+                  <!-- amount hover line-->
+                  <path ng-if="city.hoverDegree" ng-attr-d="M0,0 h{{xAmount(city.hoverDegree.amountPerc)}}" stroke="steelblue"></path>
+                </g>
+                <!-- Bottom Axis-->
+                <g ng-attr-transform="translate(0,{{height+10}})" class="bottomAxis">
+                  <text font-size="10" y="18" text-anchor="middle" fill="gray">0</text>
+                  <!-- clust axis-->
+                  <path ng-attr-d="M0,6 v-6 h{{-cityWidth*.35}} v6" stroke="orange" fill="none"></path>
+                  <text ng-attr-transform="translate({{xClust(50)}},0)" font-size="10" y="18" text-anchor="middle" fill="orange" ng-show="ctrl.overlaping(xClust(50), xClust(city.hoverDegree.clustPerc), 25)">50%</text>
+                  <g ng-if="city.hoverDegree" ng-attr-transform="translate({{xClust(city.hoverDegree.clustPerc)}},0)" class="hoverClustTick">
+                    <path d="M0,0 v6" stroke-width="2" stroke="orange"></path>
+                    <text font-size="10" y="18" text-anchor="middle" fill="orange" ng-show="ctrl.overlaping(xClust(city.hoverDegree.clustPerc), 0.1, 12)">{{city.hoverDegree.clustPerc | number:0}}%</text>
+                  </g>
+                  <!-- amount axis-->
+                  <path ng-attr-d="M0,6 v-6 h{{cityWidth*.35}} v6" stroke="steelblue" fill="none"></path>
+                  <text ng-attr-transform="translate({{xAmount(20)}},0)" font-size="10" y="18" text-anchor="middle" fill="steelblue" ng-show="ctrl.overlaping(xAmount(20), xAmount(city.hoverDegree.amountPerc), 25)">20%</text>
+                  <g ng-if="city.hoverDegree" ng-attr-transform="translate({{xAmount(city.hoverDegree.amountPerc)}},0)" class="hoverAmountTick">
+                    <path d="M0,0 v6" stroke-width="2" stroke="steelblue"></path>
+                    <text font-size="10" y="18" text-anchor="middle" fill="steelblue" ng-show="ctrl.overlaping(xAmount(city.hoverDegree.amountPerc), 0.1, 10)">{{city.hoverDegree.amountPerc | number:0}}%</text>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <!-- hover city-->
+            <g ng-if="city" ng-attr-transform="translate({{x(city.pop)}},0)" class="city hoverCity">
+              <!-- amount and cluster areas-->
               <path ng-attr-d="{{areaClust(city.degrees)}}" class="leftArea"></path>
               <path ng-attr-d="{{areaAmount(city.degrees)}}" class="rightArea"></path>
+              <!-- Degree lines-->
               <g ng-if="mouse" ng-attr-transform="translate(0, {{y(hoverDegree)}})" class="hoverTick">
                 <!-- clust hover line-->
                 <path ng-if="city.hoverDegree" ng-attr-d="M0,0 h{{xClust(city.hoverDegree.clustPerc)}}" stroke="orange"></path>
                 <!-- amount hover line-->
                 <path ng-if="city.hoverDegree" ng-attr-d="M0,0 h{{xAmount(city.hoverDegree.amountPerc)}}" stroke="steelblue"></path>
               </g>
+              <!-- Bottom Axis-->
               <g ng-attr-transform="translate(0,{{height+10}})" class="bottomAxis">
                 <text font-size="10" y="18" text-anchor="middle" fill="gray">0</text>
                 <!-- clust axis-->
@@ -71,51 +108,24 @@
                   <text font-size="10" y="18" text-anchor="middle" fill="steelblue" ng-show="ctrl.overlaping(xAmount(city.hoverDegree.amountPerc), 0.1, 10)">{{city.hoverDegree.amountPerc | number:0}}%</text>
                 </g>
               </g>
-            </g>
-          </g>
-          <!-- hover city-->
-          <g ng-if="hoverCity" ng-attr-transform="translate({{x(hoverCity.pop)}},0)" class="city hoverCity">
-            <path ng-attr-d="{{areaClust(hoverCity.degrees)}}" class="leftArea"></path>
-            <path ng-attr-d="{{areaAmount(hoverCity.degrees)}}" class="rightArea"></path>
-            <!-- hover paths-->
-            <!-- degree axis-->
-            <g class="axis yAxis">
-              <g ng-repeat="tick in y.ticks(10)" ng-attr-transform="translate(0, {{y(tick)}})" ng-show="ctrl.overlaping(y(tick), mouse[1], model.degreeTickSize[1]+3)" class="tick">
-                <path d="M-3,0 h6" stroke="black"></path>
-                <text text-anchor="start" dy=".32em" x="9">{{x.tickFormat(6, ',.1s')(tick)}}</text>
+              <!-- degree axis-->
+              <g class="axis yAxis">
+                <g ng-repeat="tick in y.ticks(10)" ng-attr-transform="translate(0, {{y(tick)}})" ng-show="ctrl.overlaping(y(tick), y(hoverDegree), model.degreeTickSize[1]+3)" class="tick">
+                  <path d="M-3,0 h6" style="stroke: black"></path>
+                  <text x="9" ng-attr-y="{{ tick == 1 ? -6 : 0}}" dy=".32em" style="text-anchor: start">{{x.tickFormat(6, ',.1s')(tick)}}</text>
+                </g>
+                <!-- hover tick and text-->
               </g>
               <g ng-if="mouse" ng-attr-transform="translate(0, {{y(hoverDegree)}})" class="hoverTick">
-                <!-- clust hover line-->
-                <path ng-if="hoverCity.hoverDegree" ng-attr-d="M0,0 h{{xClust(hoverCity.hoverDegree.clustPerc)}}" stroke="orange"></path>
-                <!-- amount hover line-->
-                <path ng-if="hoverCity.hoverDegree" ng-attr-d="M0,0 h{{xAmount(hoverCity.hoverDegree.amountPerc)}}" stroke="steelblue"></path>
-                <!-- hover tick and text-->
                 <path d="M-3,0 h6" stroke="black" stroke-width="2"></path>
-                <text getsize ng-model="model.degreeTickSize" dy=".32em" x="0" ng-attr-y="{{y(hoverDegree) &gt; 20 ? -12 : 12}}" text-anchor="middle" font-weight="600" ng-bind-template="{{hoverDegree | number:0}} contacts"></text>
+                <text getsize ng-model="model.degreeTickSize" ng-attr-y="{{y(hoverDegree) &gt; 20 ? -12 : 12}}" dy=".32em" style="text-anchor: middle; font-weight: 600; font-size: 12px">{{hoverDegree | number:0}} contacts</text>
               </g>
             </g>
-            <g ng-attr-transform="translate(0,{{height+10}})" class="bottomAxis">
-              <text font-size="10" y="18" text-anchor="middle" fill="gray">0</text>
-              <!-- clust axis-->
-              <path ng-attr-d="M0,6 v-6 h{{-cityWidth*.35}} v6" stroke="orange" fill="none"></path>
-              <text ng-attr-transform="translate({{xClust(50)}},0)" font-size="10" y="18" text-anchor="middle" fill="orange" ng-show="ctrl.overlaping(xClust(50), xClust(hoverCity.hoverDegree.clustPerc), 25)">50%</text>
-              <g ng-if="hoverCity.hoverDegree" ng-attr-transform="translate({{xClust(hoverCity.hoverDegree.clustPerc)}},0)" class="hoverClustTick">
-                <path d="M0,0 v6" stroke-width="2" stroke="orange"></path>
-                <text font-size="10" y="18" text-anchor="middle" fill="orange" ng-show="ctrl.overlaping(xClust(hoverCity.hoverDegree.clustPerc), 0.1, 12)">{{hoverCity.hoverDegree.clustPerc | number:0}}%</text>
-              </g>
-              <!-- amount axis-->
-              <path ng-attr-d="M0,6 v-6 h{{cityWidth*.35}} v6" stroke="steelblue" fill="none"></path>
-              <text ng-attr-transform="translate({{xAmount(20)}},0)" font-size="10" y="18" text-anchor="middle" fill="steelblue" ng-show="ctrl.overlaping(xAmount(20), xAmount(hoverCity.hoverDegree.amountPerc), 25)">20%</text>
-              <g ng-if="hoverCity.hoverDegree" ng-attr-transform="translate({{xAmount(hoverCity.hoverDegree.amountPerc)}},0)" class="hoverAmountTick">
-                <path d="M0,0 v6" stroke-width="2" stroke="steelblue"></path>
-                <text font-size="10" y="18" text-anchor="middle" fill="steelblue" ng-show="ctrl.overlaping(xAmount(hoverCity.hoverDegree.amountPerc), 0.1, 10)">{{hoverCity.hoverDegree.amountPerc | number:0}}%</text>
-              </g>
-            </g>
+            <!-- hover target-->
+            <rect ng-mousemove="ctrl.mousemove($event)" ng-mouseleave="ctrl.mouseleave()" ng-attr-x="{{cityWidth/2}}" ng-attr-width="{{width-cityWidth}}" ng-attr-height="{{height}}" class="hoverTarget"></rect>
           </g>
-          <!-- hover target-->
-          <rect ng-mousemove="ctrl.mousemove($event)" ng-mouseleave="ctrl.mouseleave()" ng-attr-x="{{cityWidth/2}}" ng-attr-width="{{width-cityWidth}}" ng-attr-height="{{height}}" class="hoverTarget"></rect>
-        </g>
-      </svg>
+        </svg>
+      </div>
     </div>
     <script type="text/javascript" src="bundle.js"></script>
   </body>

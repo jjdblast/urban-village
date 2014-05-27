@@ -35,7 +35,7 @@ div {
   box-sizing: border-box;
 }
 .ctn {
-  width: 600px;
+  width: 700px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
@@ -153,12 +153,13 @@ body {
   font-family: "Whitney A", "Whitney B";
 }
 .ctn-full {
-  width: 600px;
+  width: 700px;
   min-height: 1px;
   margin: auto;
   padding: 0 20px;
+  min-width: 1000px;
   width: 100%;
-  margin-top: 40px;
+  padding: 0 40px;
 }
 .ctn-vis {
   width: 280px;
@@ -166,58 +167,6 @@ body {
   margin-left: 0px;
   padding-left: 0px;
   padding-top: 0px;
-}
-.col-citiesView {
-  padding: 0 20px;
-  min-height: 1px;
-  float: left;
-  padding: 0;
-  width: 100%;
-}
-.col-right {
-  padding: 0 20px;
-  min-height: 1px;
-  width: 100%;
-  float: left;
-  width: 25%;
-}
-g.city {
-  -webkit-transition: opacity .3s;
-  transition: opacity .3s;
-}
-.hide {
-  opacity: 0 !important;
-}
-.view-description {
-  margin-top: 80px;
-}
-.view-description p {
-  margin: 0;
-  text-align: center;
-}
-.graphDescription {
-  margin: 50px auto;
-}
-.graphDescription p {
-  margin: 0;
-  text-align: center;
-}
-.stroke {
-  text-decoration: underline;
-  font-weight: 600;
-}
-.green {
-  color: #33a02c;
-}
-.steelblue {
-  color: steelblue;
-}
-.orange {
-  color: orange;
-}
-*[ng-controller^='mainCtrl'] .wrp-vis {
-  -webkit-box-shadow: inset 0px 1px 5px #808080, inset 0px -1px 5px #808080;
-  box-shadow: inset 0px 1px 5px #808080, inset 0px -1px 5px #808080;
 }
 *[ng-controller^='mainCtrl'] rect.hoverTarget {
   opacity: 0;

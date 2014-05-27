@@ -52,8 +52,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     $scope.model = {}
     $scope.svgWidth = 1000
-    $scope.svgHeight = 350
-    $scope.margin = {t: 50, b:40, l:20, r:20}
+    $scope.svgHeight = 380
+    $scope.margin = {t: 60, b:60, l:1, r:1}
     $scope.width = $scope.svgWidth - $scope.margin.l - $scope.margin.r
     $scope.height = $scope.svgHeight - $scope.margin.t - $scope.margin.b
 
@@ -68,16 +68,16 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     // scales
 
     $scope.x = d3.scale.log()
-        .range([$scope.cityWidth/2, $scope.width-$scope.cityWidth/2])
+        .range([$scope.cityWidth*.40, $scope.width-$scope.cityWidth*.40])
     $scope.y = d3.scale.log()
         .range([$scope.height, 0])
 
     $scope.xAmount = d3.scale.linear()
         .domain([0, 20])
-        .range([0, $scope.cityWidth*.35])
+        .range([0, $scope.cityWidth*.33])
     $scope.xClust = d3.scale.linear()
         .domain([0,50])
-        .range([0, -$scope.cityWidth*.35])
+        .range([0, -$scope.cityWidth*.33])
 
     // draw functions
 
@@ -118,10 +118,11 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
                 d1 = $scope.data[i],
                 d = y0 - acc.size(d0) > acc.size(d1) - y0 ? d1 : d0;
 
-            $scope.hoverCity = d
-            // $scope.hoverCity = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
-            
-            $scope.hoverCity.hoverDegree = _.find($scope.hoverCity.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+            $scope.city = d
+            // $scope.city = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
+            $scope.hoverPop = $scope.city.pop
+
+            $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
 
             _.each($scope.citiesData, function(d,i){
                 d.hoverDegree = _.find(d.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
@@ -131,8 +132,9 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             $scope.mouse = [0,$scope.y(10)]
 
             $scope.hoverDegree = 10
-            $scope.hoverCity = _.first($scope.data)
-            $scope.hoverCity.hoverDegree = _.find($scope.hoverCity.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+            $scope.city = _.first($scope.data)
+            $scope.hoverPop = $scope.city.pop
+            $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
 
             _.each($scope.citiesData, function(d,i){
                 d.hoverDegree = _.find(d.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
@@ -154,7 +156,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10
-        $scope.hoverCity = _.first($scope.data)
+        $scope.city = _.first($scope.data)
+        $scope.hoverPop = $scope.city.pop
         
         // scales domain
         $scope.x.domain(d3.extent($scope.data, acc.size))
