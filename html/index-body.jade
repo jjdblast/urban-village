@@ -1,8 +1,13 @@
-.ctn-full
-    h2 Titulo
-.wrp-vis(
+.ctn-full(style = '')
+    h2.title(
+        style = 'margin-bottom: 0;'
+    ) Number of phone contacts according to city population
+    h3(
+        style = 'margin-top: 0; margin-bottom: 120px;'
+    ) 15 months of telecommunication data from cities in Portugal
+
+.ctn-full(style = 'background: hsl(0,0%,90%)'): .wrp-vis(
     ng-style = 'wrpStyle()' 
-    style = 'background: hsl(0,0%,90%)'
 )
     svg(
             vbox = '0 0 {{svgWidth}} {{svgHeight}}'

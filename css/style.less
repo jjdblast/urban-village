@@ -2,7 +2,8 @@
 @import 'base.less';
 @import 'typography.less';
 
-@width: 600px;
+
+@width: 700px;
 @half-gutter: 20px;
 
 @baseFontSize: 16px;
@@ -18,8 +19,9 @@ body {
 
 .ctn-full {
     .ctn();
+    min-width: 1000px;
     width: 100%;
-    margin-top: 40px;
+    padding: 0 40px;
     // margin-bottom: 80px;
     // max-width: 1200px;
 }
@@ -31,69 +33,15 @@ body {
     padding-left: 0px;
     padding-top: 0px;
 }
-.col-citiesView {
-    .col();
-    padding: 0;
-    width: 100%;
-}
-.col-right {
-    .col();
-    width: 25%;
-}
-
-g.city {
-    // opacity: .9;
-    transition: opacity .3s;
-}
-.hide {
-    opacity: 0 !important;
-}
-
-.view-description {
-    margin-top: 80px;
-    p {
-        margin: 0;
-        text-align: center;
-    }
-}
-
-.graphDescription {
-    margin: 50px auto;
-    p {
-        margin: 0;
-        text-align: center;
-    }
-}
-.stroke {
-    text-decoration: underline;
-    font-weight: 600;
-}
-.green {
-    color: #33a02c;
-}
-.steelblue {
-    color: steelblue;
-}
-.orange {
-    color: orange;
-}
-
 
 /////////
 
 *[ng-controller^='mainCtrl'] {
     .wrp-vis {
-        box-shadow: inset 0px 1px 5px gray, inset 0px -1px 5px gray;
     }
     rect.hoverTarget {
         opacity: 0;
     }
-    // .hoverTick {
-    //     path {
-    //         stroke-width: 2;
-    //     }
-    //     font-weight: 600;
-    // }
     path.leftArea {
         fill: url(#diagonalHatch2);
         stroke: orange;
