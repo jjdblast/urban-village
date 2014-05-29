@@ -11,39 +11,39 @@
   <body ng-app="app" ng-controller="mainCtrl as ctrl">
     <div style="" class="ctn-full">
       <div style="padding-top: 3rem; padding-bottom: 2.5rem;" class="row header">
-        <div style="width: 45%;" class="col title">
-          <h1>Phone contacts on Portugal cities</h1>
+        <div style="width: 41%;" class="col title">
+          <h1>Phone contacts on Portugal</h1>
           <div class="lead">15 months of telecommunication data</div>
         </div>
-        <div style="width: 55%; float: right; max-width: 800px;" class="col labels">
-          <div class="row">
+        <div style="width: 59%; float: right;" class="col labels">
+          <div style="height: 110px;" class="row">
             <div style="width: {{100/4}}%; color: green;" class="col">
-              <h3>{{hoverPop}}</h3>
-              <p>Population size of the selected city</p>
+              <h3>{{hoverPop || 0}}</h3>
+              <p>Population of the selected city</p>
             </div>
             <div style="width: {{100/4}}%; color: black;" class="col">
-              <h3>{{hoverDegree}} </h3>
-              <p>Number of phone contacts, people that called each other</p>
+              <h3>{{hoverDegree || 0}} </h3>
+              <p>Phone contacts, people that called each other</p>
             </div>
             <div style="width: {{100/4}}%; color: steelblue;" class="col">
               <h3 ng-if="city.hoverDegree.amountPerc &gt;= 0.1">{{city.hoverDegree.amountPerc || 0 | number:1}}%</h3>
               <h3 ng-if="city.hoverDegree.amountPerc &lt; 0.1">~0.1%</h3>
-              <h3 ng-if="!city.hoverDegree.amountPerc">0%</h3>
-              <p>Percentage of people in the selected city with {{hoverDegree}} contacts</p>
+              <h3 ng-if="!city.hoverDegree.amountPerc">0.0%</h3>
+              <p>People in the selected city with {{hoverDegree}} contacts</p>
             </div>
             <div ng-if="hoverDegree &gt; 1" style="width: {{100/4}}%; color: orange;" class="col">
               <h3>{{city.hoverDegree.clustPerc || 0 | number:1}}%</h3>
               <p>Chance that each two of the {{hoverDegree}} contacts know each other</p>
             </div>
             <div ng-if="hoverDegree == 1" style="width: {{100/4}}%; color: orange;" class="col">
-              <h3>100%</h3>
-              <p>Only one phone contact, he knows himself</p>
+              <h3>0%</h3>
+              <p>Chance that two contacts know each other</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div style="background: hsl(0,0%,90%)" class="ctn-full">
+    <div style="background: hsl(0,0%,90%);" class="ctn-full">
       <div ng-style="wrpStyle()" class="wrp-vis">
         <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
           <defs>
@@ -156,6 +156,17 @@
           </g>
         </svg>
       </div>
+    </div>
+    <div style="padding-top: 3rem; width: 1000px;" class="ctn">
+      <div class="row">
+        <div style="width: {{100/2}}%;" class="col">
+          <p>On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio- economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this perva- sive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.</p>
+        </div>
+        <div style="width: {{100/2}}%;" class="col">
+          <p>On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invari- ant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form </p>
+        </div>
+      </div>
+      <hr>
     </div>
     <script type="text/javascript" src="bundle.js"></script>
   </body>

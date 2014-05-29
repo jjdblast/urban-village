@@ -1,20 +1,20 @@
 .ctn-full(style = '')
     .row.header(style = 'padding-top: 3rem; padding-bottom: 2.5rem;')
-        .col.title(style = 'width: 45%;')
-            h1 Phone contacts on Portugal cities
+        .col.title(style = 'width: 41%;')
+            h1 Phone contacts on Portugal
             .lead 15 months of telecommunication data
-        .col.labels(style = 'width: 55%; float: right; max-width: 800px;'): .row
+        .col.labels(style = 'width: 59%; float: right;'): .row(style = 'height: 110px;')
             .col(style = 'width: {{100/4}}%; color: green;')
-                h3 {{hoverPop}}
-                p Population size of the selected city
+                h3 {{hoverPop || 0}}
+                p Population of the selected city
             .col(style = 'width: {{100/4}}%; color: black;')
-                h3 {{hoverDegree}} 
-                p Number of phone contacts, people that called each other
+                h3 {{hoverDegree || 0}} 
+                p Phone contacts, people that called each other
             .col(style = 'width: {{100/4}}%; color: steelblue;')
                 h3(ng-if = 'city.hoverDegree.amountPerc >= 0.1') {{city.hoverDegree.amountPerc || 0 | number:1}}%
                 h3(ng-if = 'city.hoverDegree.amountPerc < 0.1') ~0.1%
-                h3(ng-if = '!city.hoverDegree.amountPerc') 0%
-                p Percentage of people in the selected city with {{hoverDegree}} contacts
+                h3(ng-if = '!city.hoverDegree.amountPerc') 0.0%
+                p People in the selected city with {{hoverDegree}} contacts
             .col(
                     ng-if = 'hoverDegree > 1'
                     style = 'width: {{100/4}}%; color: orange;'
@@ -25,11 +25,11 @@
                     ng-if = 'hoverDegree == 1'
                     style = 'width: {{100/4}}%; color: orange;'
                 )
-                h3 100%
-                p Only one phone contact, he knows himself
+                h3 0%
+                p Chance that two contacts know each other
 
 
-.ctn-full(style = 'background: hsl(0,0%,90%)'): .wrp-vis(
+.ctn-full(style = 'background: hsl(0,0%,90%);'): .wrp-vis(
     ng-style = 'wrpStyle()' 
 )
     svg(
@@ -44,3 +44,11 @@
                 path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
         g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
             include vis-gMain
+
+.ctn(style = 'padding-top: 3rem; width: 1000px;')
+    .row
+        .col(style = 'width: {{100/2}}%;')
+            p On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio- economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this perva- sive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.
+        .col(style = 'width: {{100/2}}%;')
+            p On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invari- ant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form 
+    hr
