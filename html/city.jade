@@ -1,0 +1,76 @@
+// amount and cluster areas
+path.leftArea(ng-attr-d = '{{areaClust(city.degrees)}}')
+path.rightArea(ng-attr-d = '{{areaAmount(city.degrees)}}')
+
+// Degree lines
+g.hoverTick(
+        ng-if = 'mouse'
+        ng-attr-transform = 'translate(0, {{y(hoverDegree)}})'
+    )
+    // clust hover line
+    path(
+        ng-if = 'city.hoverDegree'
+        ng-attr-d = 'M0,0 h{{xClust(city.hoverDegree.clustPerc)}}'
+        style = 'stroke: orange'
+    )
+    // amount hover line
+    path(
+        ng-if = 'city.hoverDegree'
+        ng-attr-d = 'M0,0 h{{xAmount(city.hoverDegree.amountPerc)}}'
+        style = 'stroke: steelblue'
+    )
+
+// Bottom Axis
+g.bottomAxis(ng-attr-transform = 'translate(0,{{height+10}})')
+    text(
+        y = 18 
+        style = 'text-anchor: middle; fill: gray'
+    ) 0
+    // clust axis
+    path(
+        ng-attr-d = 'M0,6 v-6 h{{-cityWidth*.35}} v6'
+        style = 'fill: none; stroke: orange'
+    )
+    text(
+        ng-show = 'ctrl.overlaping(xClust(50), xClust(city.hoverDegree.clustPerc), 25)'
+        ng-attr-transform = 'translate({{xClust(50)}},0)'
+        y = 18 
+        style = 'text-anchor: middle; fill: orange;'
+    ) 50%
+    g.hoverClustTick(
+        ng-if = 'city.hoverDegree'
+        ng-attr-transform = 'translate({{xClust(city.hoverDegree.clustPerc)}},0)'
+    )
+        path(
+            d = 'M0,0 v6' 
+            style = 'stroke: orange; stroke-width:2;'
+        )
+        text(
+            ng-show = 'ctrl.overlaping(xClust(city.hoverDegree.clustPerc), 0.1, 12)'
+            y = 18
+            style = 'text-anchor: middle; fill: orange'
+        ) {{city.hoverDegree.clustPerc | number:0}}%
+    // amount axis
+    path(
+        ng-attr-d = 'M0,6 v-6 h{{cityWidth*.35}} v6'
+        style = 'fill: none; stroke: steelblue;'
+    )
+    text(
+        ng-show = 'ctrl.overlaping(xAmount(20), xAmount(city.hoverDegree.amountPerc), 25)'
+        ng-attr-transform = 'translate({{xAmount(20)}},0)'
+        y = 18
+        style = 'text-anchor: middle; fill: steelblue;'
+    ) 20%
+    g.hoverAmountTick(
+        ng-if = 'city.hoverDegree'
+        ng-attr-transform = 'translate({{xAmount(city.hoverDegree.amountPerc)}},0)'
+    )
+        path(
+            d = 'M0,0 v6' 
+            style = 'stroke: steelblue; stroke-width: 2;'
+        )
+        text(
+            ng-show = 'ctrl.overlaping(xAmount(city.hoverDegree.amountPerc), 0.1, 10)'
+            y = 18
+            style = 'text-anchor: middle; fill: steelblue;'
+        ) {{city.hoverDegree.amountPerc | number:0}}%

@@ -1,79 +1,109 @@
+@import (less) '../bower_components/normalize-css/normalize.css';
 @import 'fonts.less';
 @import 'base.less';
-@import 'typography.less';
+// @import 'typography.less';
 
-@width: 600px;
-@half-gutter: 20px;
+
+@width: 700px;
+@half-gutter: 1rem;
 
 @baseFontSize: 16px;
 @lineMult: 1.5;
 @baseLineHeight: round(@baseFontSize * @lineMult);
 @sizeMult: 1.5;
 
-body {
+html, body {
     font-family: "Whitney A", "Whitney B";
-    // margin-bottom: 500px;
-    // background: lightgray;
+}
+
+path {
+    fill: none;
+}
+text {
+    font-size: 13px;
+}
+
+@media only screen and (max-width: 640px) {}
+@media only screen and (min-width: 641px) { }
+@media only screen and (min-width: 641px) and (max-width: 1024px) { }
+@media only screen and (min-width: 1025px) { }
+@media only screen and (min-width: 1025px) and (max-width: 1440px) { }
+@media only screen and (min-width: 1441px) { }
+@media only screen and (min-width: 1441px) and (max-width: 1920px) { }
+@media (min-width: 1921px) { }
+
+@media only screen and (max-width: 1440px) {
+    .col.title {
+        width: 100% !important;
+        padding-bottom: 1.5rem;
+    }
+    .col.labels {
+        width: 100% !important;
+        max-width: none !important;
+        float: none !important;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    html {
+        font-size: 18px;
+    }
 }
 
 .ctn-full {
     .ctn();
+    min-width: 1000px;
     width: 100%;
-    margin-top: 40px;
-    // margin-bottom: 80px;
-    // max-width: 1200px;
-}
-.ctn-vis {
-    width: 560px/2;
-    float: left;
-    margin-left: 0px;
-    // padding: 10px;
-    padding-left: 0px;
-    padding-top: 0px;
-}
-.col-citiesView {
-    .col();
-    padding: 0;
-    width: 100%;
-}
-.col-right {
-    .col();
-    width: 25%;
+    padding: 0 3*@half-gutter;
 }
 
-g.city {
-    // opacity: .9;
-    transition: opacity .3s;
-}
-.hide {
-    opacity: 0 !important;
-}
+.labels {
+    h3 {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        font-weight: 500;
+        padding-top: 0rem;
+        padding-bottom: 0rem;
 
-.view-description {
-    margin-top: 80px;
+        border-bottom: 2px solid;
+    }
     p {
-        margin: 0;
-        text-align: center;
+        font-size: .8rem;
+        line-height: 1.5;
+        font-weight: 400;
+        padding-top: 0rem;
+        padding-bottom: .5rem;
     }
 }
 
-.graphDescription {
-    margin: 50px auto;
-    p {
-        margin: 0;
-        text-align: center;
+/////////
+
+.bottomAxis text {
+    font-size: 11px;
+}
+
+*[ng-controller^='mainCtrl'] {
+    .wrp-vis {
+    }
+    path.leftArea {
+        fill: url(#diagonalHatch2);
+        stroke: orange;
+    }
+    path.rightArea {
+        fill: url(#diagonalHatch);
+        stroke: steelblue;
     }
 }
-.stroke {
-    text-decoration: underline;
-    font-weight: 600;
+
+.ng-hide-add, .ng-hide-remove {
+    transition:0.2s linear all;
+    display:block!important;
 }
-.green {
-    color: #33a02c;
+.ng-hide-remove {
+    opacity: 0;
 }
-.steelblue {
-    color: steelblue;
+.ng-hide-add.ng-hide-add-active { 
+    opacity: 0;
 }
-.orange {
-    color: orange;
+.ng-hide-remove.ng-hide-remove-active { 
+    opacity: 1;
 }

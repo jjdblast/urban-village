@@ -1,0 +1,105 @@
+// base and labels
+path.area(
+    ng-attr-d = '{{area(data)}}'
+    style = 'fill: white'
+)
+path.mean(
+    ng-attr-d = '{{line(data)}}'
+    style = 'fill: none; stroke: lightgray'
+)
+g.cityTicks
+    circle(
+        ng-repeat = 'city in data'
+        ng-attr-cx = '{{x(city.pop)}}'
+        ng-attr-cy = '{{y(city.meanDegree)}}'
+        r = 2
+        style = 'fill: lightgray;'
+    )
+text(
+    ng-attr-transform = 'translate({{width-165}}, {{height/2+10}})'
+    style = 'fill: lightgray;'
+) contacts average
+text(
+    ng-attr-transform = 'translate({{width-165}}, {{15}})'
+    style = 'fill: lightgray;'
+) contacts max
+
+
+// population axis
+g.axis.xAxis(transform = 'translate(0,-18)')
+    path(
+        ng-attr-d = 'M0,3 v6 H{{width}} v-6'
+        style = 'stroke: green'
+    )
+    g.tick(
+            ng-repeat = "tick in pData.xAxis"
+            ng-attr-transform = 'translate({{x(tick.value)}}, 0)'
+        )
+        path(d = 'M0,3 v6' style = 'stroke: green;')
+        text(
+            ng-show = 'ctrl.overlaping(x(tick.value), x(hoverPop), model.popTickSize[0]*.8)'
+            style = 'fill: green; text-anchor: middle'
+        ) {{tick.text}}
+    g.hoverTick(
+            ng-attr-transform = 'translate({{x(hoverPop)}}, 0)'
+        )
+        path(d = 'M0,3 v6' style = 'stroke: green; stroke-width: 2')
+        text(
+            getsize ng-model='model.popTickSize'
+            y = -2
+            style = 'fill: green; font-weight: 600; text-anchor: middle'
+        ) city pop: {{hoverPop | number:0}}
+
+// cities
+g.cities
+    g.city(
+        ng-repeat = 'city in citiesData'
+        ng-attr-transform = 'translate({{x(city.pop)}},0)'
+        ng-show = 'ctrl.overlaping(x(city.pop), x(hoverPop), cityWidth*.88)'
+    )
+        include city
+
+// hover city
+g.city.hoverCity(
+        ng-if = 'city'
+        ng-attr-transform = 'translate({{x(city.pop)}},0)'
+    )
+    include city
+
+    // degree axis
+    g.axis.yAxis
+        g.tick(
+            ng-repeat = "tick in y.ticks(10)"
+            ng-attr-transform = 'translate(0, {{y(tick)}})'
+            ng-show = 'ctrl.overlaping(y(tick), y(hoverDegree), model.degreeTickSize[1]+3)'
+        )
+            path(
+                d = 'M-3,0 h6'
+                style = 'stroke: black'
+            )
+            text(
+                x = 9 ng-attr-y = '{{ tick == 1 ? -6 : 0}}'
+                dy = '.32em'
+                style = 'text-anchor: start'
+            ) {{x.tickFormat(6, ',.1s')(tick)}}
+
+        // hover tick and text
+    g.hoverTick(
+            ng-if = 'mouse'
+            ng-attr-transform = 'translate(0, {{y(hoverDegree)}})'
+        )
+        path(d = 'M-3,0 h6' stroke = 'black' stroke-width = 2)
+        text(
+            getsize ng-model='model.degreeTickSize'
+            ng-attr-y = '{{y(hoverDegree) > 20 ? -12 : 12}}'
+            dy = '.32em' 
+            style = 'text-anchor: middle; font-weight: 600;'
+        ) {{hoverDegree | number:0}} contacts
+
+// hover target
+rect.hoverTarget(
+    ng-mousemove = 'ctrl.mousemove($event)' ng-mouseleave = 'ctrl.mouseleave()'
+    ng-attr-x = '{{cityWidth/2}}'
+    ng-attr-width = '{{width-cityWidth}}' ng-attr-height = '{{height}}'
+    style = 'opacity: 0;'
+)

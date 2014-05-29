@@ -3,6 +3,9 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+
+    font-size: 20px;
+    line-height: 1.5;
 }
 div {
     box-sizing: border-box;
@@ -13,7 +16,7 @@ div {
     width: @width;
     min-height: 1px;
     margin: auto;
-    padding: 0 @half-gutter;
+    padding: 0 3*@half-gutter;
 }
 
 // rows and columns
@@ -44,16 +47,47 @@ div {
     }
 }
 
-.axis {
-    .domain {
-        fill: none;
-    }
-    line {
-        fill: none;
-        stroke: #000;
-        // shape-rendering: crispEdges;
-    }
-    text {
-        font-size: 11px;
-    }
+// new typography
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2.2rem;
+    line-height: 1.0;
+    font-weight: 500;
+    padding-top: 0rem;
+    padding-bottom: .1em;
+}
+.lead {
+    font-size: 1.35rem;
+    line-height: 1.2;
+    font-weight: 400;
+    color: rgba(0,0,0,.7);
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+h2 {
+    font-size: 1.9rem;
+    line-height: 1.1;
+    font-weight: 500;
+    padding-top: 0rem;
+    padding-bottom: .1rem;
+}
+h3 {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    font-weight: 500;
+    padding-top: 0rem;
+    padding-bottom: .2rem;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+    padding-top: 0rem;
+    padding-bottom: 1.5rem;
 }

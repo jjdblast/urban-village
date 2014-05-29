@@ -8,6 +8,6 @@ html
         link(type="text/css", rel="stylesheet", href="style.css")
         script(type="text/javascript", src="lib.js")
 
-    body
+    body(ng-app="app" ng-controller="mainCtrl as ctrl")
         include index-body
         script(type="text/javascript", src="bundle.js")
