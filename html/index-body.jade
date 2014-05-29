@@ -1,10 +1,33 @@
 .ctn-full(style = '')
-    h2.title(
-        style = 'margin-bottom: 0;'
-    ) Number of phone contacts according to city population
-    h3(
-        style = 'margin-top: 0; margin-bottom: 120px;'
-    ) 15 months of telecommunication data from cities in Portugal
+    .row.header(style = 'padding-top: 3rem; padding-bottom: 2.5rem;')
+        .col.title(style = 'width: 45%;')
+            h1 Phone contacts on Portugal cities
+            .lead 15 months of telecommunication data
+        .col.labels(style = 'width: 55%; float: right; max-width: 800px;'): .row
+            .col(style = 'width: {{100/4}}%; color: green;')
+                h3 {{hoverPop}}
+                p Population size of the selected city
+            .col(style = 'width: {{100/4}}%; color: black;')
+                h3 {{hoverDegree}} 
+                p Number of phone contacts, people that called each other
+            .col(style = 'width: {{100/4}}%; color: steelblue;')
+                h3(ng-if = 'city.hoverDegree.amountPerc >= 0.1') {{city.hoverDegree.amountPerc || 0 | number:1}}%
+                h3(ng-if = 'city.hoverDegree.amountPerc < 0.1') ~0.1%
+                h3(ng-if = '!city.hoverDegree.amountPerc') 0%
+                p Percentage of people in the selected city with {{hoverDegree}} contacts
+            .col(
+                    ng-if = 'hoverDegree > 1'
+                    style = 'width: {{100/4}}%; color: orange;'
+                )
+                h3 {{city.hoverDegree.clustPerc || 0 | number:1}}%
+                p Chance that each two of the {{hoverDegree}} contacts know each other
+            .col(
+                    ng-if = 'hoverDegree == 1'
+                    style = 'width: {{100/4}}%; color: orange;'
+                )
+                h3 100%
+                p Only one phone contact, he knows himself
+
 
 .ctn-full(style = 'background: hsl(0,0%,90%)'): .wrp-vis(
     ng-style = 'wrpStyle()' 

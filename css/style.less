@@ -1,46 +1,88 @@
+@import (less) '../bower_components/normalize-css/normalize.css';
 @import 'fonts.less';
 @import 'base.less';
-@import 'typography.less';
+// @import 'typography.less';
 
 
 @width: 700px;
-@half-gutter: 20px;
+@half-gutter: 1rem;
 
 @baseFontSize: 16px;
 @lineMult: 1.5;
 @baseLineHeight: round(@baseFontSize * @lineMult);
 @sizeMult: 1.5;
 
-body {
+html, body {
     font-family: "Whitney A", "Whitney B";
-    // margin-bottom: 500px;
-    // background: lightgray;
+}
+
+path {
+    fill: none;
+}
+text {
+    font-size: 13px;
+}
+
+@media only screen and (max-width: 640px) {}
+@media only screen and (min-width: 641px) { }
+@media only screen and (min-width: 641px) and (max-width: 1024px) { }
+@media only screen and (min-width: 1025px) { }
+@media only screen and (min-width: 1025px) and (max-width: 1440px) { }
+@media only screen and (min-width: 1441px) { }
+@media only screen and (min-width: 1441px) and (max-width: 1920px) { }
+@media (min-width: 1921px) { }
+
+@media only screen and (max-width: 1440px) {
+    .col.title {
+        width: 100% !important;
+        padding-bottom: 1.5rem;
+    }
+    .col.labels {
+        width: 100% !important;
+        max-width: none !important;
+        float: none !important;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    html {
+        font-size: 18px;
+    }
 }
 
 .ctn-full {
     .ctn();
     min-width: 1000px;
     width: 100%;
-    padding: 0 40px;
-    // margin-bottom: 80px;
-    // max-width: 1200px;
+    padding: 0 3*@half-gutter;
 }
-.ctn-vis {
-    width: 560px/2;
-    float: left;
-    margin-left: 0px;
-    // padding: 10px;
-    padding-left: 0px;
-    padding-top: 0px;
+
+.labels {
+    h3 {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        font-weight: 500;
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+
+        border-bottom: 2px solid;
+    }
+    p {
+        font-size: .8rem;
+        line-height: 1.5;
+        font-weight: 400;
+        padding-top: 0rem;
+        padding-bottom: .5rem;
+    }
 }
 
 /////////
 
+.bottomAxis text {
+    font-size: 11px;
+}
+
 *[ng-controller^='mainCtrl'] {
     .wrp-vis {
-    }
-    rect.hoverTarget {
-        opacity: 0;
     }
     path.leftArea {
         fill: url(#diagonalHatch2);

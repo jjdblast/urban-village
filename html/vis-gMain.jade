@@ -1,26 +1,27 @@
 // base and labels
 path.area(
     ng-attr-d = '{{area(data)}}'
-    fill = 'white'
+    style = 'fill: white'
 )
 path.mean(
     ng-attr-d = '{{line(data)}}'
-    fill = 'none' stroke = 'lightgray'
+    style = 'fill: none; stroke: lightgray'
 )
 g.cityTicks
     circle(
         ng-repeat = 'city in data'
         ng-attr-cx = '{{x(city.pop)}}'
         ng-attr-cy = '{{y(city.meanDegree)}}'
-        r = 2 fill = 'lightgray'
+        r = 2
+        style = 'fill: lightgray;'
     )
 text(
     ng-attr-transform = 'translate({{width-165}}, {{height/2+10}})'
-    font-size = 12 fill = 'lightgray'
+    style = 'fill: lightgray;'
 ) contacts average
 text(
     ng-attr-transform = 'translate({{width-165}}, {{15}})'
-    font-size = 12 fill = 'lightgray'
+    style = 'fill: lightgray;'
 ) contacts max
 
 
@@ -28,26 +29,25 @@ text(
 g.axis.xAxis(transform = 'translate(0,-18)')
     path(
         ng-attr-d = 'M0,3 v6 H{{width}} v-6'
-        stroke = 'green'
+        style = 'stroke: green'
     )
     g.tick(
             ng-repeat = "tick in pData.xAxis"
             ng-attr-transform = 'translate({{x(tick.value)}}, 0)'
         )
-        path(d = 'M0,3 v6' stroke='green')
+        path(d = 'M0,3 v6' style = 'stroke: green;')
         text(
-            text-anchor = 'middle' fill='green'
             ng-show = 'ctrl.overlaping(x(tick.value), x(hoverPop), model.popTickSize[0]*.8)'
+            style = 'fill: green; text-anchor: middle'
         ) {{tick.text}}
     g.hoverTick(
             ng-attr-transform = 'translate({{x(hoverPop)}}, 0)'
         )
-        path(d = 'M0,3 v6' stroke = 'green' stroke-width = 2)
+        path(d = 'M0,3 v6' style = 'stroke: green; stroke-width: 2')
         text(
             getsize ng-model='model.popTickSize'
             y = -2
-            fill = 'green' font-weight = 600
-            text-anchor = 'middle'
+            style = 'fill: green; font-weight: 600; text-anchor: middle'
         ) city pop: {{hoverPop | number:0}}
 
 // cities
@@ -93,14 +93,13 @@ g.city.hoverCity(
             getsize ng-model='model.degreeTickSize'
             ng-attr-y = '{{y(hoverDegree) > 20 ? -12 : 12}}'
             dy = '.32em' 
-            style = 'text-anchor: middle; font-weight: 600; font-size: 12px'
+            style = 'text-anchor: middle; font-weight: 600;'
         ) {{hoverDegree | number:0}} contacts
 
 // hover target
 rect.hoverTarget(
-    ng-mousemove = 'ctrl.mousemove($event)'
-    ng-mouseleave = 'ctrl.mouseleave()'
+    ng-mousemove = 'ctrl.mousemove($event)' ng-mouseleave = 'ctrl.mouseleave()'
     ng-attr-x = '{{cityWidth/2}}'
-    ng-attr-width = '{{width-cityWidth}}' 
-    ng-attr-height = '{{height}}'
+    ng-attr-width = '{{width-cityWidth}}' ng-attr-height = '{{height}}'
+    style = 'opacity: 0;'
 )
