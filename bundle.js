@@ -158,6 +158,11 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         $scope.hoverDegree = 10
         $scope.city = _.first($scope.data)
         $scope.hoverPop = $scope.city.pop
+        $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+
+        _.each($scope.citiesData, function(d,i){
+            d.hoverDegree = _.find(d.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
+        })
         
         // scales domain
         $scope.x.domain(d3.extent($scope.data, acc.size))

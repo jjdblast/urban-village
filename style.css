@@ -423,7 +423,7 @@ div {
   width: 700px;
   min-height: 1px;
   margin: auto;
-  padding: 0 1rem;
+  padding: 0 3rem;
 }
 .row {
   min-height: 1px;
@@ -523,7 +523,6 @@ text {
   width: 700px;
   min-height: 1px;
   margin: auto;
-  padding: 0 1rem;
   min-width: 1000px;
   width: 100%;
   padding: 0 3rem;
