@@ -1,6 +1,3 @@
-require('./services')
-require('./directives')
-
 angular.module('app', ['services', 'directives', 'ngAnimate'])
 
 .controller('mainCtrl', function ($scope, $http, getMouse, transform) {
