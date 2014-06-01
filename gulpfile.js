@@ -23,7 +23,7 @@ function index() {
         .pipe(jade({pretty: true}))
 }
 function bundle() {
-    return gulp.src(['app/js/**/*.js', '!app/js/export/**/*.js', '!app/js/test/**/*.js'])
+    return gulp.src(['app/js/**/*.js', '!app/js/export/**/*.js'])
         .pipe(concat('bundle.js'))
 }
 function libs(type){
@@ -32,7 +32,7 @@ function libs(type){
 }
 function style(){
     return gulp.src('app/css/style.less')
-        .pipe(less({paths: ['./app/css', './node_modules/lc-template/css']}))
+        .pipe(less({paths: ['./app/css', './bower_components', './node_modules/lc-template/css']}))
         .pipe(autoprefixer())
 }
 
