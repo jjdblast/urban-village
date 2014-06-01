@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     autoprefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
-    clean = require('gulp-clean')
+    clean = require('gulp-clean'),
+    karma = require('gulp-karma')
 
 //////////////
 // common streams
@@ -63,7 +64,7 @@ app.get('/style.css', function(req, res) {
 //////////////
 // tasks
 //////////////
-gulp.task('default', ['server', 'build'])
+gulp.task('default', ['server', 'build', 'test'])
 
 gulp.task('server', function(){
     app.listen(5000)
@@ -108,9 +109,18 @@ gulp.task('data/', function() {
         .pipe(gulp.dest('build/data'))
 })
 
-// gulp.watch('js/**/*.js', function () {
-//     console.log('update')
-// })
+gulp.task('test', function () {
+    return gulp.src(_.flatten([
+            _.map(libsData, 'prod'),
+            'bower_components/angular-mocks/angular-mocks.js',
+            ['app/js/**/*.js', '!app/js/export/**/*.js'],
+            'app/test/**/*Spec.js'
+        ]))
+        .pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'watch'
+        }))
+})
 
 /////////////////
 // utilities

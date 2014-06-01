@@ -1,3 +1,0 @@
-# Scaling Project
-
-// test results

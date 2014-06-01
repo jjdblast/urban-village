@@ -128,7 +128,6 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             var index = bisect($scope.data, $scope.x.invert(d))
             return $scope.data[index]
         })
-        console.log($scope.citiesData)
 
         // pData
         $scope.pData = {}
