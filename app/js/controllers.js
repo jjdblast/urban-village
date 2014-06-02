@@ -104,8 +104,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     $http.get('data/aggregate.json').success(function(data) {
         // transform data
         $scope.data = transform(data)
-        console.log(data[0])
-        console.log(data[0].degrees[0])
+        // console.log(data[0])
+        // console.log(data[0].degrees[0])
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10

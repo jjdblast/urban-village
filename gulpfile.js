@@ -13,14 +13,16 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
-    karma = require('gulp-karma'),
     minifyCss = require('gulp-minify-css'),
     header = require('gulp-header'),
-    runSequence = require('run-sequence')
+    runSequence = require('run-sequence'),
+    bump = require('gulp-bump')
 
 var devExpress = express(),
     karmaServer,
     libsData = require('./app/js/libs')
+
+require('./server/dataOperations')
 
 //////////////
 // common streams
@@ -39,7 +41,7 @@ function libs(type){
 }
 function style(){
     return gulp.src('app/css/style.less')
-        .pipe(less({paths: ['./app/css', './bower_components', './node_modules/lc-template/css']}))
+        .pipe(less({paths: ['./app/css', './bower_components', './material']}))
         .pipe(autoprefixer())
 }
 
@@ -166,13 +168,22 @@ gulp.task('test', function () {
 /////////////////
 // utilities
 /////////////////
+function bump (type) {
+    return gulp.src(['./bower.json', './package.json'])
+        .pipe(bump({type:type})).pipe(gulp.dest('./'))
+}
+
+gulp.task('bump:major', function(){ return bump('major') })
+gulp.task('bump:minor', function(){ return bump('minor') })
+gulp.task('bump:patch', function(){ return bump('patch') })
+
 // accept stdin calls
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', function (data) {
     data = (data + '').trim()
-    if (data === 'subl' || data === 'edit' || data === 'e') { exec('subl .') }
-    if (data === 'open' || data === 'o') { exec('osascript '+ __dirname +'/node_modules/lc-template/js/scr/reload.scpt') }
+    if (data === 'subl' || data === 'edit' || data === 'e') { exec('server/scr/subl .') }
+    if (data === 'open' || data === 'o') { exec('osascript ' + 'server/scr/reload.scpt') }
     // if (data === 'exit' || data === 'quit' || data === 'q') { process.exit(0) }
     if (gulp.hasTask(data)) { gulp.start(data) } else { gulpUtil.log('**No task with this name**') }
 })
