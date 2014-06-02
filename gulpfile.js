@@ -1,12 +1,11 @@
 var express = require('express'),
-    app = express(),
     through = require('through'),
-    libsData = require('./app/js/libs'),
-    _ = require('lodash')
+    _ = require('lodash'),
+    fs = require('fs'),
+    exec = require('child_process').exec,
+    karma = require('karma')
 
 var gulp = require('gulp'),
-    exec = require('child_process').exec,
-    fs = require('fs'),
     gulpUtil = require('gulp-util'),
     concat = require('gulp-concat'),
     jade = require('gulp-jade'),
@@ -14,7 +13,14 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
-    karma = require('gulp-karma')
+    karma = require('gulp-karma'),
+    minifyCss = require('gulp-minify-css'),
+    header = require('gulp-header'),
+    runSequence = require('run-sequence')
+
+var devExpress = express(),
+    karmaServer,
+    libsData = require('./app/js/libs')
 
 //////////////
 // common streams
@@ -38,25 +44,25 @@ function style(){
 }
 
 //////////////
-// server
+// Dev router
 /////////////
-app.use('/data', express.static('./app/data'))
-app.use('/img', express.static('./app/img'))
-app.use('/build', express.static('./build'))
-app.get('/', function (req, res) {
+var devRouter = express.Router();
+devRouter.use('/data', express.static('./app/data'))
+devRouter.use('/img', express.static('./app/img'))
+devRouter.use('/build', express.static('./build'))
+devRouter.get('/', function (req, res) {
     index()
         .pipe(unwrap()).pipe(res)
-    gulp.start('build')
 })
-app.get('/bundle.js', function (req, res) {
+devRouter.get('/bundle.js', function (req, res) {
     bundle()
         .pipe(unwrap()).pipe(res.type('application/javascript'))
 })
-app.get('/libs.js', function (req, res) {
+devRouter.get('/libs.js', function (req, res) {
     libs('dev')
         .pipe(unwrap()).pipe(res.type('application/javascript'))
 })
-app.get('/style.css', function(req, res) {
+devRouter.get('/style.css', function(req, res) {
     style()
         .pipe(unwrap()).pipe(res.type('text/css'))
 })
@@ -64,19 +70,24 @@ app.get('/style.css', function(req, res) {
 //////////////
 // tasks
 //////////////
-gulp.task('default', ['server', 'build', 'test'])
+gulp.task('default', ['server', 'test'])
 
 gulp.task('server', function(){
-    app.listen(5000)
-    gulpUtil.log('**Server started on localhost:5000**')
+    devExpress.use('/', devRouter)
+        .listen(5000)
+    gulpUtil.log('*Dev Server started on localhost:5000**')
 })
 
-gulp.task('clean', function () {
+gulp.task('build', function(callback) {
+    runSequence('build-clean',
+        ['index', 'bundle', 'libs', 'style', 'img/', 'data/'],
+        callback)
+})
+
+gulp.task('build-clean', function () {
     return gulp.src('build/', {read: false})
         .pipe(clean())
 })
-
-gulp.task('build', ['index', 'bundle', 'libs', 'style', 'img/', 'data/'])
 
 gulp.task('index', function(){
     return index()
@@ -90,12 +101,25 @@ gulp.task('bundle', function(){
 })
 
 gulp.task('libs', function () {
+    var banner = ['/**',
+      ' * This code make use of:',
+      ' * Angular.js, D3.js, lodash.js',
+      ' */',
+      ''].join('\n');
     return libs('prod')
+        .pipe(header(banner))
         .pipe(gulp.dest('build/'))
 })
 
 gulp.task('style', function(){
+    var banner = ['/**',
+      ' * This code make use of:',
+      ' * Normalize.css, LESS',
+      ' */',
+      ''].join('\n');
     return style()
+        .pipe(minifyCss({keepSpecialComments: 0}))
+        .pipe(header(banner))
         .pipe(gulp.dest('build/'))
 })
 
@@ -109,23 +133,39 @@ gulp.task('data/', function() {
         .pipe(gulp.dest('build/data'))
 })
 
+//////////////
+// KARMA unit test
+//////////////
 gulp.task('test', function () {
-    return gulp.src(_.flatten([
+    if (karmaServer) {
+        gulpUtil.log('Karma already running')
+        return
+    }
+    karmaServer = require('karma').server;
+    karmaServer.start({
+        frameworks: ['jasmine'],
+        files: _.flatten([
             _.map(libsData, 'prod'),
             'bower_components/angular-mocks/angular-mocks.js',
-            ['app/js/**/*.js', '!app/js/export/**/*.js'],
+            'app/js/**/*.js',
             'app/test/**/*Spec.js'
-        ]))
-        .pipe(karma({
-            configFile: 'karma.conf.js',
-            action: 'watch'
-        }))
+        ]),
+        exclude: [
+            'app/js/export/**/*.js',
+        ],
+        reporters: ['progress', 'lcreport', 'beep'],
+        autoWatch: true,
+        browsers: ['PhantomJS'],
+        singleRun: false,
+    }, function(exitCode) {
+        gulpUtil.log('Karma has exited')
+        process.exit(exitCode);
+    })
 })
 
 /////////////////
 // utilities
 /////////////////
-
 // accept stdin calls
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
@@ -133,7 +173,7 @@ process.stdin.on('data', function (data) {
     data = (data + '').trim()
     if (data === 'subl' || data === 'edit' || data === 'e') { exec('subl .') }
     if (data === 'open' || data === 'o') { exec('osascript '+ __dirname +'/node_modules/lc-template/js/scr/reload.scpt') }
-    if (data === 'exit' || data === 'quit' || data === 'q') { process.exit() }
+    // if (data === 'exit' || data === 'quit' || data === 'q') { process.exit(0) }
     if (gulp.hasTask(data)) { gulp.start(data) } else { gulpUtil.log('**No task with this name**') }
 })
 // unwrap gulp stream
