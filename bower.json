@@ -11,8 +11,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "material",
   ],
   "dependencies": {
     "angular-animate": "~1.2.16",

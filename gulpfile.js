@@ -168,14 +168,14 @@ gulp.task('test', function () {
 /////////////////
 // utilities
 /////////////////
-function bump (type) {
+function bumpFunc (type) {
     return gulp.src(['./bower.json', './package.json'])
         .pipe(bump({type:type})).pipe(gulp.dest('./'))
 }
 
-gulp.task('bump:major', function(){ return bump('major') })
-gulp.task('bump:minor', function(){ return bump('minor') })
-gulp.task('bump:patch', function(){ return bump('patch') })
+gulp.task('bump:major', function(){ return bumpFunc('major') })
+gulp.task('bump:minor', function(){ return bumpFunc('minor') })
+gulp.task('bump:patch', function(){ return bumpFunc('patch') })
 
 // accept stdin calls
 process.stdin.resume();
