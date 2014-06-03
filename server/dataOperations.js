@@ -20,7 +20,7 @@ gulp.task('data:aggregate', ['open db'], function (done) {
             fs.writeFileSync(path, JSON.stringify(data), 'utf-8')
 
             gulpUtil.log('data saved on: ' + path); gulp.start('close db'); done();
-        })
+        }) 
 })
 
 //////////////
