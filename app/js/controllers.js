@@ -1,6 +1,3 @@
-require('./services')
-require('./directives')
-
 angular.module('app', ['services', 'directives', 'ngAnimate'])
 
 .controller('mainCtrl', function ($scope, $http, getMouse, transform) {
@@ -107,8 +104,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     $http.get('data/aggregate.json').success(function(data) {
         // transform data
         $scope.data = transform(data)
-        console.log(data[0])
-        console.log(data[0].degrees[0])
+        // console.log(data[0])
+        // console.log(data[0].degrees[0])
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10
@@ -131,7 +128,6 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             var index = bisect($scope.data, $scope.x.invert(d))
             return $scope.data[index]
         })
-        console.log($scope.citiesData)
 
         // pData
         $scope.pData = {}
