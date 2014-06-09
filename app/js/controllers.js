@@ -1,14 +1,20 @@
 angular.module('app', ['services', 'directives', 'ngAnimate'])
 
 .controller('mainCtrl', function ($scope, $http, transform) {
+
+    $scope.wrpStyle = function(){
+        return {'padding-bottom': this.svgHeight/this.svgWidth*100 + '%'}
+    }
+
     $http.get('data/aggregate.json').success(function(data) {
         // transform data
         $scope.data = transform(data)
+        console.log($scope.data[0])
         $scope.$broadcast('data-arrived')
     })
 })
 
-.controller('mainVisCtrl', function ($scope, $http, getMouse, transform) {
+.controller('mainVisCtrl', function ($scope, getMouse) {
     var s = $scope
 
     $scope.model = {}
@@ -63,9 +69,9 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     // view accessors
 
-    $scope.wrpStyle = function(){
-        return {'padding-bottom': $scope.svgHeight/$scope.svgWidth*100 + '%'}
-    }
+    // $scope.wrpStyle = function(){
+    //     return {'padding-bottom': $scope.svgHeight/$scope.svgWidth*100 + '%'}
+    // }
 
     // events and helpers
     _.extend(this, {
@@ -144,4 +150,44 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     })
 
+})
+
+.controller('cumulativeCtrl', function ($scope) {
+
+    $scope.model = {}
+    $scope.svgWidth = 400
+    $scope.svgHeight = 400
+    $scope.margin = {t: 50, b:50, l:50, r:50}
+    $scope.width = $scope.svgWidth - $scope.margin.l - $scope.margin.r
+    $scope.height = $scope.svgHeight - $scope.margin.t - $scope.margin.b
+
+    var acc = {
+        size: function(d,i){return d.pop}
+    }
+
+    // scales
+    $scope.x = d3.scale.log()
+        .range([0, $scope.width])
+    $scope.y = d3.scale.log()
+        .range([$scope.height, 0])
+
+    $scope.$on('data-arrived', function(){
+        $scope.x.domain(d3.extent($scope.data, acc.size))
+        $scope.y.domain(d3.extent($scope.data, function(d,i){return d.scaledCumulativeDegree}))
+
+        // pData
+        $scope.pData = {}
+        $scope.pData.xAxis = _.map($scope.x.ticks(5), function(d,i){
+            return {
+                value: d,
+                text: $scope.x.tickFormat(5, ',.1s')(d)
+            }
+        })
+        $scope.pData.yAxis = _.map($scope.y.ticks(5), function(d,i){
+            return {
+                value: d,
+                text: $scope.y.tickFormat(5, ',.1s')(d)
+            }
+        })
+    })
 })

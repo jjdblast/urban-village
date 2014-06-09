@@ -20,6 +20,8 @@ angular.module('services', [])
         _.each(data, function(d,i){
             d.degrees = _.filter(d.degrees, function(d,i){return d.amount>1})
             d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
+            d.cumulativeDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount})
+            d.scaledCumulativeDegree = d.cumulativeDegree / (d.amount/d.pop)
 
             // mean
             d.meanDegree = _.reduce(d.degrees, function(acc,d,i){

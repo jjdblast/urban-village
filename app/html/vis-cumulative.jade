@@ -1,0 +1,49 @@
+g.axis.xAxis(transform = 'translate(0,-5)')
+    path(
+        ng-attr-d = 'M0,-6 v6 H{{width}} v-6'
+        style = 'stroke: green'
+    )
+    g.tick(
+            ng-repeat = "tick in pData.xAxis"
+            ng-attr-transform = 'translate({{x(tick.value)}}, 0)'
+        )
+        path(d = 'M0,0 v-6' style = 'stroke: green;')
+        text(
+            y = -12
+            style = 'fill: green; text-anchor: middle'
+        ) {{tick.text}}
+text(
+    x = 20
+    transform = 'translate({{width}},{{height}}) rotate(-90)'
+    style = 'text-anchor: start'
+) Sum of contacts
+
+g.axis.xAxis(transform = 'translate(-5,0)')
+    path(
+        ng-attr-d = 'M-6,0 h6 V{{height}} h-6'
+        style = 'stroke: black'
+    )
+    g.tick(
+            ng-repeat = "tick in pData.yAxis"
+            ng-attr-transform = 'translate(0, {{y(tick.value)}})'
+        )
+        path(d = 'M0,0 h-6' style = 'stroke: black;')
+        text(
+            x = -12 dy = '.35em'
+            style = 'fill: black; text-anchor: end'
+        ) {{tick.text}}
+
+text(
+    ng-attr-transform = 'translate({{width}},{{height}})'
+    y = 0 x = -20
+    style = 'fill: green; text-anchor: end'
+) City population
+
+g.cities
+    circle(
+        ng-repeat = "city in data"
+        r = 3
+        ng-attr-cx = '{{x(city.pop)}}'
+        ng-attr-cy = '{{y(city.scaledCumulativeDegree)}}'
+        opacity = .5
+    )
