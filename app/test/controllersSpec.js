@@ -1,6 +1,6 @@
 // jasmine specs for controllers
 
-describe('mainCtrl', function(){
+describe('mainVisCtrl', function(){
 
   // definitions
   var $httpBackend, $scope, ctrl; 
@@ -9,7 +9,7 @@ describe('mainCtrl', function(){
   beforeEach(inject(function($injector){
     $scope = $injector.get('$rootScope').$new()
     var $controller = $injector.get('$controller');
-    ctrl = $controller('mainCtrl', {'$scope' : $scope })
+    ctrl = $controller('mainVisCtrl', {'$scope' : $scope })
   }))
 
   // tests

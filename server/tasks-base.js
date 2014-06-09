@@ -1,9 +1,9 @@
 var express = require('express'),
-    through = require('through'),
     _ = require('lodash'),
     fs = require('fs'),
     exec = require('child_process').exec,
-    karma = require('karma')
+    karma = require('karma'),
+    through = require('through')
 
 var gulp = require('gulp'),
     gulpUtil = require('gulp-util'),
@@ -15,14 +15,11 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     minifyCss = require('gulp-minify-css'),
     header = require('gulp-header'),
-    runSequence = require('run-sequence'),
-    bump = require('gulp-bump')
+    runSequence = require('run-sequence')
 
 var devExpress = express(),
     karmaServer,
-    libsData = require('./app/js/libs')
-
-require('./server/dataOperations')
+    libsData = JSON.parse(fs.readFileSync('./app/js/libs.json', 'utf-8'))
 
 //////////////
 // common streams
@@ -168,14 +165,6 @@ gulp.task('test', function () {
 /////////////////
 // utilities
 /////////////////
-function bumpFunc (type) {
-    return gulp.src(['./bower.json', './package.json'])
-        .pipe(bump({type:type})).pipe(gulp.dest('./'))
-}
-
-gulp.task('bump:major', function(){ return bumpFunc('major') })
-gulp.task('bump:minor', function(){ return bumpFunc('minor') })
-gulp.task('bump:patch', function(){ return bumpFunc('patch') })
 
 // accept stdin calls
 process.stdin.resume();

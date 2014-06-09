@@ -28,7 +28,7 @@ g.bottomAxis(ng-attr-transform = 'translate(0,{{height+10}})')
     ) 0
     // clust axis
     path(
-        ng-attr-d = 'M0,6 v-6 h{{-cityWidth*.35}} v6'
+        ng-attr-d = 'M0,6 v-6 h{{cityWidth*.35}} v6'
         style = 'fill: none; stroke: orange'
     )
     text(
@@ -52,7 +52,7 @@ g.bottomAxis(ng-attr-transform = 'translate(0,{{height+10}})')
         ) {{city.hoverDegree.clustPerc | number:0}}%
     // amount axis
     path(
-        ng-attr-d = 'M0,6 v-6 h{{cityWidth*.35}} v6'
+        ng-attr-d = 'M0,6 v-6 h{{-cityWidth*.35}} v6'
         style = 'fill: none; stroke: steelblue;'
     )
     text(

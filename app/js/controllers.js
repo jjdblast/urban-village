@@ -1,12 +1,20 @@
 angular.module('app', ['services', 'directives', 'ngAnimate'])
 
-.controller('mainCtrl', function ($scope, $http, getMouse, transform) {
+.controller('mainCtrl', function ($scope, $http, transform) {
+    $http.get('data/aggregate.json').success(function(data) {
+        // transform data
+        $scope.data = transform(data)
+        $scope.$broadcast('data-arrived')
+    })
+})
+
+.controller('mainVisCtrl', function ($scope, $http, getMouse, transform) {
     var s = $scope
 
     $scope.model = {}
     $scope.svgWidth = 1000
     $scope.svgHeight = 380
-    $scope.margin = {t: 60, b:60, l:1, r:1}
+    $scope.margin = {t: 60, b:55, l:1, r:1}
     $scope.width = $scope.svgWidth - $scope.margin.l - $scope.margin.r
     $scope.height = $scope.svgHeight - $scope.margin.t - $scope.margin.b
 
@@ -27,10 +35,10 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     $scope.xAmount = d3.scale.linear()
         .domain([0, 20])
-        .range([0, $scope.cityWidth*.33])
+        .range([0, -$scope.cityWidth*.33])
     $scope.xClust = d3.scale.linear()
         .domain([0,50])
-        .range([0, -$scope.cityWidth*.33])
+        .range([0, $scope.cityWidth*.33])
 
     // draw functions
 
@@ -100,12 +108,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     })
 
     // get data
-
-    $http.get('data/aggregate.json').success(function(data) {
-        // transform data
-        $scope.data = transform(data)
-        // console.log(data[0])
-        // console.log(data[0].degrees[0])
+    $scope.$on('data-arrived', function(){
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10
