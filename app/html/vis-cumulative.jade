@@ -1,0 +1,11 @@
+.wrp-vis(
+    ng-controller='cumulativeCtrl as ctrl'
+    ng-style = 'wrpStyle()' 
+)
+    svg(
+            vbox = '0 0 {{svgWidth}} {{svgHeight}}'
+            preserveAspectRatio = 'xMidYMid meet' 
+            ng-if = 'data'
+        )
+        g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
+            include vis-cumulative-body
