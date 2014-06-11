@@ -13,8 +13,8 @@
       <div style="" class="ctn-full">
         <div style="padding-top: 3rem; padding-bottom: 2rem;" class="row header">
           <div style="width: 41%;" class="col title">
-            <h1>Phone contacts on Portugal</h1>
-            <div class="lead">15 months of telecommunication data</div>
+            <h1>Scaling of Phone Contacts</h1>
+            <div class="lead">Analysis of 15 months of telecommunication data from Portugal</div>
           </div>
           <div style="width: 59%; float: right;" class="col labels">
             <div style="height: 110px;" class="row">
@@ -177,56 +177,62 @@
         </div>
       </div>
     </div>
-    <div style="padding-top: 2rem; width: 1000px;" class="ctn">
+    <div style="padding-top: 2rem; width: 900px;" class="ctn">
       <!-- DESCRIPTION-->
-      <h3>Description</h3>
-      <div class="row">
-        <div style="width: {{100/2}}%;" class="col">
-          <!-- cumulative graph-->
-          <div style="background: hsl(0,0%,90%);">
-            <div ng-controller="cumulativeCtrl as ctrl" ng-style="wrpStyle()" class="wrp-vis">
-              <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
-                <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
-                  <g transform="translate(0,-5)" class="axis xAxis">
-                    <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
-                    <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
-                      <path d="M0,0 v-6" style="stroke: green;"></path>
-                      <text y="-12" style="fill: green; text-anchor: middle">{{tick.text}}</text>
-                    </g>
-                  </g>
-                  <text x="20" transform="translate({{width}},{{height}}) rotate(-90)" style="text-anchor: start">Sum of contacts</text>
-                  <g transform="translate(-5,0)" class="axis xAxis">
-                    <path ng-attr-d="M-6,0 h6 V{{height}} h-6" style="stroke: black"></path>
-                    <g ng-repeat="tick in pData.yAxis" ng-attr-transform="translate(0, {{y(tick.value)}})" class="tick">
-                      <path d="M0,0 h-6" style="stroke: black;"></path>
-                      <text x="-12" dy=".35em" style="fill: black; text-anchor: end">{{tick.text}}</text>
-                    </g>
-                  </g>
-                  <text ng-attr-transform="translate({{width}},{{height}})" y="0" x="-20" style="fill: green; text-anchor: end">City population</text>
-                  <g class="cities">
-                    <circle ng-repeat="city in data" r="3" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.scaledCumulativeDegree)}}" opacity="0.5"></circle>
+      <div style="padding: 0 0px;" class="col-center">
+        <h3>Description</h3>
+        <p>On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socioeconomic quantities increase superlinearly with city size with a well defined scaling exponent β. In this research we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.</p>
+        <div style="background: hsl(0,0%,90%); width: 50%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px;">
+          <div ng-controller="cumulativeCtrl as ctrl" ng-style="wrpStyle()" class="wrp-vis">
+            <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
+              <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
+                <!-- lines-->
+                <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" style="stroke: white; stroke-dashArray: 5,1; stroke-width: 2;"></path>
+                <text x="270" y="80" style="fill: white; font-weight: 600;">Scaling 1</text>
+                <path d="M265,76, h-17" style="stroke: white;"></path>
+                <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" style="stroke: gray; stroke-dashArray: 5,1; stroke-width: 2;"></path>
+                <text x="225" y="50" style="fill: gray; font-weight: 600; text-anchor: end;">Scaling 1.12</text>
+                <path d="M230,46, h22" style="stroke: gray;"></path>
+                <text x="70" y="180" style="fill: gray; text-anchor: middle;">city</text>
+                <path d="M70,185, v22" style="stroke: gray;"></path>
+                <g transform="translate(0,-5)" class="axis xAxis">
+                  <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
+                  <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
+                    <path d="M0,0 v-6" style="stroke: green;"></path>
+                    <text y="-12" style="fill: green; text-anchor: middle">{{tick.text}}</text>
                   </g>
                 </g>
-              </svg>
-            </div>
+                <text x="20" ng-attr-transform="translate({{width}},{{height}}) rotate(-90)" style="text-anchor: start">Sum of contacts</text>
+                <g transform="translate(-5,0)" class="axis xAxis">
+                  <path ng-attr-d="M-6,0 h6 V{{height}} h-6" style="stroke: black"></path>
+                  <g ng-repeat="tick in pData.yAxis" ng-attr-transform="translate(0, {{y(tick.value)}})" class="tick">
+                    <path d="M0,0 h-6" style="stroke: black;"></path>
+                    <text x="-12" dy=".35em" style="fill: black; text-anchor: end">{{tick.text}}</text>
+                  </g>
+                </g>
+                <text ng-attr-transform="translate({{width}},{{height}})" y="0" x="-20" style="fill: green; text-anchor: end">City population</text>
+                <g class="cities">
+                  <circle ng-repeat="city in data" r="3" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.scaledCumulativeDegree)}}" opacity="0.5"></circle>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
-        <div style="width: {{100/2}}%;" class="col">
-          <p>On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socio- economic quantities increase superlinearly with city size with a well defined scaling exponent β. In this paper we show that this perva- sive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.</p>
-        </div>
+        <p>On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.</p>
+        <p>For more information, <a href="#">see the published paper.</a></p>
       </div>
       <!-- FOOTER-->
       <div style="padding-top: 2.8rem;" class="row footer">
         <div style="width: {{100/4}}%;" class="col">
           <h5>Press Material</h5>
-          <p class="small"><a href="#">Download press release<br></a><a href="#">Download visual material <br></a><a href="#">Download Hi-res video <br></a><a href="#">Download Hi-res video <br></a><a href="#">See MIT press release <br></a></p>
+          <p class="small"><a href="#">Download press release<br></a><a href="#">Download visual material <br></a><a href="#">See MIT press release <br></a></p>
           <p class="small">For more information, contact: <a href="mailto:senseable-contacts@mit.edu">senseable-contacts@mit.edu</a></p>
         </div>
         <div style="width: {{100/4}}%;" class="col">
           <h5>Paper Authors</h5>
           <p class="small">
             Markus Schlapfer <br>
-            Lúıs M. A. Bettencourt <br>
+            Luis M. A. Bettencourt <br>
             Mathias Raschke <br>
             Sebastian Grauwin <br>
             Rob Claxton <br>
