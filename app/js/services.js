@@ -1,6 +1,13 @@
 
 angular.module('services', [])
 
+.factory('dataPromise', function ($http, transform) {
+    return $http.get('data/aggregate.json')
+        .then(function(response){
+            return transform(response.data)
+        })
+})
+
 .factory('getMouse', function(){
     return function(e){
         var container = e.srcElement || e.target

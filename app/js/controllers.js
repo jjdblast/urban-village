@@ -6,15 +6,9 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         return {'padding-bottom': this.svgHeight/this.svgWidth*100 + '%'}
     }
 
-    $http.get('data/aggregate.json').success(function(data) {
-        // transform data
-        $scope.data = transform(data)
-        console.log($scope.data[0])
-        $scope.$broadcast('data-arrived')
-    })
 })
 
-.controller('mainVisCtrl', function ($scope, getMouse) {
+.controller('mainVisCtrl', function ($scope, dataPromise, getMouse) {
     var s = $scope
 
     $scope.model = {}
@@ -67,12 +61,6 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     var bisect = d3.bisector(function(d){return acc.size(d)}).right
 
-    // view accessors
-
-    // $scope.wrpStyle = function(){
-    //     return {'padding-bottom': $scope.svgHeight/$scope.svgWidth*100 + '%'}
-    // }
-
     // events and helpers
     _.extend(this, {
         mousemove: function(e){
@@ -114,7 +102,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     })
 
     // get data
-    $scope.$on('data-arrived', function(){
+    dataPromise.then(function(data){
+        $scope.data = data
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10
@@ -152,7 +141,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
 })
 
-.controller('cumulativeCtrl', function ($scope) {
+.controller('cumulativeCtrl', function ($scope, dataPromise) {
 
     $scope.model = {}
     $scope.svgWidth = 400
@@ -171,7 +160,9 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     $scope.y = d3.scale.log()
         .range([$scope.height, 0])
 
-    $scope.$on('data-arrived', function(){
+    dataPromise.then(function(data){
+        $scope.data = data
+
         $scope.x.domain(d3.extent($scope.data, acc.size))
         $scope.y.domain(d3.extent($scope.data, function(d,i){return d.scaledCumulativeDegree}))
 
@@ -189,5 +180,20 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
                 text: $scope.y.tickFormat(5, ',.1s')(d)
             }
         })
+
+        console.log($scope.x.domain()[1] / $scope.x.domain()[0])
+        console.log($scope.y.domain()[1] / $scope.y.domain()[0])
+
+        $scope.pData.line1 = {
+            x0: $scope.x.domain()[0], y0: $scope.y.domain()[0],
+            x1: $scope.x.domain()[1],
+            y1: $scope.y.domain()[0] * ($scope.x.domain()[1] / $scope.x.domain()[0])
+        }
+        $scope.pData.line2 = {
+            x0: $scope.x.domain()[0], y0: $scope.y.domain()[0],
+            x1: $scope.x.domain()[1],
+            y1: $scope.y.domain()[0] * Math.pow($scope.x.domain()[1] / $scope.x.domain()[0], 1.12)
+        }
+
     })
 })
