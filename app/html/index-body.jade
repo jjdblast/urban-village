@@ -1,55 +1,34 @@
 div(ng-controller='mainVisCtrl as ctrl')
     .ctn-full(style = '')
-        .row.header(style = 'padding-top: 3rem; padding-bottom: 2rem;')
-            .col.title(style = 'width: 41%;')
+        .row.header(style = 'padding-top: 2.5rem; padding-bottom: 2.5rem;')
+            .col.title(style = '')
                 h1 Scaling of Phone Contacts
-                .lead Analysis of 15 months of telecommunication data from Portugal
-            .col.labels(style = 'width: 59%; float: right;'): .row(style = 'height: 110px;')
-                .col(style = 'width: {{100/4}}%; color: green;')
-                    h3 {{hoverPop || 0}}
-                    p Population of the selected city
-                .col(style = 'width: {{100/4}}%; color: black;')
-                    h3 {{hoverDegree || 0}} 
-                    p Phone contacts, people that called each other
-                .col(style = 'width: {{100/4}}%; color: steelblue;')
-                    h3(ng-if = 'city.hoverDegree.amountPerc >= 0.1') {{city.hoverDegree.amountPerc || 0 | number:1}}%
-                    h3(ng-if = 'city.hoverDegree.amountPerc < 0.1') ~0.1%
-                    h3(ng-if = '!city.hoverDegree.amountPerc') 0.0%
-                    p People in the selected city with {{hoverDegree}} contacts
-                .col(
-                        ng-if = 'hoverDegree > 1'
-                        style = 'width: {{100/4}}%; color: orange;'
-                    )
-                    h3 {{city.hoverDegree.clustPerc || 0 | number:1}}%
-                    p Probability that each two of the {{hoverDegree}} contacts know each other
-                .col(
-                        ng-if = 'hoverDegree == 1'
-                        style = 'width: {{100/4}}%; color: orange;'
-                    )
-                    h3 0%
-                    p Probability that two contacts know each other
+                .lead Exploration and analysis of 15 months of telecommunication data from Portugal
+
+        //- h3 Data Exploration
 
     // MAIN VIS
-    .ctn-full(style = 'background: hsl(0,0%,90%);'): .wrp-vis(
-        ng-style = 'wrpStyle()' 
-    )
-        svg(
-                vbox = '0 0 {{svgWidth}} {{svgHeight}}'
-                preserveAspectRatio = 'xMidYMid meet' 
-                ng-if = 'data'
-            )
-            defs
-                pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
-                    path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
-                pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
-                    path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
-            g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
-                include vis-gMain
 
-    .ctn-full(style = 'padding-top: 1.5rem; padding-bottom: 1rem; background: hsl(0,0%,94%); border-top: 2px solid hsl(0,0%,80%); opacity: 0.8; margin-bottom: 1.5rem;')
+    .ctn-full(style = 'background: hsl(0,0%,88%); border-top: 2px solid hsl(0,0%,80%);')
+        .wrp-vis(
+            ng-style = 'wrpStyle()' 
+        )
+            svg(
+                    vbox = '0 0 {{svgWidth}} {{svgHeight}}'
+                    preserveAspectRatio = 'xMidYMid meet' 
+                    ng-if = 'data'
+                )
+                defs
+                    pattern(id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4")
+                        path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='steelblue')
+                    pattern(id="diagonalHatch2" patternUnits="userSpaceOnUse" width="4" height="4")
+                        path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
+                g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
+                    include vis-gMain
+    .ctn-full(style = 'padding-top: 1.5rem; padding-bottom: 1rem; background: hsl(0,0%,94%); border-bottom: 2px solid hsl(0,0%,80%); border-top: 2px solid hsl(0,0%,70%); opacity: 0.8; margin-bottom: 0rem;')
         .row.how-to-read
             .col(style = 'width: {{100/4}}%')
-                h4 How to read the graph
+                h4 How to explore the data
                 p
                     | Cities
                     img(src='img/city.svg')
@@ -74,14 +53,42 @@ div(ng-controller='mainVisCtrl as ctrl')
                     span(style='color: orange; font-weight: 600;') contacts know each other 
                     img(src='img/clustAxis.svg' style='margin-left: 0px;')
                     | is on the right.
+
+    //- .ctn-full(style = 'background: hsl(0,0%,94%); border-bottom: 2px solid hsl(0,0%,80%); border-top: 2px solid hsl(0,0%,70%); opacity: 0.8;')
+        .row(style = 'padding-top: .8rem; padding-bottom: .2rem;')
+           
+            .col.labels: .row(style = '')
+                .col(style = 'width: {{100/4}}%; color: green;')
+                    h3 {{hoverPop || 0}}
+                    p Population of the selected city
+                .col(style = 'width: {{100/4}}%; color: black;')
+                    h3 {{hoverDegree || 0}} 
+                    p Phone contacts, people that called each other
+                .col(style = 'width: {{100/4}}%; color: steelblue;')
+                    h3(ng-if = 'city.hoverDegree.amountPerc >= 0.1') {{city.hoverDegree.amountPerc || 0 | number:1}}%
+                    h3(ng-if = 'city.hoverDegree.amountPerc < 0.1') ~0.1%
+                    h3(ng-if = '!city.hoverDegree.amountPerc') 0.0%
+                    p People in the selected city with {{hoverDegree}} contacts
+                .col(
+                        ng-if = 'hoverDegree > 1'
+                        style = 'width: {{100/4}}%; color: orange;'
+                    )
+                    h3 {{city.hoverDegree.clustPerc || 0 | number:1}}%
+                    p Probability that each two of the {{hoverDegree}} contacts know each other
+                .col(
+                        ng-if = 'hoverDegree == 1'
+                        style = 'width: {{100/4}}%; color: orange;'
+                    )
+                    h3 0%
+                    p Probability that each two of the {{hoverDegree}} contacts know each other
 .ctn(style = 'padding-top: 2rem; width: 900px;')
     // DESCRIPTION
     .col-center(style = 'padding: 0 0px;')
-        h3 Description
+        h3 Data Analysis
 
         p On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socioeconomic quantities increase superlinearly with city size with a well defined scaling exponent β. In this research we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.
 
-        div(style = 'background: hsl(0,0%,90%); width: 50%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px;')
+        div(style = 'background: hsl(0,0%,90%); width: 50%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px;')
             include vis-cumulative
 
         p On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.
