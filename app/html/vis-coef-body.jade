@@ -1,0 +1,84 @@
+// lines
+//- path(
+//-     ng-attr-d = 'M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}'
+//-     style = 'stroke: white; stroke-dashArray: 5,1; stroke-width: 2;'
+//- )
+//- text(
+//-     x = 270 y = 80
+//-     style = 'fill: white; font-weight: 600;'
+//- ) Scaling 1
+//- path(
+//-     d = 'M265,76, h-17'
+//-     style = 'stroke: white;'
+//- )
+//- path(
+//-     ng-attr-d = 'M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}'
+//-     style = 'stroke: gray; stroke-dashArray: 5,1; stroke-width: 2;'
+//- )
+//- text(
+//-     x = 225 y = 50
+//-     style = 'fill: gray; font-weight: 600; text-anchor: end;'
+//- ) Scaling 1.12
+//- path(
+//-     d = 'M230,46, h22'
+//-     style = 'stroke: gray;'
+//- )
+
+text(
+    x = 72 y = 190
+    style = 'fill: gray; text-anchor: middle;'
+) city
+path(
+    d = 'M72,195, v22'
+    style = 'stroke: gray;'
+)
+
+g.axis.xAxis(transform = 'translate(0,-5)')
+    path(
+        ng-attr-d = 'M0,-6 v6 H{{width}} v-6'
+        style = 'stroke: green'
+    )
+    g.tick(
+            ng-repeat = "tick in pData.xAxis"
+            ng-attr-transform = 'translate({{x(tick.value)}}, 0)'
+        )
+        path(d = 'M0,0 v-6' style = 'stroke: green;')
+        text(
+            y = -12
+            style = 'fill: green; text-anchor: middle'
+        ) {{tick.text}}
+text(
+    x = 40 y = 15
+    ng-attr-transform = 'translate({{width}},{{height}}) rotate(-90)'
+    style = 'text-anchor: start; fill: orange;'
+) Cluster coefficient
+
+g.axis.yAxis(transform = 'translate(-5,0)')
+    path(
+        ng-attr-d = 'M-6,0 h6 V{{height}} h-6'
+        style = 'stroke: orange'
+    )
+    g.tick(
+            ng-repeat = "tick in pData.yAxis"
+            ng-attr-transform = 'translate(0, {{y(tick.value)}})'
+        )
+        path(d = 'M0,0 h-6' style = 'stroke: orange;')
+        text(
+            x = -8 dy = '.35em'
+            style = 'fill: orange; text-anchor: end'
+        ) {{tick.text}}
+
+text(
+    ng-attr-transform = 'translate({{width}},{{height}})'
+    y = 15 x = -20
+    style = 'fill: green; text-anchor: end'
+) City population
+
+g.cities
+    circle(
+        ng-repeat = "city in data"
+        r = 3
+        ng-attr-cx = '{{x(city.pop)}}'
+        ng-attr-cy = '{{y(city.avgClustCoeff)}}'
+        opacity = .5
+    )

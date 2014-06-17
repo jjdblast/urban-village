@@ -18,6 +18,7 @@
             pop: '$_id.pop'
         },
         amount: {$sum: '$amount'},
+        avgClustCoeff: {$avg: '$avgClustCoeff'},
         degrees: {$push: {
             degree: '$_id.degree',
             avgClustCoeff: '$avgClustCoeff',
@@ -27,7 +28,7 @@
     {$project:{
         _id: 0,
         pop: '$_id.pop',
-        amount: 1, degrees: 1,
+        amount: 1, degrees: 1, avgClustCoeff: 1
     }},
     {$sort:{
         pop: 1,

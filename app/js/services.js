@@ -35,10 +35,13 @@ angular.module('services', [])
                 return acc + d.amount*d.degree
             },0) / d.amount 
 
+            d.avgClustCoeff = d.avgClustCoeff * 100
+
             _.each(d.degrees, function (degree) {
                 degree.amountPerc = degree.amount / d.amount * 100
                 degree.clustPerc = degree.avgClustCoeff * 100
             })
+
         })
 
         return _(data).filter(function (d,i) {

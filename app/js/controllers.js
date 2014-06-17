@@ -56,8 +56,8 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         .x0(function(d,i){return 0})
 
     $scope.line = d3.svg.line()
-        .x(function(d,i){return $scope.x(acc.size(d))})
-        .y(function(d,i){return $scope.y(d.meanDegree)})
+        // .x(function(d,i){return $scope.x(acc.size(d))})
+        // .y(function(d,i){return $scope.y(d.meanDegree)})
 
     var bisect = d3.bisector(function(d){return acc.size(d)}).right
 
@@ -136,6 +136,14 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             }
         })
 
+        var regressionLine = ss.linear_regression()
+            .data(_.map($scope.data, function(d,i){
+                return [acc.size(d), d.meanDegree]
+            }))
+            .line()
+        $scope.meanLineData = _.map($scope.x.domain(), function(d,i){
+            return [$scope.x(d), $scope.y(regressionLine(d))]
+        })
 
     })
 
@@ -181,9 +189,6 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             }
         })
 
-        console.log($scope.x.domain()[1] / $scope.x.domain()[0])
-        console.log($scope.y.domain()[1] / $scope.y.domain()[0])
-
         $scope.pData.line1 = {
             x0: $scope.x.domain()[0], y0: $scope.y.domain()[0],
             x1: $scope.x.domain()[1],
@@ -196,4 +201,54 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         }
 
     })
+})
+
+.controller('coefCtrl', function ($scope, dataPromise) {
+
+    $scope.model = {}
+    $scope.svgWidth = 400
+    $scope.svgHeight = 400
+    $scope.margin = {t: 50, b:50, l:50, r:50}
+    $scope.width = $scope.svgWidth - $scope.margin.l - $scope.margin.r
+    $scope.height = $scope.svgHeight - $scope.margin.t - $scope.margin.b
+
+    var acc = {
+        size: function(d,i){return d.pop}
+    }
+
+    // scales
+    $scope.x = d3.scale.log()
+        .range([0, $scope.width])
+    $scope.y = d3.scale.linear()
+        .range([$scope.height, 0])
+
+    $scope.line = d3.svg.line()
+
+    dataPromise.then(function(data){
+        $scope.data = data
+
+        $scope.x.domain(d3.extent($scope.data, acc.size))
+        $scope.y.domain([0,100])
+
+        // pData
+        $scope.pData = {}
+        $scope.pData.xAxis = _.map($scope.x.ticks(5), function(d,i){
+            return {
+                value: d,
+                text: $scope.x.tickFormat(5, ',.1s')(d)
+            }
+        })
+        $scope.pData.yAxis = _.map($scope.y.ticks(5), function(d,i){
+            return {
+                value: d,
+                text: $scope.y.tickFormat(5, ',.0s')(d)+'%'
+            }
+        })
+
+    })
+
+    this.overlaping = function (elemPos, hoverPos, size) {
+        if (!hoverPos) return true
+        return Math.abs(elemPos - hoverPos) > size
+    }
 })

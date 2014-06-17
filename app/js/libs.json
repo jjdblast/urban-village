@@ -18,5 +18,10 @@
         "name": "angular-animate",
         "dev": "bower_components/angular-animate/angular-animate.js",
         "prod": "bower_components/angular-animate/angular-animate.min.js"
+    },
+    {   
+        "name": "simple-statistcs",
+        "dev": "bower_components/simple-statistics/src/simple_statistics.js",
+        "prod": "bower_components/simple-statistics/src/simple_statistics.js"
     }
 ]
