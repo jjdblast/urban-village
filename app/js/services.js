@@ -35,6 +35,9 @@ angular.module('services', [])
                 return acc + d.amount*d.degree
             },0) / d.amount 
 
+            d.avgClustCoeff = _.reduce(d.degrees, function(acc,d,i){
+                return acc + d.amount*d.avgClustCoeff
+            },0) / d.amount 
             d.avgClustCoeff = d.avgClustCoeff * 100
 
             _.each(d.degrees, function (degree) {

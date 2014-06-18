@@ -228,7 +228,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         $scope.data = data
 
         $scope.x.domain(d3.extent($scope.data, acc.size))
-        $scope.y.domain([0,100])
+        $scope.y.domain([0,60])
 
         // pData
         $scope.pData = {}
@@ -238,7 +238,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
                 text: $scope.x.tickFormat(5, ',.1s')(d)
             }
         })
-        $scope.pData.yAxis = _.map($scope.y.ticks(5), function(d,i){
+        $scope.pData.yAxis = _.map([5,15,25,35,45,55], function(d,i){
             return {
                 value: d,
                 text: $scope.y.tickFormat(5, ',.0s')(d)+'%'

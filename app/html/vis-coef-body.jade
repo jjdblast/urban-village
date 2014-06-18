@@ -1,35 +1,15 @@
 // lines
-//- path(
-//-     ng-attr-d = 'M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}'
-//-     style = 'stroke: white; stroke-dashArray: 5,1; stroke-width: 2;'
-//- )
-//- text(
-//-     x = 270 y = 80
-//-     style = 'fill: white; font-weight: 600;'
-//- ) Scaling 1
-//- path(
-//-     d = 'M265,76, h-17'
-//-     style = 'stroke: white;'
-//- )
-//- path(
-//-     ng-attr-d = 'M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}'
-//-     style = 'stroke: gray; stroke-dashArray: 5,1; stroke-width: 2;'
-//- )
-//- text(
-//-     x = 225 y = 50
-//-     style = 'fill: gray; font-weight: 600; text-anchor: end;'
-//- ) Scaling 1.12
-//- path(
-//-     d = 'M230,46, h22'
-//-     style = 'stroke: gray;'
-//- )
-
 text(
-    x = 72 y = 190
+    x = 72 y = 110
     style = 'fill: gray; text-anchor: middle;'
 ) city
 path(
-    d = 'M72,195, v22'
+    d = 'M72,115, v22'
+    style = 'stroke: gray;'
+)
+
+path(
+    ng-attr-d = 'M-5 {{y(25)}}, h{{width+5}}'
     style = 'stroke: gray;'
 )
 
@@ -48,7 +28,7 @@ g.axis.xAxis(transform = 'translate(0,-5)')
             style = 'fill: green; text-anchor: middle'
         ) {{tick.text}}
 text(
-    x = 40 y = 15
+    x = 20 y = 15
     ng-attr-transform = 'translate({{width}},{{height}}) rotate(-90)'
     style = 'text-anchor: start; fill: orange;'
 ) Cluster coefficient
