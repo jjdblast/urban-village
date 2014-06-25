@@ -136,16 +136,30 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             }
         })
 
-        var regressionLine = ss.linear_regression()
-            .data(_.map($scope.data, function(d,i){
-                return [acc.size(d), d.meanDegree]
-            }))
-            .line()
-        $scope.meanLineData = _.map($scope.x.domain(), function(d,i){
-            return [$scope.x(d), $scope.y(regressionLine(d))]
-        })
+        $scope.meanLineData = calculateRegressionLineData()
 
     })
+
+    function calculateRegressionLineData () {
+        var regData = _.map($scope.data, function(d,i){
+            return [Math.log(acc.size(d)), Math.log(d.meanDegree)]
+            return [(acc.size(d)), (d.meanDegree)]
+        })
+        var regressionLine = ss.linear_regression()
+            .data(regData)
+        var regM = regressionLine.m()
+        var regB = regressionLine.b()
+
+        function regline(x){
+            return Math.pow(x, regM) * Math.exp(regB)
+            return regressionLine.m()*x + regressionLine.b()
+        }
+
+        var meanLineData = _.map($scope.x.domain(), function(d,i){
+            return [$scope.x(d), $scope.y(regline(d))]
+        })
+        return meanLineData
+    }
 
 })
 
