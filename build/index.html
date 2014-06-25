@@ -199,8 +199,9 @@
             <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
               <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                 <!-- lines-->
-                <text x="72" y="190" style="fill: gray; text-anchor: middle;">city</text>
-                <path d="M72,195, v22" style="stroke: gray;"></path>
+                <text x="72" y="110" style="fill: gray; text-anchor: middle;">city</text>
+                <path d="M72,115, v22" style="stroke: gray;"></path>
+                <path ng-attr-d="M-5 {{y(25)}}, h{{width+5}}" style="stroke: gray;"></path>
                 <g transform="translate(0,-5)" class="axis xAxis">
                   <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
                   <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
@@ -208,7 +209,7 @@
                     <text y="-12" style="fill: green; text-anchor: middle">{{tick.text}}</text>
                   </g>
                 </g>
-                <text x="40" y="15" ng-attr-transform="translate({{width}},{{height}}) rotate(-90)" style="text-anchor: start; fill: orange;">Cluster coefficient</text>
+                <text x="20" y="15" ng-attr-transform="translate({{width}},{{height}}) rotate(-90)" style="text-anchor: start; fill: orange;">Cluster coefficient</text>
                 <g transform="translate(-5,0)" class="axis yAxis">
                   <path ng-attr-d="M-6,0 h6 V{{height}} h-6" style="stroke: orange"></path>
                   <g ng-repeat="tick in pData.yAxis" ng-attr-transform="translate(0, {{y(tick.value)}})" class="tick">
