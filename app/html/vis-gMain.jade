@@ -5,7 +5,7 @@ path.area(
 )
 path.mean(
     ng-attr-d = '{{line(meanLineData)}}'
-    style = 'fill: none; stroke: lightgray'
+    style = 'fill: none; stroke: lightgray; stroke-dasharray: 5,5;'
 )
 g.cityTicks
     circle(
@@ -99,7 +99,7 @@ g.city.hoverCity(
 // hover target
 rect.hoverTarget(
     ng-mousemove = 'ctrl.mousemove($event)' ng-mouseleave = 'ctrl.mouseleave()'
-    ng-attr-x = '{{cityWidth/2}}'
-    ng-attr-width = '{{width-cityWidth}}' ng-attr-height = '{{height}}'
+    ng-attr-x = '0'
+    ng-attr-width = '{{width}}' ng-attr-height = '{{height}}'
     style = 'opacity: 0;'
 )

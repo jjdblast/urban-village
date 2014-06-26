@@ -1,16 +1,16 @@
 // lines
 text(
-    x = 72 y = 110
+    x = 72 y = 130
     style = 'fill: gray; text-anchor: middle;'
 ) city
 path(
-    d = 'M72,115, v22'
+    d = 'M72,135, v22'
     style = 'stroke: gray;'
 )
 
 path(
     ng-attr-d = 'M-5 {{y(25)}}, h{{width+5}}'
-    style = 'stroke: gray;'
+    style = 'stroke: gray; stroke-dasharray: 5,5;'
 )
 
 g.axis.xAxis(transform = 'translate(0,-5)')

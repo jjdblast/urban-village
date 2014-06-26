@@ -33,7 +33,7 @@
             <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
               <!-- base and labels-->
               <path ng-attr-d="{{area(data)}}" style="fill: white" class="area"></path>
-              <path ng-attr-d="{{line(meanLineData)}}" style="fill: none; stroke: lightgray" class="mean"></path>
+              <path ng-attr-d="{{line(meanLineData)}}" style="fill: none; stroke: lightgray; stroke-dasharray: 5,5;" class="mean"></path>
               <g class="cityTicks">
                 <circle ng-repeat="city in data" ng-attr-cx="{{x(city.pop)}}" ng-attr-cy="{{y(city.meanDegree)}}" r="2" style="fill: lightgray;"></circle>
               </g>
@@ -128,7 +128,7 @@
                 </g>
               </g>
               <!-- hover target-->
-              <rect ng-mousemove="ctrl.mousemove($event)" ng-mouseleave="ctrl.mouseleave()" ng-attr-x="{{cityWidth/2}}" ng-attr-width="{{width-cityWidth}}" ng-attr-height="{{height}}" style="opacity: 0;" class="hoverTarget"></rect>
+              <rect ng-mousemove="ctrl.mousemove($event)" ng-mouseleave="ctrl.mouseleave()" ng-attr-x="0" ng-attr-width="{{width}}" ng-attr-height="{{height}}" style="opacity: 0;" class="hoverTarget"></rect>
             </g>
           </svg>
         </div>
@@ -161,12 +161,12 @@
             <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
               <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                 <!-- lines-->
-                <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" style="stroke: white; stroke-dashArray: 5,1; stroke-width: 2;"></path>
-                <text x="270" y="80" style="fill: white; font-weight: 600;">Scaling 1</text>
-                <path d="M265,76, h-17" style="stroke: white;"></path>
-                <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" style="stroke: gray; stroke-dashArray: 5,1; stroke-width: 2;"></path>
-                <text x="225" y="50" style="fill: gray; font-weight: 600; text-anchor: end;">Scaling 1.12</text>
-                <path d="M230,46, h22" style="stroke: gray;"></path>
+                <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-25)" style="stroke: white; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                <text x="270" y="90" style="fill: white; font-weight: 600;">Scaling 1</text>
+                <path d="M265,86, h-17" style="stroke: white; "></path>
+                <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-25)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                <text x="225" y="60" style="fill: gray; font-weight: 600; text-anchor: end;">Scaling 1.12</text>
+                <path d="M230,56, h22" style="stroke: gray;"></path>
                 <text x="70" y="180" style="fill: gray; text-anchor: middle;">city</text>
                 <path d="M70,185, v22" style="stroke: gray;"></path>
                 <g transform="translate(0,-5)" class="axis xAxis">
@@ -199,9 +199,9 @@
             <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
               <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                 <!-- lines-->
-                <text x="72" y="110" style="fill: gray; text-anchor: middle;">city</text>
-                <path d="M72,115, v22" style="stroke: gray;"></path>
-                <path ng-attr-d="M-5 {{y(25)}}, h{{width+5}}" style="stroke: gray;"></path>
+                <text x="72" y="130" style="fill: gray; text-anchor: middle;">city</text>
+                <path d="M72,135, v22" style="stroke: gray;"></path>
+                <path ng-attr-d="M-5 {{y(25)}}, h{{width+5}}" style="stroke: gray; stroke-dasharray: 5,5;"></path>
                 <g transform="translate(0,-5)" class="axis xAxis">
                   <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
                   <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">

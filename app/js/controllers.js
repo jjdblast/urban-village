@@ -71,7 +71,12 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
                 i = bisect($scope.data, y0, 1),
                 d0 = $scope.data[i - 1],
                 d1 = $scope.data[i],
-                d = y0 - acc.size(d0) > acc.size(d1) - y0 ? d1 : d0;
+                d
+
+            if(_.isUndefined(d1)) { d = _.last($scope.data) }
+            else { d = y0 - acc.size(d0) > acc.size(d1) - y0 ? d1 : d0; }
+
+            // var d = y0 - acc.size(d0) > acc.size(d1) - y0 ? d1 : d0;
 
             $scope.city = d
             // $scope.city = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
