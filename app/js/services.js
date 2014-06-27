@@ -25,7 +25,7 @@ angular.module('services', [])
 .factory('transform', function () {
     return function(data){
         _.each(data, function(d,i){
-            d.degrees = _.filter(d.degrees, function(d,i){return d.amount>15})
+            d.degrees = _.filter(d.degrees, function(d,i){return d.amount> 4 })
             d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
             d.cumulativeDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount})
             d.scaledCumulativeDegree = d.cumulativeDegree / (d.amount/d.pop)
