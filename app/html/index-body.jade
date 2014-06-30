@@ -93,23 +93,24 @@ div(ng-controller='mainVisCtrl as ctrl')
             | , or vice versa.
 
         
+        p Researchers from the MIT SENSEable City Lab and the Santa Fe Institute, New Mexico teamed up to study how cities can affect our social relationships. 
+
+
         figure(style = 'width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-cumulative
-            figcaption Graph showing the difference between a linear relation and a super-linear one.
+            figcaption Graph showing the difference between a linear scaling relation and a super-linear one.
 
-        //- h4 The bigger the city more phone contacts
+        p Inferring human interaction networks from millions of anonymized mobile phone records in Portugal and UK, their study reveals a fundamental pattern: our social connections scale with city size.
 
-        p Inferring human interaction networks from millions of anonymized mobile phone records in Portugal reveals a fundamental pattern of how cities affect our social circles:
-
-        p The larger the town you live in, the more people you call and the more calls you make. This relation is “super-linear,” which means that on average, if you double the size of a town, the total number of social interactions will more than double – in a mathematically predictable way.
+        p The larger the town you live in, the more people you call and the more calls you make. The scaling of this relation is “super-linear,” which means that on average, if you double the size of a town, the sum of phone contacts in the city will more than double – in a mathematically predictable way.
 
         div(style='clear:both; height:1rem;')
 
         figure(style = 'width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-coef
-            figcaption The chance that two phone contacts from one person know each other is not affected by city size.
+            figcaption The chance that two phone contacts from one person know each other is on average not affected by city size.
         
         //- h4 The bigger the city more phone contacts
 
