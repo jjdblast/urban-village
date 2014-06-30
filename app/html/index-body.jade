@@ -25,6 +25,7 @@ div(ng-controller='mainVisCtrl as ctrl')
                         path(d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke='orange')
                 g.main(ng-attr-transform = 'translate({{margin.l}}, {{margin.t}})')
                     include vis-gMain
+        //- div(style = 'font-size:.7rem; text-align:center') *For this graph some outliers have been taken out to better show the increase in the average number of contacts.
     .ctn-full(style = 'padding-top: 1.5rem; padding-bottom: 1rem; background: hsl(0,0%,94%); border-bottom: 2px solid hsl(0,0%,80%); border-top: 2px solid hsl(0,0%,70%); opacity: 0.8; margin-bottom: 0rem;')
         .row.how-to-read
             .col(style = 'width: {{100/4}}%')
@@ -53,6 +54,7 @@ div(ng-controller='mainVisCtrl as ctrl')
                     span(style='color: orange; font-weight: 600;') contacts know each other 
                     img(src='img/clustAxis.svg' style='margin-left: 0px;')
                     | is on the right.
+    .ctn(style = 'font-size:.65rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,50%);') *For this graph some outliers have been taken out to better show the increase in the average number of contacts.
 
     //- .ctn-full(style = 'background: hsl(0,0%,94%); border-bottom: 2px solid hsl(0,0%,80%); border-top: 2px solid hsl(0,0%,70%); opacity: 0.8;')
         .row(style = 'padding-top: .8rem; padding-bottom: .2rem;')
@@ -81,7 +83,7 @@ div(ng-controller='mainVisCtrl as ctrl')
                     )
                     h3 0%
                     p Probability that each two of the {{hoverDegree}} contacts know each other
-.ctn(style = 'padding-top: 2rem; width: 900px;')
+.ctn(style = 'padding-top: 2.5rem; width: 900px;')
     // DESCRIPTION
     .col-center(style = 'padding: 0 0px;')
 
@@ -114,6 +116,8 @@ div(ng-controller='mainVisCtrl as ctrl')
         p Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.
 
         p This suggests that we instinctively form tight communities, in small towns and large cities alike. But if you live in a small community, your social circle is more or less determined by those who live around you, whereas in a large city you have more freedom to select which of the thousands of people around you will constitute your social circle.
+
+        div(style='clear:both;')
 
         p The revealed characteristics have important implications for the way information and ideas diffuse throughout a city. And eventually they can help us to understand a broad spectrum of social phenomena such as crime and the spread of diseases.
 

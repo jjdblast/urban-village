@@ -111,8 +111,40 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
     // get data
     dataPromise.then(function(data){
         // console.log(data[0])
+        data = _.cloneDeep(data)
 
-        $scope.data = data
+        _.each(data, function(d,i){
+            d.degrees = _.filter(d.degrees, function(d,i){return d.amount> 6 })
+            d.maxDegree = d3.max(d.degrees, function(d,i){return d.degree})
+            d.cumulativeDegree = d3.sum(d.degrees, function(d,i){return d.degree*d.amount})
+            d.scaledCumulativeDegree = d.cumulativeDegree / (d.amount/d.pop)
+
+            // mean
+            d.meanDegree = _.reduce(d.degrees, function(acc,d,i){
+                return acc + d.amount*d.degree
+            },0) / d.amount 
+
+            d.avgClustCoeff = _.reduce(d.degrees, function(acc,d,i){
+                return acc + d.amount*d.avgClustCoeff
+            },0) / d.amount 
+            d.avgClustCoeff = d.avgClustCoeff * 100
+
+            _.each(d.degrees, function (degree) {
+                degree.amountPerc = degree.amount / d.amount * 100
+                degree.clustPerc = degree.avgClustCoeff * 100
+            })
+
+        })
+
+        data.splice(0,2)
+
+        $scope.data = _(data).filter(function (d,i) {
+                return d.amount / d.pop > 0.1
+            })
+            .sortBy('pop')
+            .value()
+
+        // $scope.data = data
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10

@@ -151,8 +151,9 @@
           </div>
         </div>
       </div>
+      <div style="font-size:.65rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,50%);" class="ctn">*For this graph some outliers have been taken out to better show the increase in the average number of contacts.</div>
     </div>
-    <div style="padding-top: 2rem; width: 900px;" class="ctn">
+    <div style="padding-top: 2.5rem; width: 900px;" class="ctn">
       <!-- DESCRIPTION-->
       <div style="padding: 0 0px;" class="col-center">
         <p class="lead">Do you thrive amongst the crowds of a large metropolis or do you prefer the close community spirit of village life? Today’s widespread use of mobile communication technology enables us to explore <b>how a person’s social network changes when moving from a small town into a big city</b>, or vice versa.</p>
@@ -162,14 +163,14 @@
               <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
                 <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                   <!-- lines-->
-                  <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-12)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="270" y="90" style="fill: gray; font-weight: 600;">linear (β=1)</text>
-                  <path d="M265,86, h-17" style="stroke: gray; "></path>
-                  <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-12)" style="stroke: black; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="225" y="60" style="fill: black; font-weight: 600; text-anchor: end;">Super-linear (β=1.12)</text>
-                  <path d="M230,56, h22" style="stroke: black;"></path>
-                  <text x="70" y="180" style="fill: gray; text-anchor: middle;">city</text>
-                  <path d="M70,185, v22" style="stroke: gray;"></path>
+                  <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-29)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                  <text x="270" y="90" transform="translate(0,-17)" style="fill: gray; font-weight: 600;">linear (β=1)</text>
+                  <path d="M265,86, h-17" transform="translate(0,-17)" style="stroke: gray; "></path>
+                  <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-29)" style="stroke: black; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                  <text x="225" y="60" transform="translate(0,-17)" style="fill: black; font-weight: 600; text-anchor: end;">Super-linear (β=1.12)</text>
+                  <path d="M230,56, h22" transform="translate(0,-17)" style="stroke: black;"></path>
+                  <text x="70" y="180" transform="translate(0,-30)" style="fill: gray; text-anchor: middle;">city</text>
+                  <path d="M70,185, v22" transform="translate(0,-30)" style="stroke: gray;"></path>
                   <g transform="translate(0,-5)" class="axis xAxis">
                     <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
                     <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
@@ -234,6 +235,7 @@
         </figure>
         <p>Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.</p>
         <p>This suggests that we instinctively form tight communities, in small towns and large cities alike. But if you live in a small community, your social circle is more or less determined by those who live around you, whereas in a large city you have more freedom to select which of the thousands of people around you will constitute your social circle.</p>
+        <div style="clear:both;"></div>
         <p>The revealed characteristics have important implications for the way information and ideas diffuse throughout a city. And eventually they can help us to understand a broad spectrum of social phenomena such as crime and the spread of diseases.</p>
         <p>For more information, <a href="#">see the published paper.</a></p>
       </div>
