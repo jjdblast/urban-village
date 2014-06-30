@@ -90,23 +90,26 @@ div(ng-controller='mainVisCtrl as ctrl')
             b how a person’s social network changes when moving from a small town into a big city
             | , or vice versa.
 
-        //- h3 Data Analysis
         
         figure(style = 'width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-cumulative
             figcaption Graph showing the difference between a linear relation and a super-linear one.
 
+        //- h4 The bigger the city more phone contacts
+
         p Inferring human interaction networks from millions of anonymized mobile phone records in Portugal reveals a fundamental pattern of how cities affect our social circles:
 
         p The larger the town you live in, the more people you call and the more calls you make. This relation is “super-linear,” which means that on average, if you double the size of a town, the total number of social interactions will more than double – in a mathematically predictable way.
 
-        div
+        div(style='clear:both; height:1rem;')
 
         figure(style = 'width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-coef
-            figcaption The chance that two phone contacts from a person know each other is not affected by city size.
+            figcaption The chance that two phone contacts from one person know each other is not affected by city size.
+        
+        //- h4 The bigger the city more phone contacts
 
         p Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.
 
@@ -123,8 +126,7 @@ div(ng-controller='mainVisCtrl as ctrl')
             h5 Press Material
             p.small
                 a(href='#') Download press release<br>
-                a(href='#') Download visual material <br>
-                a(href='#') See MIT press release <br>
+                a(href='img/pressVisualMaterial.zip') Download visual material <br><br>
             p.small 
                 | For more information, contact: 
                 a(href='mailto:senseable-contacts@mit.edu') senseable-contacts@mit.edu
@@ -132,16 +134,16 @@ div(ng-controller='mainVisCtrl as ctrl')
         .col(style = 'width: {{100/4}}%;')
             h5 Study Authors
             p.small
-                | Markus Schlapfer <br>
+                a(href='http://web.mit.edu/schlmark/www/') Markus Schlapfer <br>
                 a(href='http://www.sebastian-grauwin.com/') Sebastian Grauwin <br>
-                | Carlo Ratti
+                | Carlo Ratti - Director
 
             h5 Data Visualization
             p.small 
                 a(href='http://luiscarli.com') Luis Carli
 
         .col(style = 'width: {{100/4}}%;')
-            h5 Colaborators
+            h5 Collaborators
             p.small.
                 Luis M. A. Bettencourt <br>
                 Mathias Raschke <br>

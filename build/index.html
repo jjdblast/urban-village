@@ -163,10 +163,10 @@
                 <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                   <!-- lines-->
                   <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-12)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="270" y="90" style="fill: gray; font-weight: 600;">linear (1x)</text>
+                  <text x="270" y="90" style="fill: gray; font-weight: 600;">linear (β=1)</text>
                   <path d="M265,86, h-17" style="stroke: gray; "></path>
                   <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-12)" style="stroke: black; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="225" y="60" style="fill: black; font-weight: 600; text-anchor: end;">Sper-linear (1.12x)</text>
+                  <text x="225" y="60" style="fill: black; font-weight: 600; text-anchor: end;">Super-linear (β=1.12)</text>
                   <path d="M230,56, h22" style="stroke: black;"></path>
                   <text x="70" y="180" style="fill: gray; text-anchor: middle;">city</text>
                   <path d="M70,185, v22" style="stroke: gray;"></path>
@@ -197,7 +197,7 @@
         </figure>
         <p>Inferring human interaction networks from millions of anonymized mobile phone records in Portugal reveals a fundamental pattern of how cities affect our social circles:</p>
         <p>The larger the town you live in, the more people you call and the more calls you make. This relation is “super-linear,” which means that on average, if you double the size of a town, the total number of social interactions will more than double – in a mathematically predictable way.</p>
-        <div></div>
+        <div style="clear:both; height:1rem;"></div>
         <figure style="width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;">
           <div style="background: hsl(0,0%,90%);">
             <div ng-controller="coefCtrl as ctrl" ng-style="wrpStyle()" class="wrp-vis">
@@ -206,7 +206,7 @@
                   <!-- lines-->
                   <text x="72" y="130" style="fill: gray; text-anchor: middle;">city</text>
                   <path d="M72,135, v22" style="stroke: gray;"></path>
-                  <path ng-attr-d="M-5 {{y(25)}}, h{{width+5}}" style="stroke: gray; stroke-dasharray: 5,5;"></path>
+                  <path ng-attr-d="M-5 {{y(25)}}, h{{width+5}}" style="stroke: gray; stroke-dasharray: 5,5; stroke-width:2;"></path>
                   <g transform="translate(0,-5)" class="axis xAxis">
                     <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
                     <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
@@ -230,7 +230,7 @@
               </svg>
             </div>
           </div>
-          <figcaption>The chance that two phone contacts from a person know each other is not affected by city size.</figcaption>
+          <figcaption>The chance that two phone contacts from one person know each other is not affected by city size.</figcaption>
         </figure>
         <p>Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.</p>
         <p>This suggests that we instinctively form tight communities, in small towns and large cities alike. But if you live in a small community, your social circle is more or less determined by those who live around you, whereas in a large city you have more freedom to select which of the thousands of people around you will constitute your social circle.</p>
@@ -241,17 +241,17 @@
       <div style="padding-top: 2.8rem;" class="row footer">
         <div style="width: {{100/4}}%;" class="col">
           <h5>Press Material</h5>
-          <p class="small"><a href="#">Download press release<br></a><a href="#">Download visual material <br></a><a href="#">See MIT press release <br></a></p>
+          <p class="small"><a href="#">Download press release<br></a><a href="img/pressVisualMaterial.zip">Download visual material <br><br></a></p>
           <p class="small">For more information, contact: <a href="mailto:senseable-contacts@mit.edu">senseable-contacts@mit.edu</a></p>
         </div>
         <div style="width: {{100/4}}%;" class="col">
           <h5>Study Authors</h5>
-          <p class="small">Markus Schlapfer <br><a href="http://www.sebastian-grauwin.com/">Sebastian Grauwin <br></a>Carlo Ratti</p>
+          <p class="small"><a href="http://web.mit.edu/schlmark/www/">Markus Schlapfer <br></a><a href="http://www.sebastian-grauwin.com/">Sebastian Grauwin <br></a>Carlo Ratti - Director</p>
           <h5>Data Visualization</h5>
           <p class="small"><a href="http://luiscarli.com">Luis Carli</a></p>
         </div>
         <div style="width: {{100/4}}%;" class="col">
-          <h5>Colaborators</h5>
+          <h5>Collaborators</h5>
           <p class="small">
             Luis M. A. Bettencourt <br>
             Mathias Raschke <br>
