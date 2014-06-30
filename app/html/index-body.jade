@@ -87,15 +87,12 @@ div(ng-controller='mainVisCtrl as ctrl')
     // DESCRIPTION
     .col-center(style = 'padding: 0 0px;')
 
-        p.lead
+        p
             | Do you thrive amongst the crowds of a large metropolis or do you prefer the close community spirit of village life? Today’s widespread use of mobile communication technology enables us to explore 
-            b how a person’s social network changes when moving from a small town into a big city
-            | , or vice versa.
+            b how a person’s social network changes when moving from a small town into a big city. 
+            | Researchers from the MIT SENSEable City Lab and the Santa Fe Institute, New Mexico teamed up to study how cities can affect our social relationships.
 
         
-        p Researchers from the MIT SENSEable City Lab and the Santa Fe Institute, New Mexico teamed up to study how cities can affect our social relationships. 
-
-
         figure(style = 'width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-cumulative
@@ -110,7 +107,7 @@ div(ng-controller='mainVisCtrl as ctrl')
         figure(style = 'width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-coef
-            figcaption The chance that two phone contacts from one person know each other is on average not affected by city size.
+            figcaption The chance that two phone contacts from one person know each other is not affected by city size.
         
         //- h4 The bigger the city more phone contacts
 
