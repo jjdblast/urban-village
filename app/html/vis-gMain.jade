@@ -16,11 +16,11 @@ g.cityTicks
         style = 'fill: lightgray;'
     )
 text(
-    ng-attr-transform = 'translate({{width-165}}, {{height/2+10}})'
+    ng-attr-transform = 'translate({{width-165}}, {{height/2+28}})'
     style = 'fill: lightgray;'
 ) contacts average
 text(
-    ng-attr-transform = 'translate({{width-165}}, {{15}})'
+    ng-attr-transform = 'translate({{width-165}}, {{20}})'
     style = 'fill: lightgray;'
 ) contacts max
 
@@ -48,7 +48,11 @@ g.axis.xAxis(transform = 'translate(0,-18)')
             getsize ng-model='model.popTickSize'
             y = -2
             style = 'fill: green; font-weight: 600; text-anchor: middle'
-        ) city pop: {{hoverPop | number:0}}
+        ) pop: {{hoverPop | number:0}}
+        text(
+            y = -20
+            style = 'fill: green; font-weight: 600; text-anchor: middle'
+        ) {{hoverName}}
 
 // cities
 g.cities

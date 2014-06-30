@@ -81,6 +81,7 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             $scope.city = d
             // $scope.city = $scope.data[ bisect($scope.data, $scope.x.invert($scope.mouse[0])) ]
             $scope.hoverPop = $scope.city.pop
+            $scope.hoverName = $scope.city.name
 
             $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
 
@@ -92,8 +93,9 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
             $scope.mouse = [0,$scope.y(10)]
 
             $scope.hoverDegree = 10
-            $scope.city = _.first($scope.data)
+            $scope.city = _.last($scope.data)
             $scope.hoverPop = $scope.city.pop
+            $scope.hoverName = $scope.city.name
             $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
 
             _.each($scope.citiesData, function(d,i){
@@ -108,12 +110,15 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
 
     // get data
     dataPromise.then(function(data){
+        // console.log(data[0])
+
         $scope.data = data
 
         $scope.mouse = [0,0]
         $scope.hoverDegree = 10
-        $scope.city = _.first($scope.data)
+        $scope.city = _.last($scope.data)
         $scope.hoverPop = $scope.city.pop
+        $scope.hoverName = $scope.city.name
         $scope.city.hoverDegree = _.find($scope.city.degrees, function(d,i){ return d.degree == $scope.hoverDegree})
 
         _.each($scope.citiesData, function(d,i){

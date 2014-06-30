@@ -13,6 +13,7 @@
     "mongodb": "^1.4.2"
   },
   "devDependencies": {
+    "d3": "^3.4.8",
     "gulp": "^3.6.2",
     "gulp-autoprefixer": "0.0.7",
     "gulp-clean": "^0.3.0",

@@ -84,21 +84,35 @@ div(ng-controller='mainVisCtrl as ctrl')
 .ctn(style = 'padding-top: 2rem; width: 900px;')
     // DESCRIPTION
     .col-center(style = 'padding: 0 0px;')
-        h3 Data Analysis
 
-        p On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socioeconomic quantities increase superlinearly with city size with a well defined scaling exponent β. In this research we show that this pervasive regularity could be explained by changes in the structure of the network of human interactions. By analyzing billions of anonymized phone call records from two European countries, we find that cities affect social networks in different ways.
+        p.lead
+            | Do you thrive amongst the crowds of a large metropolis or do you prefer the close community spirit of village life? Today’s widespread use of mobile communication technology enables us to explore 
+            b how a person’s social network changes when moving from a small town into a big city
+            | , or vice versa.
 
-        div(style = 'background: hsl(0,0%,90%); width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px;')
-            include vis-cumulative
+        //- h3 Data Analysis
+        
+        figure(style = 'width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;')
+            div(style = 'background: hsl(0,0%,90%);')
+                include vis-cumulative
+            figcaption Graph showing the difference between a linear relation and a super-linear one.
 
-        p On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.
+        p Inferring human interaction networks from millions of anonymized mobile phone records in Portugal reveals a fundamental pattern of how cities affect our social circles:
 
-        p On average, inhabitants of larger cities earn more than those of smaller ones. They also file more patents and are at greater risk to contract contagious diseases. In other terms, almost all socioeconomic quantities increase superlinearly with city size with a well defined scaling exponent β.
+        p The larger the town you live in, the more people you call and the more calls you make. This relation is “super-linear,” which means that on average, if you double the size of a town, the total number of social interactions will more than double – in a mathematically predictable way.
 
-        div(style = 'background: hsl(0,0%,90%); width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;')
-            include vis-coef
+        div
 
-        p On the one hand, the total number of social contacts, the total amount of time spent on the phone and the total number of calls scale superlinearly with city size with the same exponent β. On the other, there are surprising invariant quantities: the average communication intensity between each pair of persons, and the probability that an individual’s contacts are also connected with each other do not change with city size. The latter is particularly noteworthy, as it indicates that we tend to form tight-knit communities, or ‘villages’, independent of where we live.
+        figure(style = 'width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;')
+            div(style = 'background: hsl(0,0%,90%);')
+                include vis-coef
+            figcaption The chance that two phone contacts from a person know each other is not affected by city size.
+
+        p Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.
+
+        p This suggests that we instinctively form tight communities, in small towns and large cities alike. But if you live in a small community, your social circle is more or less determined by those who live around you, whereas in a large city you have more freedom to select which of the thousands of people around you will constitute your social circle.
+
+        p The revealed characteristics have important implications for the way information and ideas diffuse throughout a city. And eventually they can help us to understand a broad spectrum of social phenomena such as crime and the spread of diseases.
 
         p For more information, 
             a(href = '#') see the published paper.
@@ -116,21 +130,25 @@ div(ng-controller='mainVisCtrl as ctrl')
                 a(href='mailto:senseable-contacts@mit.edu') senseable-contacts@mit.edu
 
         .col(style = 'width: {{100/4}}%;')
-            h5 Paper Authors
-            p.small.
-                Markus Schlapfer <br>
-                Luis M. A. Bettencourt <br>
-                Mathias Raschke <br>
-                Sebastian Grauwin <br>
-                Rob Claxton <br>
-                Zbigniew Smoreda <br>
-                Geoffrey B. West <br>
-                Carlo Ratti
+            h5 Study Authors
+            p.small
+                | Markus Schlapfer <br>
+                a(href='http://www.sebastian-grauwin.com/') Sebastian Grauwin <br>
+                | Carlo Ratti
 
-        .col(style = 'width: {{100/4}}%;')
             h5 Data Visualization
             p.small 
                 a(href='http://luiscarli.com') Luis Carli
+
+        .col(style = 'width: {{100/4}}%;')
+            h5 Colaborators
+            p.small.
+                Luis M. A. Bettencourt <br>
+                Mathias Raschke <br>
+                Rob Claxton <br>
+                Zbigniew Smoreda <br>
+                Geoffrey B. West <br>
+
 
         .col(style = 'width: {{100/4}}%;')
             img(src='img/credits.png')

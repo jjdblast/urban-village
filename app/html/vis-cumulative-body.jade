@@ -1,29 +1,29 @@
 // lines
 path(
     ng-attr-d = 'M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}'
-    transform = 'translate(0,-25)'
-    style = 'stroke: white; stroke-dashArray: 5,5; stroke-width: 2;'
-)
-text(
-    x = 270 y = 90
-    style = 'fill: white; font-weight: 600;'
-) Scaling 1
-path(
-    d = 'M265,86, h-17'
-    style = 'stroke: white; '
-)
-path(
-    ng-attr-d = 'M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}'
-    transform = 'translate(0,-25)'
+    transform = 'translate(0,-12)'
     style = 'stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;'
 )
 text(
+    x = 270 y = 90
+    style = 'fill: gray; font-weight: 600;'
+) linear (1x)
+path(
+    d = 'M265,86, h-17'
+    style = 'stroke: gray; '
+)
+path(
+    ng-attr-d = 'M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}'
+    transform = 'translate(0,-12)'
+    style = 'stroke: black; stroke-dashArray: 5,5; stroke-width: 2;'
+)
+text(
     x = 225 y = 60
-    style = 'fill: gray; font-weight: 600; text-anchor: end;'
-) Scaling 1.12
+    style = 'fill: black; font-weight: 600; text-anchor: end;'
+) Sper-linear (1.12x)
 path(
     d = 'M230,56, h22'
-    style = 'stroke: gray;'
+    style = 'stroke: black;'
 )
 
 text(

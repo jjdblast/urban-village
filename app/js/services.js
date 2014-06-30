@@ -2,7 +2,7 @@
 angular.module('services', [])
 
 .factory('dataPromise', function ($http, transform) {
-    return $http.get('data/aggregate.json')
+    return $http.get('data/aggregate2.json')
         .then(function(response){
             return transform(response.data)
         })
