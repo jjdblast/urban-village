@@ -55,7 +55,7 @@ div(ng-controller='mainVisCtrl as ctrl')
                     img(src='img/clustAxis.svg' style='margin-left: 0px;')
                     | is on the right.
     .ctn(style = 'font-size:.75rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,40%); font-style: italic;') 
-        | Graph showing data from 15 months of telecommunication from Portugal cities. 
+        | Graph showing data from 15 months of telecommunication in cities of Portugal. 
         span(style='text-style:none;') † ‡
 
     //- <br>In this graph outliers are not considered to better show the increase in the average number of contacts
@@ -103,9 +103,9 @@ div(ng-controller='mainVisCtrl as ctrl')
         figure(style = 'width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;')
             div(style = 'background: hsl(0,0%,90%);')
                 include vis-cumulative
-            figcaption Graph showing the difference between a linear scaling relation and a super-linear one. ‡
+            figcaption Graph showing the difference between a linear scaling relation and a superlinear one. ‡
 
-        p Human interaction networks can be inferred from billions of anonymized mobile phone records. This study, focusing on Portugal and the UK, reveals a fundamental pattern: our social connections scale with city size. People who life in a larger town make more calls and call a larger number of different people. The scaling of this relation is 'super-linear,’ meaning that on average, if the size of a town doubles, the sum of phone contacts in the city will more than double – in a mathematically predictable way.
+        p Human interaction networks can be inferred from billions of anonymized mobile phone records. This study, focusing on Portugal and the UK, reveals a fundamental pattern: our social connections scale with city size. People who life in a larger town make more calls and call a larger number of different people. The scaling of this relation is 'superlinear,’ meaning that on average, if the size of a town doubles, the sum of phone contacts in the city will more than double – in a mathematically predictable way.
 
         div(style='clear:both; height:1rem;')
 
@@ -120,13 +120,18 @@ div(ng-controller='mainVisCtrl as ctrl')
 
         p The findings of this research help elucidate the role of cities as accelerators of human interactions, and the effectiveness of urban social space in the diffusion of ideas and information. Eventually, they can help us understand a broader spectrum of social phenomena, from crime to the spread of diseases.
 
-        p 
-            | For more information, 
-            a(href = '#') see the published paper
-            |  , 
-            a(href = 'img/pressRelease.docx') download press release
-            |  and 
-            a(href='img/pressVisualMaterial.zip') download the visual material.
+        p
+            |For more information, 
+            a(href = 'img/manuscript.pdf') see the published paper
+            |.<br>
+
+            | You can also download the 
+            a(href = 'img/pressRelease.pdf') press release
+            |  and the 
+            a(href='img/pressVisualMaterial.zip') visual material
+            | .<br>
+
+            | The project was developed as part of Ericsson’s “Signature of Humanity” project.
 
     // FOOTER
     .row.footer(style='padding-top: 2.8rem;')
@@ -165,6 +170,6 @@ div(ng-controller='mainVisCtrl as ctrl')
             img(src='img/credits.png')
             img(src='img/ericsson.png' style='width: 50px; margin-top: 15px;')
 
-    p(style='padding-bottom:0; font-size:.7rem;') † In this graph outliers are not considered to better show the increase in the average number of contacts
-    p(style='padding-bottom:1.5rem; font-size:.7rem;') ‡ The graph only shows data from Portugal cities
+    p(style='padding-bottom:0; font-size:.7rem;') † In this graph outliers are not considered to better show the increase in the average number of contacts.
+    p(style='padding-bottom:1.5rem; font-size:.7rem;') ‡ The graph only shows data from cities in Portugal.
 
