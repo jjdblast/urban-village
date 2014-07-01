@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="img/favicon.png">
-    <title>Scaling of Phone Contacts</title>
+    <title>The Urban Village</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="style.css">
     <script type="text/javascript" src="libs.js"></script>
@@ -13,8 +13,8 @@
       <div style="" class="ctn-full">
         <div style="padding-top: 2.5rem; padding-bottom: 2.5rem;" class="row header">
           <div style="" class="col title">
-            <h1>Scaling of Phone Contacts</h1>
-            <div class="lead">Exploration and analysis of 15 months of telecommunication data from Portugal</div>
+            <h1>The Urban Village</h1>
+            <div class="lead">Or, the scaling of human interactions with city size</div>
           </div>
         </div>
       </div>
@@ -151,12 +151,13 @@
           </div>
         </div>
       </div>
-      <div style="font-size:.65rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,50%);" class="ctn">*For this graph some outliers have been taken out to better show the increase in the average number of contacts.</div>
+      <div style="font-size:.75rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,40%); font-style: italic;" class="ctn">Graph showing data from 15 months of telecommunication from Portugal cities. <span style="text-style:none;">† ‡</span></div>
     </div>
     <div style="padding-top: 2.5rem; width: 900px;" class="ctn">
       <!-- DESCRIPTION-->
       <div style="padding: 0 0px;" class="col-center">
-        <p>Do you thrive amongst the crowds of a large metropolis or do you prefer the close community spirit of village life? Today’s widespread use of mobile communication technology enables us to explore <b>how a person’s social network changes when moving from a small town into a big city. </b>Researchers from the MIT SENSEable City Lab and the Santa Fe Institute, New Mexico teamed up to study how cities can affect our social relationships.</p>
+        <p>Do you thrive within the crowds of a large metropolis or do you prefer the close community spirit of village life? Analyzing mobile communication data reveals <b>how a person’s social network changes when moving from a small town into a big city. </b>A team of researchers from both the MIT Senseable City Lab and the Santa Fe Institute worked with Orange Labs, British Telecom and Raschke Software Engineering to study how cities affect our social relationships.</p>
+        <div style="clear:both; height:1rem;"></div>
         <figure style="width: 48%; float: left; margin: 15px; margin-top: 8px; margin-left: 0px; margin-right: 20px; margin-bottom: 20px;">
           <div style="background: hsl(0,0%,90%);">
             <div ng-controller="cumulativeCtrl as ctrl" ng-style="wrpStyle()" class="wrp-vis">
@@ -194,10 +195,9 @@
               </svg>
             </div>
           </div>
-          <figcaption>Graph showing the difference between a linear scaling relation and a super-linear one.</figcaption>
+          <figcaption>Graph showing the difference between a linear scaling relation and a super-linear one. ‡</figcaption>
         </figure>
-        <p>Inferring human interaction networks from millions of anonymized mobile phone records in Portugal and UK, their study reveals a fundamental pattern: our social connections scale with city size.</p>
-        <p>The larger the town you live in, the more people you call and the more calls you make. The scaling of this relation is “super-linear,” which means that on average, if you double the size of a town, the sum of phone contacts in the city will more than double – in a mathematically predictable way.</p>
+        <p>Human interaction networks can be inferred from billions of anonymized mobile phone records. This study, focusing on Portugal and the UK, reveals a fundamental pattern: our social connections scale with city size. People who life in a larger town make more calls and call a larger number of different people. The scaling of this relation is 'super-linear,’ meaning that on average, if the size of a town doubles, the sum of phone contacts in the city will more than double – in a mathematically predictable way.</p>
         <div style="clear:both; height:1rem;"></div>
         <figure style="width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;">
           <div style="background: hsl(0,0%,90%);">
@@ -231,24 +231,22 @@
               </svg>
             </div>
           </div>
-          <figcaption>The chance that two phone contacts from one person know each other is not affected by city size.</figcaption>
+          <figcaption>The chance that two phone contacts from one person know each other is not affected by city size. ‡</figcaption>
         </figure>
-        <p>Surprisingly, however, the odds that your contacts are also connected with each other is not affected by the size of the town you reside in.</p>
-        <p>This suggests that we instinctively form tight communities, in small towns and large cities alike. But if you live in a small community, your social circle is more or less determined by those who live around you, whereas in a large city you have more freedom to select which of the thousands of people around you will constitute your social circle.</p>
-        <div style="clear:both;"></div>
-        <p>The revealed characteristics have important implications for the way information and ideas diffuse throughout a city. And eventually they can help us to understand a broad spectrum of social phenomena such as crime and the spread of diseases.</p>
-        <p>For more information, <a href="#">see the published paper.</a></p>
+        <p>Surprisingly, however, group clustering (the odds that your friends mutually know one another) does not change with city size. It seems that even in large cities we tend to build tightly knit communities, or ‘villages,’ around ourselves. There is an important difference, though: if in a real village our connections might simply be defined by proximity, in a large city we can elect a community based on any number of factors, from affinity to interest to sexual preference.</p>
+        <div style="clear:both; height:1rem;"></div>
+        <p>The findings of this research help elucidate the role of cities as accelerators of human interactions, and the effectiveness of urban social space in the diffusion of ideas and information. Eventually, they can help us understand a broader spectrum of social phenomena, from crime to the spread of diseases.</p>
+        <p>For more information, <a href="#">see the published paper</a> , <a href="img/pressRelease.docx">download press release</a> and <a href="img/pressVisualMaterial.zip">download the visual material.</a></p>
       </div>
       <!-- FOOTER-->
       <div style="padding-top: 2.8rem;" class="row footer">
         <div style="width: {{100/4}}%;" class="col">
-          <h5>Press Material</h5>
-          <p class="small"><a href="#">Download press release<br></a><a href="img/pressVisualMaterial.zip">Download visual material <br><br></a></p>
+          <h5>Contact</h5>
           <p class="small">For more information, contact: <a href="mailto:senseable-contacts@mit.edu">senseable-contacts@mit.edu</a></p>
         </div>
         <div style="width: {{100/4}}%;" class="col">
           <h5>Study Authors</h5>
-          <p class="small"><a href="http://web.mit.edu/schlmark/www/">Markus Schlapfer <br></a><a href="http://www.sebastian-grauwin.com/">Sebastian Grauwin <br></a>Carlo Ratti - Director</p>
+          <p class="small"><a href="http://web.mit.edu/schlmark/www/">Markus Schläpfer <br></a><a href="http://www.sebastian-grauwin.com/">Sebastian Grauwin <br></a>Carlo Ratti - Director</p>
           <h5>Data Visualization</h5>
           <p class="small"><a href="http://luiscarli.com">Luis Carli</a></p>
         </div>
@@ -261,11 +259,12 @@
             Zbigniew Smoreda <br>
             Geoffrey B. West <br>
             
-            
           </p>
         </div>
-        <div style="width: {{100/4}}%;" class="col"><img src="img/credits.png"></div>
+        <div style="width: {{100/4}}%;" class="col"><img src="img/credits.png"><img src="img/ericsson.png" style="width: 50px; margin-top: 15px;"></div>
       </div>
+      <p style="padding-bottom:0; font-size:.7rem;">† In this graph outliers are not considered to better show the increase in the average number of contacts</p>
+      <p style="padding-bottom:1.5rem; font-size:.7rem;">‡ The graph only shows data from Portugal cities</p>
     </div>
     <script type="text/javascript" src="bundle.js"></script>
   </body>
