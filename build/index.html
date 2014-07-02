@@ -164,14 +164,14 @@
               <svg vbox="0 0 {{svgWidth}} {{svgHeight}}" preserveAspectRatio="xMidYMid meet" ng-if="data">
                 <g ng-attr-transform="translate({{margin.l}}, {{margin.t}})" class="main">
                   <!-- lines-->
-                  <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-29)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="270" y="90" transform="translate(0,-17)" style="fill: gray; font-weight: 600;">linear (β=1)</text>
-                  <path d="M265,86, h-17" transform="translate(0,-17)" style="stroke: gray; "></path>
-                  <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-29)" style="stroke: black; stroke-dashArray: 5,5; stroke-width: 2;"></path>
-                  <text x="225" y="60" transform="translate(0,-17)" style="fill: black; font-weight: 600; text-anchor: end;">Super-linear (β=1.12)</text>
-                  <path d="M230,56, h22" transform="translate(0,-17)" style="stroke: black;"></path>
-                  <text x="70" y="180" transform="translate(0,-30)" style="fill: gray; text-anchor: middle;">city</text>
-                  <path d="M70,185, v22" transform="translate(0,-30)" style="stroke: gray;"></path>
+                  <path ng-attr-d="M{{x(pData.line1.x0)}},{{y(pData.line1.y0)}} L{{x(pData.line1.x1)}},{{y(pData.line1.y1)}}" transform="translate(0,-2)" style="stroke: gray; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                  <text x="270" y="90" transform="translate(0,-2)" style="fill: gray; font-weight: 600;">linear (β=1)</text>
+                  <path d="M265,86, h-17" transform="translate(0,-2)" style="stroke: gray; "></path>
+                  <path ng-attr-d="M{{x(pData.line2.x0)}},{{y(pData.line2.y0)}} L{{x(pData.line2.x1)}},{{y(pData.line2.y1)}}" transform="translate(0,-2)" style="stroke: black; stroke-dashArray: 5,5; stroke-width: 2;"></path>
+                  <text x="225" y="60" transform="translate(0,-2)" style="fill: black; font-weight: 600; text-anchor: end;">Super-linear (β=1.12)</text>
+                  <path d="M230,56, h22" transform="translate(0,-2)" style="stroke: black;"></path>
+                  <text x="70" y="180" transform="translate(0,-2)" style="fill: gray; text-anchor: middle;">city</text>
+                  <path d="M70,185, v22" transform="translate(0,-2)" style="stroke: gray;"></path>
                   <g transform="translate(0,-5)" class="axis xAxis">
                     <path ng-attr-d="M0,-6 v6 H{{width}} v-6" style="stroke: green"></path>
                     <g ng-repeat="tick in pData.xAxis" ng-attr-transform="translate({{x(tick.value)}}, 0)" class="tick">
