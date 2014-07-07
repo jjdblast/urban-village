@@ -197,7 +197,7 @@
           </div>
           <figcaption>Graph showing the difference between a linear scaling relation and a superlinear one. ‡</figcaption>
         </figure>
-        <p>Human interaction networks can be inferred from billions of anonymized mobile phone records. This study, focusing on Portugal and the UK, reveals a fundamental pattern: our social connections scale with city size. People who life in a larger town make more calls and call a larger number of different people. The scaling of this relation is 'superlinear,’ meaning that on average, if the size of a town doubles, the sum of phone contacts in the city will more than double – in a mathematically predictable way.</p>
+        <p>Human interaction networks can be inferred from billions of anonymized mobile phone records. This study, focusing on Portugal and the UK, reveals a fundamental pattern: our social connections scale with city size. People who live in a larger town make more calls and call a larger number of different people. The scaling of this relation is 'superlinear,’ meaning that on average, if the size of a town doubles, the sum of phone contacts in the city will more than double – in a mathematically predictable way.</p>
         <div style="clear:both; height:1rem;"></div>
         <figure style="width: 48%; float: right; margin: 15px; margin-top: 8px; margin-right: 0px; margin-left: 20px;">
           <div style="background: hsl(0,0%,90%);">
@@ -236,7 +236,21 @@
         <p>Surprisingly, however, group clustering (the odds that your friends mutually know one another) does not change with city size. It seems that even in large cities we tend to build tightly knit communities, or ‘villages,’ around ourselves. There is an important difference, though: if in a real village our connections might simply be defined by proximity, in a large city we can elect a community based on any number of factors, from affinity to interest to sexual preference.</p>
         <div style="clear:both; height:1rem;"></div>
         <p>The findings of this research help elucidate the role of cities as accelerators of human interactions, and the effectiveness of urban social space in the diffusion of ideas and information. Eventually, they can help us understand a broader spectrum of social phenomena, from crime to the spread of diseases.</p>
-        <p>For more information, <a href="img/manuscript.pdf">see the published paper</a>.<br>
+        <div style="margin-top: 2rem;" ng-controller="video as ctrl">
+          <div ng-show="!video"><img src="img/video-buton.png" style="float: left; margin-right: 1rem; cursor: pointer;" ng-click="click()">
+            <h4 style="margin-bottom: 0rem; padding-top: .1rem;">Video</h4>
+            <p style="">Social networks derived from mobile phone data in Portugal.</p>
+          </div>
+          <div ng-show="video">
+            <video id="video1" loop style="width:100%;">
+              <source src="img/NetworkStructure.mp4" type="video/mp4">
+              <source src="img/NetworkStructure.webm" type="video/webm">
+            </video>
+            <div style="font-size:.75rem; margin-top:.3rem; text-align:center; color:hsl(0,0%,40%); font-style: italic;">Video: Kael Greco, MIT Senseable City Lab.</div>
+          </div>
+        </div>
+        <div style="clear:both; margin-bottom: 2rem;"></div>
+        <p>For more information, <a href="http://rsif.royalsocietypublishing.org/content/11/98/20130789.short">see the published paper</a> or <a href="img/manuscript.pdf">the preprint</a>.<br>
           You can also download the <a href="img/pressRelease.pdf">press release</a> and the <a href="img/pressVisualMaterial.zip">visual material</a>.<br>
           The project was developed as part of Ericsson’s “Signature of Humanity” project.
         </p>
@@ -251,7 +265,7 @@
           <h5>Study Authors</h5>
           <p class="small"><a href="http://web.mit.edu/schlmark/www/">Markus Schläpfer <br></a><a href="http://www.sebastian-grauwin.com/">Sebastian Grauwin <br></a>Carlo Ratti - Director</p>
           <h5>Data Visualization</h5>
-          <p class="small"><a href="http://luiscarli.com">Luis Carli</a></p>
+          <p class="small"><a href="http://luiscarli.com">Luis Carli <br></a>Kael Greco - video</p>
         </div>
         <div style="width: {{100/4}}%;" class="col">
           <h5>Collaborators</h5>
