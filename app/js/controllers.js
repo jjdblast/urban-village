@@ -308,3 +308,15 @@ angular.module('app', ['services', 'directives', 'ngAnimate'])
         return Math.abs(elemPos - hoverPos) > size
     }
 })
+
+.controller('video', function ($scope) {
+    $scope.video = false
+    $scope.click = function(){
+        $scope.video = !$scope.video
+        var myVideo = document.getElementById("video1"); 
+        if ($scope.video) 
+            myVideo.play(); 
+        else 
+            myVideo.pause(); 
+    }
+})
