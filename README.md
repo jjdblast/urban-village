@@ -1,3 +1,4 @@
-# Scaling Project
+# The Urban Village
 
-Unit test: SUCCESS. 8/8 passed.
+Code for a dataVis project done together with the MIT Sensable City Lab.  
+The deployed version can be seen at: [http://senseable.mit.edu/urbanvillages/](http://senseable.mit.edu/urbanvillages/)
